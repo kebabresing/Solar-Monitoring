@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voltage Monitor | Protek 608 - VEDC Malang</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo-boe.png">
+  
+  <!-- Google Fonts: Inter, Chakra Petch (Digital), JetBrains Mono (Terminal) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient: #f3f6fa;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-shadow: 0 16px 40px -8px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.03);
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-subtle: #eff6ff;
+      --primary-border: #bfdbfe;
+      
+      --danger: #e11d48;
+      --danger-hover: #be123c;
+      --danger-subtle: #fff1f2;
+      --danger-border: #fecdd3;
+      
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.35);
+      --warning: #f59e0b;
+      
+      --display-bg: #f8fafc;
+      --display-border: #e2e8f0;
+      --digital-color: #1e40af;
+      
+      --terminal-bg: #090d16;
+      --terminal-text: #38bdf8;
+      --terminal-border: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    /* Warning Banner for unsupported browsers */
+    #browser-warning {
+      display: none;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      color: #b45309;
+      padding: 12px 18px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    /* Main Container Card */
+    .monitoring-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .monitoring-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #2563eb, #10b981);
+    }
+
+    /* Header */
+    .card-header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .device-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Status Grid */
+    .status-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #f8fafc;
+      border: 1px solid #edf2f7;
+      padding: 12px 14px;
+      border-radius: 14px;
+    }
+
+    .status-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .status-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #ef4444;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .status-dot.connected {
+      background-color: #10b981;
+      box-shadow: 0 0 8px var(--success-glow);
+    }
+
+    .status-dot.syncing {
+      background-color: #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .status-dot.warning {
+      background-color: var(--warning);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+
+    .status-dot.pulse {
+      animation: pulse-dot 0.6s ease;
+    }
+
+    @keyframes pulse-dot {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Display Container */
+    .display-container {
+      width: 100%;
+      background: #edf4ff;
+      border: 1.5px solid #dbeafe;
+      border-radius: 20px;
+      padding: 24px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: inset 0 2px 4px rgba(37, 99, 235, 0.03);
+    }
+
+    .display-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #3b82f6;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .voltage-wrapper {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+      margin: 2px 0 6px;
+    }
+
+    .voltage-value {
+      font-family: 'Chakra Petch', monospace;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--digital-color);
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .voltage-value.offline {
+      color: #94a3b8;
+      opacity: 0.7;
+    }
+
+    .voltage-unit {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mode-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e40af;
+      background: #ffffff;
+      border: 1px solid #bfdbfe;
+      padding: 3px 12px;
+      border-radius: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    /* Last Update */
+    .last-update {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .last-update span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Action Buttons */
+    .button-group {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .btn-connect {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-connect:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-disconnect {
+      background: var(--danger-subtle);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
+    }
+
+    .btn-disconnect:hover:not(:disabled) {
+      background: #ffe4e6;
+      border-color: #fda4af;
+      transform: translateY(-1px);
+    }
+
+    /* Hardware Setup Guide Accordion */
+    .guide-box {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .guide-header {
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .guide-list {
+      padding-left: 18px;
+    }
+
+    .guide-list li {
+      margin-bottom: 3px;
+    }
+
+    .guide-list strong {
+      color: #1e293b;
+    }
+
+    /* Diagnostics Collapsible */
+    .diag-details {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 0.8rem;
+    }
+
+    .diag-summary {
+      padding: 10px 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      user-select: none;
+    }
+
+    .diag-summary:hover {
+      color: var(--text-main);
+      background: #f1f5f9;
+    }
+
+    .diag-body {
+      padding: 12px 14px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .diag-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .diag-btn {
+      padding: 6px 12px;
+      font-size: 0.74rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .diag-btn:hover:not(:disabled) {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+
+    .diag-btn.active {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+
+    .diag-btn.active .sig-dot {
+      background-color: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+
+    .sig-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #cbd5e1;
+      display: inline-block;
+    }
+
+    .auto-poll-label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    /* Terminal / Raw Stream */
+    .raw-section {
+      width: 100%;
+      background: var(--terminal-bg);
+      border: 1px solid var(--terminal-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .raw-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .raw-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .raw-count {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #38bdf8;
+    }
+
+    .raw-content {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--terminal-text);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 8px 10px;
+      border-radius: 6px;
+      word-break: break-all;
+      line-height: 1.45;
+      min-height: 38px;
+      max-height: 75px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .diag-log {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 6px 10px;
+      max-height: 70px;
+      overflow-y: auto;
+      line-height: 1.4;
+    }
+
+    .diag-log p { margin-bottom: 2px; }
+    .diag-log .log-info { color: #38bdf8; }
+    .diag-log .log-warn { color: #f59e0b; }
+    .diag-log .log-error { color: #f43f5e; }
+    .diag-log .log-success { color: #34d399; }
+
+    /* Scrollbar */
+    .raw-content::-webkit-scrollbar, .diag-log::-webkit-scrollbar {
+      width: 4px;
+    }
+    .raw-content::-webkit-scrollbar-thumb, .diag-log::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 2px;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .monitoring-card {
+        padding: 24px 18px 20px;
+        border-radius: 20px;
+      }
+      .voltage-value {
+        font-size: 2.9rem;
+      }
+      .voltage-unit {
+        font-size: 1.4rem;
+      }
+      .card-title {
+        font-size: 1.3rem;
+      }
+      .status-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Browser Compatibility Warning -->
+  <div id="browser-warning">
+    ⚠️ <strong>Web Serial API tidak didukung</strong> pada browser ini. Harap buka aplikasi menggunakan <strong>Google Chrome</strong> atau <strong>Microsoft Edge</strong>.
+  </div>
+
+  <!-- Main Card -->
+  <div class="monitoring-card">
+    
+    <div class="card-header" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+      <div style="background: white; padding: 6px 14px; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 2px;">
+        <img src="assets/logo-boe.png" alt="BBPPMPV BOE Malang" style="height: 38px; width: auto; object-fit: contain; display: block;"/>
+      </div>
+      <h1 class="card-title">Voltage Monitor</h1>
+      <div class="device-subtitle">Pemantauan Tegangan Realtime Protek 608 &bull; VEDC Malang</div>
+      <div style="margin-top: 8px;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 0.76rem; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 9999px; text-decoration: none; font-weight: 600; transition: all 0.2s;">
+          ☀️ Buka Dashboard Panel Surya &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Status Grid -->
+    <div class="status-grid">
+      <div class="status-item">
+        <span class="status-label">Meter Port</span>
+        <div class="status-badge">
+          <span id="serial-dot" class="status-dot"></span>
+          <span id="serial-status-text">Disconnected</span>
+        </div>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Data RX</span>
+        <div class="status-badge">
+          <span id="rx-dot" class="status-dot"></span>
+          <span id="rx-status-text">0 Bytes</span>
+        </div>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Supabase Cloud</span>
+        <div class="status-badge">
+          <span id="firebase-dot" class="status-dot"></span>
+          <span id="firebase-status-text">Connecting...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voltage Display Box -->
+    <div class="display-container">
+      <div class="display-tag">NILAI PENGUKURAN</div>
+      <div class="voltage-wrapper">
+        <div id="voltage-display" class="voltage-value offline">--.---</div>
+        <div id="voltage-unit" class="voltage-unit">V</div>
+      </div>
+      <div id="mode-display" class="mode-badge">DC</div>
+    </div>
+
+    <!-- Last Update -->
+    <div class="last-update">
+      Pembaruan terakhir: <span id="last-update-time">--:--:--</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button id="btn-connect" class="btn btn-connect" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 17H7A5 5 0 0 1 7 7h2"></path>
+          <path d="M15 7h2a5 5 0 1 1 0 10h-2"></path>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        Hubungkan Meter
+      </button>
+      <button id="btn-disconnect" class="btn btn-disconnect" type="button" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        Putuskan
+      </button>
+    </div>
+
+    <!-- Protek 608 Checklist / Setup Guide -->
+    <div class="guide-box">
+      <div class="guide-header">
+        <span>💡</span> <strong>Petunjuk Koneksi Protek 608:</strong>
+      </div>
+      <ol class="guide-list">
+        <li>Nyalakan multimeter & pasang kabel optik RS-232 di slot belakang meter.</li>
+        <li><strong>Wajib aktifkan RS232:</strong> Tekan tombol <strong>MENU</strong> ➔ cari menu <strong>`RS-232C`</strong> ➔ tekan <strong>ENTER</strong> (ikon <strong>RS232C</strong> harus muncul di LCD multimeter).</li>
+        <li>Jika data belum masuk, buka menu <em>Diagnostik & Stream Sinyal</em> di bawah untuk menguji sinyal DTR/RTS atau memicu pengiriman data.</li>
+      </ol>
+    </div>
+
+    <!-- Diagnostic & Signal Details -->
+    <details class="diag-details" open>
+      <summary class="diag-summary">
+        <span>🔧 Diagnostik & Stream Serial</span>
+        <span style="font-size: 0.72rem; color: #3b82f6;">Detail ▼</span>
+      </summary>
+      <div class="diag-body">
+        
+        <!-- Hardware Signals & Triggers -->
+        <div class="diag-controls">
+          <button id="btn-toggle-dtr" class="diag-btn active" type="button" title="DTR memberi daya pada kabel optocoupler">
+            <span class="sig-dot"></span> DTR: <span id="txt-dtr">HIGH</span>
+          </button>
+          <button id="btn-toggle-rts" class="diag-btn active" type="button" title="RTS memberi daya pada kabel optocoupler">
+            <span class="sig-dot"></span> RTS: <span id="txt-rts">HIGH</span>
+          </button>
+          <button id="btn-trigger" class="diag-btn" type="button" title="Kirim karakter pemicu data ke meter">
+            ⚡ Pemicu Data
+          </button>
+          <label class="auto-poll-label">
+            <input type="checkbox" id="chk-auto-poll"> Auto Poll (1s)
+          </label>
+        </div>
+
+        <!-- Raw Serial Monitor -->
+        <div class="raw-section">
+          <div class="raw-header">
+            <span class="raw-title">Live Raw Hex Stream</span>
+            <span id="raw-byte-count" class="raw-count">0 bytes | 0 packet</span>
+          </div>
+          <div id="raw-stream-content" class="raw-content">Menunggu data masuk dari serial port...</div>
+        </div>
+
+        <!-- Diagnostic Log -->
+        <div id="diag-log-container" class="diag-log">
+          <p class="log-info">[Sistem] Siap. Klik 'Hubungkan Meter' untuk memulai.</p>
+        </div>
+
+      </div>
+    </details>
+
+  </div>
+
+  <!-- Supabase & Firebase Modular SDK & Core Application Logic -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+    // ==========================================
+    // 1. SUPABASE CLOUD DATABASE CONFIGURATION
+    // ==========================================
+    const SUPABASE_URL = "https://onacbfrwlqnnwoxxhlie.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uYWNiZnJ3bHFubndveHhobGllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NTIzODAsImV4cCI6MjEwMzAyODM4MH0.OVCaVhBVS1CpKmOJDlqdibfJLwIlAS0opHNwR2tlTdc";
+    
+    let supabase = null;
+    try {
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      updateFirebaseStatus("Ready (Supabase)", "connected");
+      logDiagnostic("Supabase Cloud Database terhubung.", "success");
+    } catch (e) {
+      console.warn("Supabase init error:", e);
+    }
+
+    // Optional Firebase Dual-Sync Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcVYhGxOFO3yogJueAxwZacoAAYzm0h0M",
+      authDomain: "voltage-monitoring-protek-608.firebaseapp.com",
+      databaseURL: "https://voltage-monitoring-protek-608-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "voltage-monitoring-protek-608"
+    };
+
+    let firebaseDb = null;
+    let isFirebaseReady = false;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      firebaseDb = getDatabase(app);
+      isFirebaseReady = true;
+    } catch (err) {}
+
+    async function pushToCloudDatabase(voltage, unit, mode) {
+      const cleanUnit = unit || "V";
+      const cleanMode = mode || "DC";
+
+      // 1. Push to Supabase PostgreSQL Table (protek608_telemetry)
+      if (supabase) {
+        try {
+          const { error } = await supabase
+            .from('protek608_telemetry')
+            .insert([{
+              voltage: voltage,
+              unit: cleanUnit,
+              mode: cleanMode,
+              target: 'solar'
+            }]);
+          if (!error) {
+            updateFirebaseStatus("Connected (Supabase)", "connected");
+          } else {
+            console.error("Supabase insert error:", error);
+          }
+        } catch (sbErr) {
+          console.error("Supabase push failed:", sbErr);
+        }
+      }
+
+      // 2. Dual Push to Firebase
+      if (isFirebaseReady && firebaseDb) {
+        try {
+          const currentRef = ref(firebaseDb, "protek608/current");
+          await set(currentRef, {
+            voltage: voltage,
+            unit: cleanUnit,
+            mode: cleanMode,
+            timestamp: Date.now()
+          });
+        } catch (fbErr) {}
+      }
+    }
+
+    // ==========================================
+    // 2. UI ELEMENTS & STATUS HELPERS
+    // ==========================================
+    const elSerialDot = document.getElementById("serial-dot");
+    const elSerialStatusText = document.getElementById("serial-status-text");
+    const elRxDot = document.getElementById("rx-dot");
+    const elRxStatusText = document.getElementById("rx-status-text");
+    const elFirebaseDot = document.getElementById("firebase-dot");
+    const elFirebaseStatusText = document.getElementById("firebase-status-text");
+    
+    const elVoltageDisplay = document.getElementById("voltage-display");
+    const elVoltageUnit = document.getElementById("voltage-unit");
+    const elModeDisplay = document.getElementById("mode-display");
+    const elLastUpdateTime = document.getElementById("last-update-time");
+    
+    const elBtnConnect = document.getElementById("btn-connect");
+    const elBtnDisconnect = document.getElementById("btn-disconnect");
+    const elBrowserWarning = document.getElementById("browser-warning");
+    
+    const elBtnToggleDtr = document.getElementById("btn-toggle-dtr");
+    const elTxtDtr = document.getElementById("txt-dtr");
+    const elBtnToggleRts = document.getElementById("btn-toggle-rts");
+    const elTxtRts = document.getElementById("txt-rts");
+    const elBtnTrigger = document.getElementById("btn-trigger");
+    const elChkAutoPoll = document.getElementById("chk-auto-poll");
+    
+    const elRawByteCount = document.getElementById("raw-byte-count");
+    const elRawStreamContent = document.getElementById("raw-stream-content");
+    const elDiagLogContainer = document.getElementById("diag-log-container");
+
+    let dtrState = true;
+    let rtsState = true;
+    let totalBytesReceived = 0;
+    let validPacketsReceived = 0;
+    let autoPollTimer = null;
+
+    function formatTime(date) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function updateSerialStatus(text, state) {
+      elSerialStatusText.textContent = text;
+      elSerialDot.className = "status-dot " + (state || "");
+    }
+
+    function updateFirebaseStatus(text, state) {
+      elFirebaseStatusText.textContent = text;
+      elFirebaseDot.className = "status-dot " + (state || "");
+    }
+
+    function pulseRxIndicator() {
+      elRxDot.className = "status-dot connected pulse";
+      setTimeout(() => {
+        elRxDot.className = "status-dot connected";
+      }, 300);
+    }
+
+    function logDiagnostic(msg, type = "info") {
+      const time = formatTime(new Date());
+      const p = document.createElement("p");
+      p.className = `log-${type}`;
+      p.textContent = `[${time}] ${msg}`;
+      elDiagLogContainer.appendChild(p);
+      elDiagLogContainer.scrollTop = elDiagLogContainer.scrollHeight;
+    }
+
+    function updateSignalButtonsUI() {
+      if (dtrState) {
+        elBtnToggleDtr.classList.add("active");
+        elTxtDtr.textContent = "HIGH";
+      } else {
+        elBtnToggleDtr.classList.remove("active");
+        elTxtDtr.textContent = "LOW";
+      }
+
+      if (rtsState) {
+        elBtnToggleRts.classList.add("active");
+        elTxtRts.textContent = "HIGH";
+      } else {
+        elBtnToggleRts.classList.remove("active");
+        elTxtRts.textContent = "LOW";
+      }
+    }
+
+    // Check Web Serial API support
+    if (!("serial" in navigator)) {
+      elBrowserWarning.style.display = "block";
+      elBtnConnect.disabled = true;
+      logDiagnostic("Web Serial API tidak didukung pada browser ini. Gunakan Chrome atau Edge.", "error");
+    }
+
+    // ==========================================
+    // 3. PROTEK 608 PROTOCOL DECODER
+    // ==========================================
+    function reverseBits(b) {
+      let result = 0;
+      for (let i = 0; i < 8; i++) {
+        if (b & (1 << i)) result |= (1 << (7 - i));
+      }
+      return (result >> 4) & 0x0F;
+    }
+
+    function decodeProtek608(buffer) {
+      if (!buffer || buffer.length !== 43) return null;
+      if (buffer[0] !== 0x5B || buffer[42] !== 0x5D) return null;
+
+      // STEP 1: Reconstruct 21 packed bytes from 40 nibbles
+      const packet = new Uint8Array(21);
+      let byteCount = 0;
+      let lastNibble = 0;
+
+      for (let i = 0; i < buffer.length; i++) {
+        if (buffer[i] === 0x5B) { byteCount = 0; continue; }
+        if (buffer[i] === 0x5D) break;
+
+        const thisNibble = reverseBits(buffer[i]);
+
+        if (byteCount % 2 === 0) {
+          lastNibble = thisNibble;
+        } else {
+          packet[(byteCount - 1) >> 1] = ((lastNibble << 4) | thisNibble) & 0xFF;
+        }
+        byteCount++;
+      }
+
+      // STEP 2: Decode 7-segment display digits
+      const DIGIT_MAP = {
+        0xFA: "0", 0x0A: "1", 0x0B: "1", 0xBC: "2", 0x9E: "3",
+        0x4E: "4", 0xD6: "5", 0xF6: "6", 0x8A: "7", 0xFE: "8",
+        0xDE: "9", 0x00: " ", 0x70: "L", 0xEC: "P", 0xF4: "E"
+      };
+
+      function decodeDigit(bits) {
+        bits = bits & 0xFE;
+        if (bits === 0x00) return " ";
+        if (DIGIT_MAP[bits] !== undefined) return DIGIT_MAP[bits];
+        if ((bits & 0xFE) === 0xFE) return "8";
+        if ((bits & 0xDE) === 0xDE) return "9";
+        if ((bits & 0xF6) === 0xF6) return "6";
+        if ((bits & 0xD6) === 0xD6) return "5";
+        if ((bits & 0x4E) === 0x4E) return "4";
+        if ((bits & 0x9E) === 0x9E) return "3";
+        if ((bits & 0xBC) === 0xBC) return "2";
+        if ((bits & 0xFA) === 0xFA) return "0";
+        if ((bits & 0x8A) === 0x8A) return "7";
+        if ((bits & 0x0A) === 0x0A) return "1";
+        return "?";
+      }
+
+      const d4bits = (((packet[5] << 4) & 0xF0) | ((packet[6] >> 4) & 0x0F)) & 0xFE;
+      const d3bits = (((packet[6] << 4) & 0xF0) | ((packet[7] >> 4) & 0x0F)) & 0xFE;
+      const d2bits = (((packet[7] << 4) & 0xF0) | ((packet[8] >> 4) & 0x0F)) & 0xFE;
+      const d1bits = packet[11] & 0xFE;
+      const d0bits = packet[12] & 0xFE;
+
+      let mainStr = "";
+
+      // Negative sign
+      const isNegative = (packet[5] & 0x20) !== 0;
+      if (isNegative) mainStr += "-";
+
+      // Digit 4 (leftmost)
+      mainStr += decodeDigit(d4bits);
+      if (packet[6] & 0x10) mainStr += ".";
+
+      // Digit 3
+      mainStr += decodeDigit(d3bits);
+      if (packet[7] & 0x10) mainStr += ".";
+
+      // Digit 2
+      mainStr += decodeDigit(d2bits);
+      if (packet[8] & 0x10) mainStr += ".";
+
+      // Digit 1
+      mainStr += decodeDigit(d1bits);
+      if (packet[11] & 0x01) mainStr += ".";
+
+      // Digit 0 (rightmost)
+      mainStr += decodeDigit(d0bits);
+
+      // STEP 3: Detect Unit and Mode
+      let unit = "V";
+      if (packet[14] & 0x40) unit = "V";
+      else if (packet[13] & 0x04) unit = "Ω";
+      else if (packet[13] & 0x02) unit = "A";
+      else if (packet[13] & 0x01) unit = "F";
+      else if (packet[13] & 0x40) unit = "Hz";
+
+      let unitPrefix = "";
+      if (packet[14] & 0x80) unitPrefix = "k";
+      else if (packet[14] & 0x08) unitPrefix = "M";
+      else if (packet[14] & 0x04) unitPrefix = "μ";
+      else if (packet[14] & 0x02) unitPrefix = "m";
+      else if (packet[14] & 0x01) unitPrefix = "n";
+
+      let mode = "DC";
+      if (packet[5] & 0x40) mode = "AC";
+      else if (packet[5] & 0x10) mode = "DC";
+
+      const trimmed = mainStr.trim();
+      if (!trimmed || trimmed === "?" || !/[0-9]/.test(trimmed)) return null;
+
+      const numValue = parseFloat(trimmed);
+      if (isNaN(numValue)) return null;
+
+      return {
+        voltage: numValue,
+        voltageStr: trimmed,
+        unit: unitPrefix + unit,
+        mode: mode,
+        modeClean: mode
+      };
+    }
+
+    // ==========================================
+    // 4. WEB SERIAL COMMUNICATION
+    // ==========================================
+    let port = null;
+    let reader = null;
+    let keepReading = false;
+    let readLoopPromise = null;
+    let serialBuffer = [];
+
+    // Apply hardware signals (DTR / RTS) to power optical isolator
+    async function applySignals(dtr, rts) {
+      if (!port) return;
+      try {
+        await port.setSignals({
+          dataTerminalReady: dtr,
+          requestToSend: rts
+        });
+        updateSignalButtonsUI();
+        logDiagnostic(`Sinyal diperbarui: DTR=${dtr ? "HIGH" : "LOW"}, RTS=${rts ? "HIGH" : "LOW"}`, "info");
+      } catch (err) {
+        logDiagnostic(`Peringatan setSignals: ${err.message}`, "warn");
+      }
+    }
+
+    // Send trigger characters to multimeter
+    async function sendTrigger(cmd = "D\r\n") {
+      if (!port || !port.writable) {
+        logDiagnostic("Port belum terhubung atau tidak writable.", "warn");
+        return;
+      }
+      try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(cmd);
+        const writer = port.writable.getWriter();
+        await writer.write(data);
+        writer.releaseLock();
+        logDiagnostic(`Pemicu terkirim: "${cmd.replace(/\r/g, '\\r').replace(/\n/g, '\\n')}"`, "info");
+      } catch (err) {
+        logDiagnostic(`Gagal kirim pemicu: ${err.message}`, "error");
+      }
+    }
+
+    // Connect to Protek 608
+    async function connectSerial() {
+      if (!("serial" in navigator)) {
+        alert("Web Serial API tidak didukung pada browser ini. Gunakan Google Chrome atau Microsoft Edge.");
+        return;
+      }
+
+      // Protek 608 uses 9600 baud, 7 data bits, 1 stop bit, no parity (7N1)
+      const serialOptions = {
+        baudRate: 9600,
+        dataBits: 7,
+        stopBits: 1,
+        parity: "none"
+      };
+
+      try {
+        logDiagnostic("Membuka dialog pemilihan COM port...", "info");
+        port = await navigator.serial.requestPort();
+        
+        updateSerialStatus("Opening...", "warning");
+        await port.open(serialOptions);
+
+        keepReading = true;
+        serialBuffer = [];
+        totalBytesReceived = 0;
+        validPacketsReceived = 0;
+        
+        updateSerialStatus("Connected", "connected");
+        elRxStatusText.textContent = "0 Bytes";
+        elRawByteCount.textContent = "0 bytes | 0 packet";
+        elRawStreamContent.textContent = "Port terbuka (9600 7N1). Menunggu byte...";
+
+        // Set DTR & RTS to HIGH to supply power to optical cable
+        await applySignals(dtrState, rtsState);
+
+        elBtnConnect.disabled = true;
+        elBtnDisconnect.disabled = false;
+        logDiagnostic("Port COM berhasil dibuka. Sinyal DTR & RTS aktif.", "success");
+
+        // Start reading loop
+        readLoopPromise = readSerialLoop();
+      } catch (err) {
+        console.error("Serial connection failed:", err);
+        updateSerialStatus("Disconnected", "disconnected");
+        elBtnConnect.disabled = false;
+        elBtnDisconnect.disabled = true;
+        if (err.name !== "NotFoundError") {
+          logDiagnostic(`Gagal membuka port: ${err.message}`, "error");
+          alert("Gagal membuka Serial Port: " + err.message);
+        } else {
+          logDiagnostic("Pemilihan port dibatalkan oleh pengguna.", "warn");
+        }
+      }
+    }
+
+    // Read loop with 43-byte buffer framing (0x5B ... 0x5D)
+    async function readSerialLoop() {
+      while (port && port.readable && keepReading) {
+        try {
+          reader = port.readable.getReader();
+          
+          while (keepReading) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            if (value && value.length > 0) {
+              totalBytesReceived += value.length;
+              elRxStatusText.textContent = `${totalBytesReceived} B`;
+              pulseRxIndicator();
+
+              // Append incoming chunks to serialBuffer
+              for (let i = 0; i < value.length; i++) {
+                serialBuffer.push(value[i]);
+              }
+
+              // Update Raw Hex View
+              const hexPreview = Array.from(serialBuffer.slice(-30))
+                .map(b => b.toString(16).toUpperCase().padStart(2, '0'))
+                .join(' ');
+              elRawStreamContent.textContent = hexPreview || "Menerima data...";
+              elRawByteCount.textContent = `${totalBytesReceived} bytes | ${validPacketsReceived} packet`;
+
+              // Process packets framed by 0x5B and 0x5D
+              while (serialBuffer.length >= 43) {
+                const startIndex = serialBuffer.indexOf(0x5B);
+                
+                if (startIndex === -1) {
+                  serialBuffer = [];
+                  break;
+                }
+
+                if (startIndex > 0) {
+                  serialBuffer.splice(0, startIndex);
+                }
+
+                if (serialBuffer.length < 43) {
+                  break;
+                }
+
+                if (serialBuffer[42] === 0x5D) {
+                  const validPacket = serialBuffer.slice(0, 43);
+                  serialBuffer.splice(0, 43);
+                  validPacketsReceived++;
+                  handleReceivedPacket(validPacket);
+                } else {
+                  serialBuffer.shift();
+                }
+              }
+
+              if (serialBuffer.length > 300) {
+                serialBuffer = serialBuffer.slice(-86);
+              }
+            }
+          }
+        } catch (err) {
+          if (keepReading) {
+            console.error("Serial read loop error:", err);
+            logDiagnostic(`Read error: ${err.message}`, "error");
+          }
+        } finally {
+          if (reader) {
+            try {
+              reader.releaseLock();
+            } catch (e) {}
+            reader = null;
+          }
+        }
+      }
+    }
+
+    // Handle a validated 43-byte packet
+    function handleReceivedPacket(packet) {
+      try {
+        const result = decodeProtek608(packet);
+
+        if (result && result.voltage !== null && !isNaN(result.voltage)) {
+          elVoltageDisplay.textContent = result.voltageStr;
+          elVoltageDisplay.classList.remove("offline");
+          elVoltageUnit.textContent = result.unit || "V";
+          elModeDisplay.textContent = result.mode;
+
+          const now = new Date();
+          elLastUpdateTime.textContent = formatTime(now);
+
+          logDiagnostic(`Data OK: ${result.voltageStr} ${result.unit} (${result.mode})`, "success");
+          pushToCloudDatabase(result.voltage, result.unit, result.modeClean);
+        } else {
+          logDiagnostic("Paket 43B diterima tapi digit decode tidak valid.", "warn");
+        }
+      } catch (err) {
+        console.error("Packet processing error:", err);
+        logDiagnostic(`Packet parse error: ${err.message}`, "error");
+      }
+    }
+
+    // Disconnect Serial cleanly without stream lock errors
+    async function disconnectSerial() {
+      keepReading = false;
+      
+      if (autoPollTimer) {
+        clearInterval(autoPollTimer);
+        autoPollTimer = null;
+        elChkAutoPoll.checked = false;
+      }
+
+      if (reader) {
+        try {
+          await reader.cancel();
+        } catch (err) {
+          console.warn("Reader cancel:", err);
+        }
+      }
+
+      if (readLoopPromise) {
+        try {
+          await readLoopPromise;
+        } catch (err) {
+          console.warn("Read loop exit:", err);
+        }
+        readLoopPromise = null;
+      }
+
+      if (port) {
+        try {
+          await port.close();
+        } catch (err) {
+          console.warn("Port close:", err);
+        }
+        port = null;
+      }
+
+      reader = null;
+      serialBuffer = [];
+
+      updateSerialStatus("Disconnected", "disconnected");
+      elRxDot.className = "status-dot";
+      elVoltageDisplay.textContent = "--.---";
+      elVoltageDisplay.classList.add("offline");
+      elBtnConnect.disabled = false;
+      elBtnDisconnect.disabled = true;
+      logDiagnostic("Port Serial terputus (Disconnected).", "info");
+    }
+
+    // USB auto-disconnect event
+    if ("serial" in navigator) {
+      navigator.serial.addEventListener("disconnect", () => {
+        logDiagnostic("Kabel USB / perangkat terlepas.", "warn");
+        disconnectSerial();
+      });
+    }
+
+    // ==========================================
+    // 5. EVENT LISTENERS
+    // ==========================================
+    elBtnConnect.addEventListener("click", () => {
+      connectSerial();
+    });
+
+    elBtnDisconnect.addEventListener("click", () => {
+      disconnectSerial();
+    });
+
+    elBtnToggleDtr.addEventListener("click", async () => {
+      dtrState = !dtrState;
+      await applySignals(dtrState, rtsState);
+    });
+
+    elBtnToggleRts.addEventListener("click", async () => {
+      rtsState = !rtsState;
+      await applySignals(dtrState, rtsState);
+    });
+
+    elBtnTrigger.addEventListener("click", () => {
+      sendTrigger("D\r\n");
+    });
+
+    elChkAutoPoll.addEventListener("change", (e) => {
+      if (e.target.checked) {
+        if (!port) {
+          alert("Hubungkan meter terlebih dahulu sebelum mengaktifkan Auto Poll.");
+          e.target.checked = false;
+          return;
+        }
+        logDiagnostic("Auto Poll aktif (1 detik).", "info");
+        autoPollTimer = setInterval(() => {
+          sendTrigger("D\r\n");
+        }, 1000);
+      } else {
+        if (autoPollTimer) {
+          clearInterval(autoPollTimer);
+          autoPollTimer = null;
+          logDiagnostic("Auto Poll dinonaktifkan.", "info");
+        }
+      }
+    });
+
+    // Initialize Firebase
+    initFirebase();
+  </script>
+</body>
+</html>

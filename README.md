@@ -93,10 +93,9 @@ graph LR
 Protek608/
 ├── assets/
 │   └── logo-boe.png          # Logo resmi BBPPMPV BOE Malang
-├── Dashboard/
-│   └── dashboard.html        # Halaman utama Visual Dashboard Monitoring Panel Surya
 ├── .gitignore                # Filter file ignore Git
-├── index.html                # Halaman Penerima Web Serial & Debugging Multimeter Protek 608
+├── index.html                # Halaman Utama: Visual Dashboard Monitoring Panel Surya
+├── meter.html                # Halaman Diagnostik Serial Multimeter Protek 608
 ├── LICENSE                   # Lisensi Open-Source (MIT)
 └── README.md                 # Dokumentasi lengkap proyek
 ```
