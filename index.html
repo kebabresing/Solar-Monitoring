@@ -1144,10 +1144,7 @@
         isDirectSerialConnected = false;
         btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
         btnText.innerText = "Hubungkan Serial";
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = "Serial Terputus";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
-        pingElem.className = "hidden";
+        updateHardwareBadge("direct_disconnected");
         return;
       }
 
@@ -1179,10 +1176,7 @@
         btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
         btnText.innerText = "Putus Serial";
 
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.25)]";
-        textElem.innerText = "Protek 608: Direct LIVE";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
-        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+        updateHardwareBadge("direct_live");
 
         // Read loop
         readDirectSerialLoop();
@@ -1276,34 +1270,69 @@
     }
 
     // ========================================================
-    // 8. SUPABASE REALTIME LISTENER (Primary Cloud Sync)
+    // 8. UNIFIED STATUS BADGE ENGINE (Glitch-Free)
     // ========================================================
-    function initSupabaseListener() {
+    function updateHardwareBadge(type, customText = "") {
       const badgeElem = document.getElementById("hardware-status-badge");
       const textElem = document.getElementById("hardware-status-text");
       const dotElem = document.getElementById("hardware-dot");
       const pingElem = document.getElementById("hardware-ping");
 
+      if (!badgeElem || !textElem) return;
+
+      // If direct serial is actively connected, it ALWAYS takes 100% priority
+      if (isDirectSerialConnected && type !== "direct_disconnected") {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.25)]";
+        textElem.innerText = "Protek 608: Direct LIVE";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+        return;
+      }
+
+      if (type === "supabase_live") {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
+        textElem.innerText = "Supabase: LIVE";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+      } else if (type === "standby") {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
+        textElem.innerText = customText || "Supabase: Standby";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
+        pingElem.className = "hidden";
+      } else if (type === "direct_disconnected") {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
+        textElem.innerText = "Serial Terputus";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
+        pingElem.className = "hidden";
+      } else {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
+        textElem.innerText = customText || "Menghubungkan...";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
+        pingElem.className = "animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-50";
+      }
+    }
+
+    // ========================================================
+    // 9. SUPABASE REALTIME LISTENER (Primary Cloud Sync)
+    // ========================================================
+    function initSupabaseListener() {
       if (!supabase) return;
 
-      // 1. Ambil data terakhir dari Supabase saat pertama kali load
+      // 1. Initial snapshot fetch
       supabase
         .from('protek608_telemetry')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(1)
         .then(({ data, error }) => {
-          if (!error && data && data.length > 0) {
+          if (!error && data && data.length > 0 && !isDirectSerialConnected) {
             const latest = data[0];
-            if (latest.target && latest.target !== currentTarget) {
-              const btn = document.getElementById(`target-${latest.target}`);
-              if (btn) btn.click();
-            }
             updateDashboardState(latest.voltage, latest.unit || "V", "Supabase Initial Sync");
+            updateHardwareBadge("supabase_live");
           }
         });
 
-      // 2. Subscribe Realtime PostgreSQL Changes (INSERT)
+      // 2. Realtime Postgres Changes Subscription
       try {
         supabase
           .channel('protek608_live_stream')
@@ -1311,93 +1340,27 @@
             'postgres_changes',
             { event: 'INSERT', schema: 'public', table: 'protek608_telemetry' },
             (payload) => {
+              // If local serial is connected, ignore incoming echo to prevent glitches
               if (isDirectSerialConnected) return;
 
               const row = payload.new;
               if (row && typeof row.voltage !== "undefined") {
-                badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
-                textElem.innerText = "Supabase: LIVE";
-                dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
-                pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
-
-                if (row.target && row.target !== currentTarget) {
-                  const btn = document.getElementById(`target-${row.target}`);
-                  if (btn) btn.click();
-                }
-
+                updateHardwareBadge("supabase_live");
                 updateDashboardState(row.voltage, row.unit || "V", "Supabase Live Stream");
 
                 clearTimeout(hardwareWatchdogTimer);
                 hardwareWatchdogTimer = setTimeout(() => {
                   if (!isDirectSerialConnected) {
-                    badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
-                    textElem.innerText = "Supabase: Standby";
-                    dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
-                    pingElem.className = "hidden";
+                    updateHardwareBadge("standby", "Supabase: Standby");
                   }
                 }, 10000);
               }
             }
           )
-          .subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-              console.log("Supabase Realtime Subscribed successfully.");
-            }
-          });
+          .subscribe();
       } catch (subErr) {
         console.warn("Supabase Realtime error:", subErr);
       }
-    }
-
-    // ========================================================
-    // 9. FIREBASE REALTIME LISTENER (Fallback / Secondary)
-    // ========================================================
-    function initFirebaseListener() {
-      const badgeElem = document.getElementById("hardware-status-badge");
-      const textElem = document.getElementById("hardware-status-text");
-      const dotElem = document.getElementById("hardware-dot");
-      const pingElem = document.getElementById("hardware-ping");
-
-      if (!isFirebaseReady || !firebaseDb) return;
-
-      try {
-        const meterRef = ref(firebaseDb, "protek608/current");
-
-        onValue(meterRef, (snapshot) => {
-          if (isDirectSerialConnected) return;
-
-          const data = snapshot.val();
-          if (data && typeof data.voltage !== "undefined") {
-            const now = Date.now();
-            const ageMs = now - (data.timestamp || now);
-
-            if (data.target && data.target !== currentTarget) {
-              const btn = document.getElementById(`target-${data.target}`);
-              if (btn) btn.click();
-            }
-
-            if (ageMs < 12000) {
-              badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
-              textElem.innerText = "Protek 608: LIVE";
-              dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
-              pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
-              
-              updateDashboardState(data.voltage, data.unit || "V", "Firebase Live Stream");
-
-              clearTimeout(hardwareWatchdogTimer);
-              hardwareWatchdogTimer = setTimeout(() => {
-                if (!isDirectSerialConnected) {
-                  badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
-                  textElem.innerText = "Protek 608: Idle";
-                  dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
-                  pingElem.className = "hidden";
-                }
-              }, 10000);
-            }
-          }
-        });
-
-      } catch (err) {}
     }
 
     // Initialize on Load
@@ -1410,7 +1373,6 @@
       }
 
       initSupabaseListener();
-      initFirebaseListener();
       updateDashboardState(0.0, "V", "Inisialisasi");
       
       window.addEventListener("resize", () => {
