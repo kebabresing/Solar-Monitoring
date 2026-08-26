@@ -777,11 +777,11 @@
         if (hasRealAmp) {
           // REAL MEASUREMENT: P = V x I (100% precision)
           telemetry.solar.current = liveMeasuredAmp.toFixed(3);
-          telemetry.solar.power = Math.round(v * liveMeasuredAmp);
+          telemetry.solar.power = parseFloat((v * liveMeasuredAmp).toFixed(2));
         } else {
           // Fallback Estimation when only 1 meter is connected
           telemetry.solar.current = (v > 2.0) ? Math.min(20.0, (v / 18.0) * 5.5).toFixed(2) : "0.00";
-          telemetry.solar.power = Math.round(v * parseFloat(telemetry.solar.current));
+          telemetry.solar.power = parseFloat((v * parseFloat(telemetry.solar.current)).toFixed(1));
         }
 
         const solarP = telemetry.solar.power;
@@ -860,17 +860,28 @@
       const elApplianceIcon = document.getElementById("appliance-icon");
 
       if (currentTarget === "solar") {
-        if (elSolarKw) elSolarKw.innerText = (telemetry.solar.power / 1000).toFixed(2);
-        if (elSolarUnit) elSolarUnit.innerText = "kW";
+        const solarP = telemetry.solar.power;
+        if (elSolarKw && elSolarUnit) {
+          if (solarP >= 1000) {
+            elSolarKw.innerText = (solarP / 1000).toFixed(2);
+            elSolarUnit.innerText = "kW";
+          } else if (solarP >= 10) {
+            elSolarKw.innerText = solarP.toFixed(1);
+            elSolarUnit.innerText = "W";
+          } else {
+            elSolarKw.innerText = solarP.toFixed(2);
+            elSolarUnit.innerText = "W";
+          }
+        }
         if (elRawMeter) {
           elRawMeter.innerText = hasRealAmp 
-            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.solar.current).toFixed(2)} A`
+            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.solar.current).toFixed(3)} A`
             : `${v.toFixed(3)} ${unit}`;
         }
         if (elPvVolt) elPvVolt.innerText = telemetry.solar.voltage + " V";
         if (elPvAmp) elPvAmp.innerText = telemetry.solar.current + " A" + (hasRealAmp ? " (Riil)" : "");
         if (elSolarDesc) elSolarDesc.innerText = hasRealAmp 
-          ? `Daya aktual terukur riil dari 2 Multimeter: ${telemetry.solar.power} Watt (P = V × I).`
+          ? `Daya aktual terukur riil dari 2 Multimeter: ${solarP} Watt (P = V × I).`
           : "Daya listrik aktual yang diproduksi oleh susunan panel surya dari radiasi sinar matahari.";
         if (elApplianceText) elApplianceText.innerText = telemetry.solar.power > 100 ? `≈ Memproduksi ${telemetry.solar.power} Watt daya bersih` : "≈ Radiasi matahari rendah / belum aktif";
         if (elApplianceIcon) elApplianceIcon.innerText = telemetry.solar.power > 500 ? "wb_sunny" : "lightbulb";
