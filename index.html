@@ -568,7 +568,6 @@
     let lastTimestamp = Date.now();
     let accumulatedPvKwh = 0.0;
     let accumulatedLoadKwh = 0.0;
-    let isDirectSerialConnected = false;
     let hardwareWatchdogTimer = null;
 
     // Multi-channel telemetry store (from multi-sensors or Protek)
@@ -925,7 +924,10 @@
       const elFlowStoredDesc = document.getElementById("flow-stored-desc");
       const elBatteryIcon = document.getElementById("node-battery-icon");
 
-      if (elFlowSolar) elFlowSolar.innerText = (telemetry.solar.power / 1000).toFixed(2) + " kW";
+      if (elFlowSolar) {
+        const fsp = telemetry.solar.power;
+        elFlowSolar.innerText = fsp >= 1000 ? (fsp / 1000).toFixed(2) + " kW" : fsp.toFixed(1) + " W";
+      }
       if (elFlowUsed) elFlowUsed.innerText = telemetry.load.power + " W";
 
       const battP = telemetry.battery.power;
@@ -1175,12 +1177,15 @@
       if (packet[14] & 0x40) unit = "V";
       else if (packet[13] & 0x04) unit = "Ω";
       else if (packet[13] & 0x02) unit = "A";
+      else if (packet[13] & 0x01) unit = "F";
+      else if (packet[13] & 0x40) unit = "Hz";
 
       let unitPrefix = "";
       if (packet[14] & 0x80) unitPrefix = "k";
       else if (packet[14] & 0x08) unitPrefix = "M";
       else if (packet[14] & 0x04) unitPrefix = "μ";
       else if (packet[14] & 0x02) unitPrefix = "m";
+      else if (packet[14] & 0x01) unitPrefix = "n";
 
       let mode = "DC";
       if (packet[5] & 0x40) mode = "AC";
@@ -1317,9 +1322,13 @@
     }
 
     // Instansiasi Port Volt & Port Amp
+    let lastVoltUnit = "V";
+    let lastAmpUnit = "A";
+
     const serialVoltDriver = new DashboardSerialPort("volt", (res) => {
       liveMeasuredVolt = res.standardValue;
-      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, res.unit, "A", getActiveSourceLabel());
+      lastVoltUnit = res.unit || "V";
+      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       // Sync ke cloud
       syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
@@ -1327,7 +1336,8 @@
 
     const serialAmpDriver = new DashboardSerialPort("amp", (res) => {
       liveMeasuredAmp = res.standardValue;
-      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, "V", res.unit, getActiveSourceLabel());
+      lastAmpUnit = res.unit || "A";
+      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       // Sync ke cloud
       syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
@@ -1336,7 +1346,7 @@
     let lastCloudSync = 0;
     function syncTelemetryToCloud(v, a) {
       const now = Date.now();
-      if (now - lastCloudSync < 300) return;
+      if (now - lastCloudSync < 1000) return; // 1 insert/detik max (hemat quota Supabase)
       lastCloudSync = now;
 
       const calcPower = (v !== null && a !== null) ? Math.round(v * a) : telemetry[currentTarget].power;
@@ -1585,8 +1595,12 @@
         console.warn("Supabase Realtime error:", subErr);
       }
 
-      // 3. Fallback Polling setiap 2 detik
-      setInterval(fetchLatestSupabase, 2000);
+      // 3. Fallback Polling setiap 3 detik (hanya aktif saat USB tidak terhubung)
+      setInterval(() => {
+        if (!isDirectVoltConnected && !isDirectAmpConnected) {
+          fetchLatestSupabase();
+        }
+      }, 3000);
     }
 
     // ========================================================
@@ -1652,7 +1666,7 @@
 
       initSupabaseListener();
       initFirebaseListener();
-      updateDashboardState(0.0, 0.0, "V", "A", "Inisialisasi");
+      updateDashboardState(0.0, null, "V", "A", "Inisialisasi");
       
       window.addEventListener("resize", () => {
         requestAnimationFrame(() => {
