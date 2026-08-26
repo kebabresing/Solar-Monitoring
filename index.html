@@ -1330,7 +1330,7 @@
 
       const calcPower = (v !== null && a !== null) ? Math.round(v * a) : telemetry[currentTarget].power;
 
-      // 1. Supabase Sync
+      // 1. Supabase Sync (Kirim V, A, dan Watt dengan aman)
       if (supabase) {
         try {
           supabase
@@ -1339,7 +1339,7 @@
               voltage: v || 0,
               unit: 'V',
               mode: 'DC',
-              target: currentTarget
+              target: `${currentTarget}#${(a !== null && a !== undefined) ? a : 0}#${calcPower}`
             }])
             .then(({ error }) => {
               if (error) console.warn("Supabase insert error:", error);
@@ -1352,7 +1352,7 @@
         try {
           const payload = {
             voltage: v || 0,
-            current: a || 0,
+            current: (a !== null && a !== undefined) ? a : 0,
             power: calcPower,
             unit: 'V',
             unit_current: 'A',
@@ -1363,6 +1363,48 @@
           set(ref(firebaseDb, `protek608/${currentTarget}`), payload);
         } catch (fbErr) {}
       }
+    }
+
+    // Helper Parser Payload Cloud (Mendukung Supabase & Firebase)
+    function parseTelemetryPayload(row) {
+      if (!row) return null;
+      let target = "solar";
+      let current = null;
+      let power = null;
+      let voltage = (typeof row.voltage !== "undefined" && row.voltage !== null) ? parseFloat(row.voltage) : 0;
+
+      if (typeof row.current !== "undefined" && row.current !== null) {
+        current = parseFloat(row.current);
+      }
+      if (typeof row.power !== "undefined" && row.power !== null) {
+        power = parseFloat(row.power);
+      }
+
+      if (row.target && typeof row.target === "string") {
+        if (row.target.includes("#")) {
+          const parts = row.target.split("#");
+          target = parts[0] || "solar";
+          if (parts.length > 1) {
+            const parsedAmp = parseFloat(parts[1]);
+            if (!isNaN(parsedAmp)) current = parsedAmp;
+          }
+          if (parts.length > 2) {
+            const parsedPower = parseFloat(parts[2]);
+            if (!isNaN(parsedPower)) power = parsedPower;
+          }
+        } else {
+          target = row.target;
+        }
+      }
+
+      return {
+        voltage: voltage,
+        current: current,
+        power: power,
+        unit: row.unit || "V",
+        unit_current: row.unit_current || "A",
+        target: target
+      };
     }
 
     // ========================================================
@@ -1402,7 +1444,7 @@
 
       if (type === "supabase_live" || type === "cloud_live" || type === "firebase_live") {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
-        textElem.innerText = customText || "Supabase: LIVE";
+        textElem.innerText = customText || "Supabase: LIVE (V+A)";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
         pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
       } else if (type === "standby") {
@@ -1429,19 +1471,21 @@
           if (isDirectVoltConnected || isDirectAmpConnected) return; // Prioritaskan USB lokal jika terhubung
           const data = snapshot.val();
           if (data && (typeof data.voltage !== "undefined" || typeof data.current !== "undefined")) {
-            updateHardwareBadge("cloud_live", "Supabase: LIVE");
+            const parsed = parseTelemetryPayload(data);
+            const label = (parsed.current !== null && parsed.current > 0) ? "Cloud Live: (V+A)" : "Cloud: LIVE";
+            updateHardwareBadge("cloud_live", label);
             updateDashboardState(
-              data.voltage,
-              data.current,
-              data.unit || "V",
-              data.unit_current || "A",
-              `Cloud Sync (${(data.target || 'Live').toUpperCase()})`
+              parsed.voltage,
+              parsed.current,
+              parsed.unit || "V",
+              parsed.unit_current || "A",
+              `Cloud Sync (${(parsed.target || 'Live').toUpperCase()})`
             );
 
             clearTimeout(hardwareWatchdogTimer);
             hardwareWatchdogTimer = setTimeout(() => {
               if (!isDirectVoltConnected && !isDirectAmpConnected) {
-                updateHardwareBadge("standby", "Supabase: Standby");
+                updateHardwareBadge("standby", "Cloud: Standby");
               }
             }, 10000);
           }
@@ -1465,13 +1509,16 @@
 
           if (!error && data && data.length > 0) {
             const latest = data[0];
-            updateHardwareBadge("supabase_live", "Supabase: LIVE");
+            const parsed = parseTelemetryPayload(latest);
+            const isDual = parsed.current !== null && !isNaN(parsed.current);
+
+            updateHardwareBadge("supabase_live", isDual ? "Supabase: LIVE (V+A)" : "Supabase: LIVE");
             updateDashboardState(
-              latest.voltage, 
-              (typeof latest.current !== "undefined") ? latest.current : null, 
-              latest.unit || "V", 
-              "A", 
-              `Supabase (${(latest.target || 'Live').toUpperCase()})`
+              parsed.voltage, 
+              parsed.current, 
+              parsed.unit || "V", 
+              parsed.unit_current || "A", 
+              `Supabase (${(parsed.target || 'Live').toUpperCase()})`
             );
 
             clearTimeout(hardwareWatchdogTimer);
@@ -1501,13 +1548,16 @@
 
               const row = payload.new;
               if (row && typeof row.voltage !== "undefined") {
-                updateHardwareBadge("supabase_live", "Supabase: LIVE");
+                const parsed = parseTelemetryPayload(row);
+                const isDual = parsed.current !== null && !isNaN(parsed.current);
+
+                updateHardwareBadge("supabase_live", isDual ? "Supabase: LIVE (V+A)" : "Supabase: LIVE");
                 updateDashboardState(
-                  row.voltage, 
-                  (typeof row.current !== "undefined") ? row.current : null, 
-                  row.unit || "V", 
-                  "A", 
-                  `Supabase Live (${(row.target || 'Live').toUpperCase()})`
+                  parsed.voltage, 
+                  parsed.current, 
+                  parsed.unit || "V", 
+                  parsed.unit_current || "A", 
+                  `Supabase Live (${(parsed.target || 'Live').toUpperCase()})`
                 );
 
                 clearTimeout(hardwareWatchdogTimer);

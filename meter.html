@@ -860,7 +860,7 @@
       if (now - lastCloudSyncTime < 250) return; // 4Hz max sync rate
       lastCloudSyncTime = now;
 
-      // 1. Supabase Sync
+      // 1. Supabase Sync (Kirim V, A, dan Watt via target payload)
       if (supabase) {
         try {
           supabase
@@ -869,7 +869,7 @@
               voltage: voltage,
               unit: "V",
               mode: "DC",
-              target: 'solar'
+              target: `solar#${(current !== null && current !== undefined) ? current : 0}#${power || 0}`
             }])
             .then(({ error }) => {
               if (!error) {
