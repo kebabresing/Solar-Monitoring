@@ -1454,19 +1454,37 @@
     function initSupabaseListener() {
       if (!supabase) return;
 
-      // 1. Initial snapshot fetch
-      supabase
-        .from('protek608_telemetry')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .then(({ data, error }) => {
-          if (!error && data && data.length > 0 && !isDirectVoltConnected && !isDirectAmpConnected) {
+      const fetchLatestSupabase = async () => {
+        if (isDirectVoltConnected || isDirectAmpConnected) return;
+        try {
+          const { data, error } = await supabase
+            .from('protek608_telemetry')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          if (!error && data && data.length > 0) {
             const latest = data[0];
-            updateDashboardState(latest.voltage, latest.current, latest.unit || "V", "A", "Supabase Initial Sync");
-            updateHardwareBadge("cloud_live", "Supabase: LIVE");
+            const ageMs = latest.created_at ? (Date.now() - new Date(latest.created_at).getTime()) : 0;
+            const isFresh = ageMs < 15000; // Data masih baru dalam 15 detik terakhir
+
+            updateHardwareBadge(isFresh ? "supabase_live" : "standby", isFresh ? "Supabase: LIVE" : "Supabase: Standby");
+            updateDashboardState(latest.voltage, latest.current, latest.unit || "V", "A", `Supabase Sync (${(latest.target || 'Live').toUpperCase()})`);
+
+            clearTimeout(hardwareWatchdogTimer);
+            hardwareWatchdogTimer = setTimeout(() => {
+              if (!isDirectVoltConnected && !isDirectAmpConnected) {
+                updateHardwareBadge("standby", "Supabase: Standby");
+              }
+            }, 10000);
           }
-        });
+        } catch (err) {
+          console.warn("Supabase fetch error:", err);
+        }
+      };
+
+      // 1. Initial snapshot fetch
+      fetchLatestSupabase();
 
       // 2. Realtime Postgres Changes Subscription
       try {
@@ -1480,8 +1498,8 @@
 
               const row = payload.new;
               if (row && typeof row.voltage !== "undefined") {
-                updateHardwareBadge("cloud_live", "Supabase: LIVE");
-                updateDashboardState(row.voltage, row.current, row.unit || "V", "A", "Supabase Live Stream");
+                updateHardwareBadge("supabase_live", "Supabase: LIVE");
+                updateDashboardState(row.voltage, row.current, row.unit || "V", "A", `Supabase Live (${(row.target || 'Live').toUpperCase()})`);
 
                 clearTimeout(hardwareWatchdogTimer);
                 hardwareWatchdogTimer = setTimeout(() => {
@@ -1496,6 +1514,9 @@
       } catch (subErr) {
         console.warn("Supabase Realtime error:", subErr);
       }
+
+      // 3. Fallback Polling setiap 2.5 detik (menjamin HP selalu update tanpa delay)
+      setInterval(fetchLatestSupabase, 2500);
     }
 
     // ========================================================
