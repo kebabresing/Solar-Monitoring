@@ -177,11 +177,20 @@
       <!-- Right: Channel Selector, Serial Connect & Status -->
       <div class="flex items-center gap-2 md:gap-3">
         
-        <!-- DIRECT SERIAL CONNECT BUTTON -->
-        <button id="btn-direct-serial" class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition">
-          <span class="material-symbols-outlined text-[18px]">usb</span>
-          <span id="btn-serial-text" class="hidden sm:inline">Hubungkan Serial</span>
-        </button>
+        <!-- DUAL DIRECT SERIAL CONNECT BUTTONS -->
+        <div class="flex items-center gap-1.5">
+          <!-- Button Port 1 (Volt) -->
+          <button id="btn-serial-volt" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition">
+            <span class="material-symbols-outlined text-[16px]">bolt</span>
+            <span id="btn-volt-text" class="hidden sm:inline">Volt (P1)</span>
+          </button>
+
+          <!-- Button Port 2 (Ampere) -->
+          <button id="btn-serial-amp" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-semibold shadow-sm transition">
+            <span class="material-symbols-outlined text-[16px]">speed</span>
+            <span id="btn-amp-text" class="hidden sm:inline">Amp (P2)</span>
+          </button>
+        </div>
 
         <!-- Live Status Badge -->
         <div id="hardware-status-badge" class="flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.12)]">
@@ -201,7 +210,7 @@
         <!-- Link to meter.html in a new tab -->
         <a href="meter.html" target="_blank" title="Buka Halaman Serial Multimeter & Diagnostik" class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high border border-white/10 rounded-xl text-xs text-on-surface-variant hover:text-on-surface transition">
           <span class="material-symbols-outlined text-[18px]">terminal</span>
-          <span class="hidden md:inline">Diagnostik Meter</span>
+          <span class="hidden md:inline">Dual Meter View</span>
         </a>
 
       </div>
@@ -730,33 +739,58 @@
     }
 
     // ========================================================
-    // 5. CORE TELEMETRY ENGINE & UI UPDATER
+    // 5. CORE TELEMETRY ENGINE & UI UPDATER (Dual Meter Ready)
     // ========================================================
-    function updateDashboardState(rawVoltage, unit = "V", sourceLabel = "Protek 608 Live") {
-      let v = parseFloat(rawVoltage) || 0;
-      if (unit === "mV") v = v / 1000;
-      v = Math.max(0, v);
+    let liveMeasuredVolt = null;
+    let liveMeasuredAmp = null;
+
+    function updateDashboardState(rawVoltage, rawCurrent = null, unit = "V", unitAmp = "A", sourceLabel = "Protek 608 Live") {
+      let v = (rawVoltage !== null && rawVoltage !== undefined) ? parseFloat(rawVoltage) : liveMeasuredVolt;
+      if (v !== null && !isNaN(v)) {
+        if (unit === "mV") v = v / 1000;
+        v = Math.max(0, v);
+        liveMeasuredVolt = v;
+        lastVoltage = v;
+      } else {
+        v = lastVoltage || 0;
+      }
+
+      let a = (rawCurrent !== null && rawCurrent !== undefined) ? parseFloat(rawCurrent) : liveMeasuredAmp;
+      if (a !== null && !isNaN(a)) {
+        if (unitAmp === "mA") a = a / 1000;
+        else if (unitAmp === "μA" || unitAmp === "uA") a = a / 1000000;
+        a = Math.max(0, a);
+        liveMeasuredAmp = a;
+      }
 
       const now = Date.now();
       const dtHours = Math.max(0, (now - lastTimestamp) / 3600000);
       lastTimestamp = now;
-      lastVoltage = v;
+
+      const hasRealAmp = (liveMeasuredAmp !== null && !isNaN(liveMeasuredAmp));
 
       // Update Telemetry based on user's target probe connection
       if (currentTarget === "solar") {
         telemetry.solar.voltage = v;
-        telemetry.solar.current = (v > 2.0) ? Math.min(20.0, (v / 18.0) * 5.5).toFixed(2) : 0.0;
-        telemetry.solar.power = Math.round(v * parseFloat(telemetry.solar.current));
         telemetry.solar.isLive = true;
 
-        // Realistic energy flow: if solar produces power, supplies load and surplus charges battery
+        if (hasRealAmp) {
+          // REAL MEASUREMENT: P = V x I (100% precision)
+          telemetry.solar.current = liveMeasuredAmp.toFixed(3);
+          telemetry.solar.power = Math.round(v * liveMeasuredAmp);
+        } else {
+          // Fallback Estimation when only 1 meter is connected
+          telemetry.solar.current = (v > 2.0) ? Math.min(20.0, (v / 18.0) * 5.5).toFixed(2) : "0.00";
+          telemetry.solar.power = Math.round(v * parseFloat(telemetry.solar.current));
+        }
+
         const solarP = telemetry.solar.power;
-        const estLoad = Math.min(solarP, 300); // load driven by available solar or minimal
+        const estLoad = Math.min(solarP, 300);
         const surplus = solarP - estLoad;
 
         telemetry.load.power = estLoad;
         telemetry.load.current = (estLoad / 220.0).toFixed(2);
-        telemetry.battery.power = surplus; // >0 charging, <0 discharging
+        telemetry.battery.power = surplus;
         telemetry.battery.voltage = (12.4 + (solarP > 100 ? 1.4 : 0)).toFixed(2);
         
         const battInfo = calculateBatterySOC(parseFloat(telemetry.battery.voltage));
@@ -770,27 +804,38 @@
         const battInfo = calculateBatterySOC(v);
         telemetry.battery.soc = battInfo.soc;
         telemetry.battery.status = battInfo.status;
-        telemetry.battery.power = battInfo.charging ? Math.round(v * 8.5) : -Math.round(v * 2.5);
-        telemetry.battery.current = (Math.abs(telemetry.battery.power) / (v || 12)).toFixed(1);
 
-        // Solar & Load estimation from battery state
+        if (hasRealAmp) {
+          telemetry.battery.current = liveMeasuredAmp.toFixed(3);
+          telemetry.battery.power = Math.round(v * liveMeasuredAmp * (battInfo.charging ? 1 : -1));
+        } else {
+          telemetry.battery.power = battInfo.charging ? Math.round(v * 8.5) : -Math.round(v * 2.5);
+          telemetry.battery.current = (Math.abs(telemetry.battery.power) / (v || 12)).toFixed(1);
+        }
+
         if (battInfo.charging) {
-          telemetry.solar.power = Math.round(telemetry.battery.power + 150);
+          telemetry.solar.power = Math.round(Math.abs(telemetry.battery.power) + 150);
           telemetry.solar.voltage = (v * 1.4).toFixed(1);
           telemetry.solar.current = (telemetry.solar.power / (parseFloat(telemetry.solar.voltage) || 1)).toFixed(2);
           telemetry.load.power = 150;
         } else {
           telemetry.solar.power = 0;
           telemetry.solar.voltage = 0;
-          telemetry.solar.current = 0;
+          telemetry.solar.current = "0.00";
           telemetry.load.power = Math.abs(telemetry.battery.power);
         }
 
       } else if (currentTarget === "load") {
         telemetry.load.voltage = v;
         telemetry.load.isLive = true;
-        telemetry.load.current = (v > 100 ? (v / 220) * 1.8 : 0).toFixed(2);
-        telemetry.load.power = Math.round(v * parseFloat(telemetry.load.current));
+
+        if (hasRealAmp) {
+          telemetry.load.current = liveMeasuredAmp.toFixed(3);
+          telemetry.load.power = Math.round(v * liveMeasuredAmp);
+        } else {
+          telemetry.load.current = (v > 100 ? (v / 220) * 1.8 : 0).toFixed(2);
+          telemetry.load.power = Math.round(v * parseFloat(telemetry.load.current));
+        }
       }
 
       // Realtime Energy Integration (No dummy numbers!)
@@ -817,30 +862,44 @@
       if (currentTarget === "solar") {
         if (elSolarKw) elSolarKw.innerText = (telemetry.solar.power / 1000).toFixed(2);
         if (elSolarUnit) elSolarUnit.innerText = "kW";
-        if (elRawMeter) elRawMeter.innerText = v.toFixed(3) + " " + unit;
+        if (elRawMeter) {
+          elRawMeter.innerText = hasRealAmp 
+            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.solar.current).toFixed(2)} A`
+            : `${v.toFixed(3)} ${unit}`;
+        }
         if (elPvVolt) elPvVolt.innerText = telemetry.solar.voltage + " V";
-        if (elPvAmp) elPvAmp.innerText = telemetry.solar.current + " A";
-        if (elSolarDesc) elSolarDesc.innerText = "Daya listrik aktual yang diproduksi oleh susunan panel surya dari radiasi sinar matahari.";
+        if (elPvAmp) elPvAmp.innerText = telemetry.solar.current + " A" + (hasRealAmp ? " (Riil)" : "");
+        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp 
+          ? `Daya aktual terukur riil dari 2 Multimeter: ${telemetry.solar.power} Watt (P = V × I).`
+          : "Daya listrik aktual yang diproduksi oleh susunan panel surya dari radiasi sinar matahari.";
         if (elApplianceText) elApplianceText.innerText = telemetry.solar.power > 100 ? `≈ Memproduksi ${telemetry.solar.power} Watt daya bersih` : "≈ Radiasi matahari rendah / belum aktif";
         if (elApplianceIcon) elApplianceIcon.innerText = telemetry.solar.power > 500 ? "wb_sunny" : "lightbulb";
 
       } else if (currentTarget === "battery") {
         if (elSolarKw) elSolarKw.innerText = v.toFixed(2);
         if (elSolarUnit) elSolarUnit.innerText = "V";
-        if (elRawMeter) elRawMeter.innerText = v.toFixed(3) + " " + unit;
+        if (elRawMeter) {
+          elRawMeter.innerText = hasRealAmp 
+            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.battery.current).toFixed(2)} A`
+            : `${v.toFixed(3)} ${unit}`;
+        }
         if (elPvVolt) elPvVolt.innerText = `SOC: ${telemetry.battery.soc}%`;
-        if (elPvAmp) elPvAmp.innerText = `${telemetry.battery.status}`;
-        if (elSolarDesc) elSolarDesc.innerText = `Mengukur langsung tegangan Baterai Bank. Kondisi: ${telemetry.battery.status} (${telemetry.battery.soc}%).`;
+        if (elPvAmp) elPvAmp.innerText = `${telemetry.battery.status} (${telemetry.battery.current} A)`;
+        if (elSolarDesc) elSolarDesc.innerText = `Mengukur langsung terminal Baterai Bank. Kondisi: ${telemetry.battery.status} (${telemetry.battery.soc}%).`;
         if (elApplianceText) elApplianceText.innerText = `Tegangan terminal baterai terukur presisi via Protek 608`;
         if (elApplianceIcon) elApplianceIcon.innerText = "battery_charging_full";
 
       } else if (currentTarget === "load") {
         if (elSolarKw) elSolarKw.innerText = telemetry.load.power;
         if (elSolarUnit) elSolarUnit.innerText = "W";
-        if (elRawMeter) elRawMeter.innerText = v.toFixed(2) + " " + unit;
-        if (elPvVolt) elPvVolt.innerText = v.toFixed(1) + " V AC";
-        if (elPvAmp) elPvAmp.innerText = telemetry.load.current + " A";
-        if (elSolarDesc) elSolarDesc.innerText = `Mengukur langsung tegangan beban listrik AC inverter fasilitas.`;
+        if (elRawMeter) {
+          elRawMeter.innerText = hasRealAmp 
+            ? `${v.toFixed(1)} V • ${parseFloat(telemetry.load.current).toFixed(2)} A`
+            : `${v.toFixed(2)} ${unit}`;
+        }
+        if (elPvVolt) elPvVolt.innerText = v.toFixed(1) + " V";
+        if (elPvAmp) elPvAmp.innerText = telemetry.load.current + " A" + (hasRealAmp ? " (Riil)" : "");
+        if (elSolarDesc) elSolarDesc.innerText = `Konsumsi daya beban listrik aktif: ${telemetry.load.power} Watt.`;
         if (elApplianceText) elApplianceText.innerText = `Konsumsi daya beban aktif: ${telemetry.load.power} Watt`;
         if (elApplianceIcon) elApplianceIcon.innerText = "bolt";
       }
@@ -1010,7 +1069,7 @@
           if (mainIcon) mainIcon.innerText = "bolt";
         }
 
-        updateDashboardState(lastVoltage, "V", isDirectSerialConnected ? "Direct Serial Live" : "Firebase Live");
+        updateDashboardState(lastVoltage, liveMeasuredAmp, "V", "A", getActiveSourceLabel());
       }
 
       btnSolar.addEventListener("click", () => setActiveChannel("solar"));
@@ -1018,13 +1077,18 @@
       btnLoad.addEventListener("click", () => setActiveChannel("load"));
     }
 
+    function getActiveSourceLabel() {
+      if (isDirectVoltConnected && isDirectAmpConnected) return "Dual Protek 608 Direct Live";
+      if (isDirectVoltConnected) return "Protek 608 (Volt Direct Live)";
+      if (isDirectAmpConnected) return "Protek 608 (Amp Direct Live)";
+      return "Cloud Realtime Live";
+    }
+
     // ========================================================
-    // 7. DIRECT WEB SERIAL DRIVER (Built-in for Dashboard!)
+    // 7. DUAL WEB SERIAL DRIVER (Volt + Ampere Multimeters)
     // ========================================================
-    let serialPort = null;
-    let serialReader = null;
-    let keepReadingSerial = false;
-    let serialBuffer = [];
+    let isDirectVoltConnected = false;
+    let isDirectAmpConnected = false;
 
     function reverseBits(b) {
       let result = 0;
@@ -1116,161 +1180,193 @@
       const numValue = parseFloat(trimmed);
       if (isNaN(numValue)) return null;
 
+      let standardValue = numValue;
+      if (unitPrefix === "m") standardValue = numValue / 1000;
+      else if (unitPrefix === "μ" || unitPrefix === "u") standardValue = numValue / 1000000;
+      else if (unitPrefix === "k") standardValue = numValue * 1000;
+
       return {
-        voltage: numValue,
+        value: numValue,
+        standardValue: standardValue,
+        voltage: standardValue,
         voltageStr: trimmed,
         unit: unitPrefix + unit,
+        rawUnit: unit,
+        isAmpere: (unit === "A"),
+        isVolt: (unit === "V"),
         mode: mode
       };
     }
 
-    async function toggleDirectSerial() {
-      const btn = document.getElementById("btn-direct-serial");
-      const btnText = document.getElementById("btn-serial-text");
-      const badgeElem = document.getElementById("hardware-status-badge");
-      const textElem = document.getElementById("hardware-status-text");
-      const dotElem = document.getElementById("hardware-dot");
-      const pingElem = document.getElementById("hardware-ping");
-
-      if (isDirectSerialConnected) {
-        keepReadingSerial = false;
-        if (serialReader) {
-          try { await serialReader.cancel(); } catch (e) {}
-        }
-        if (serialPort) {
-          try { await serialPort.close(); } catch (e) {}
-          serialPort = null;
-        }
-        isDirectSerialConnected = false;
-        btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
-        btnText.innerText = "Hubungkan Serial";
-        updateHardwareBadge("direct_disconnected");
-        return;
+    class DashboardSerialPort {
+      constructor(type, onDataReceived) {
+        this.type = type; // 'volt' or 'amp'
+        this.onData = onDataReceived;
+        this.port = null;
+        this.reader = null;
+        this.keepReading = false;
+        this.buffer = [];
       }
 
-      if (!("serial" in navigator)) {
-        alert("Web Serial API tidak didukung pada browser ini. Gunakan Google Chrome atau Microsoft Edge.");
-        return;
-      }
+      async connect() {
+        if (!("serial" in navigator)) {
+          alert("Web Serial API tidak didukung pada browser ini. Harap gunakan Google Chrome atau Microsoft Edge.");
+          return false;
+        }
 
-      try {
-        serialPort = await navigator.serial.requestPort();
-        await serialPort.open({
-          baudRate: 9600,
-          dataBits: 7,
-          stopBits: 1,
-          parity: "none"
-        });
-
-        // Set DTR & RTS to HIGH
         try {
-          await serialPort.setSignals({ dataTerminalReady: true, requestToSend: true });
-        } catch (sigErr) {
-          console.warn("setSignals warn:", sigErr);
+          this.port = await navigator.serial.requestPort();
+          await this.port.open({
+            baudRate: 9600,
+            dataBits: 7,
+            stopBits: 1,
+            parity: "none"
+          });
+
+          try {
+            await this.port.setSignals({ dataTerminalReady: true, requestToSend: true });
+          } catch (e) {}
+
+          this.keepReading = true;
+          this.buffer = [];
+          this.startReadLoop();
+          return true;
+        } catch (err) {
+          console.error(`Serial connect error (${this.type}):`, err);
+          if (err.name !== "NotFoundError") {
+            alert(`Gagal membuka port serial (${this.type}): ` + err.message);
+          }
+          return false;
         }
+      }
 
-        isDirectSerialConnected = true;
-        keepReadingSerial = true;
-        serialBuffer = [];
+      async startReadLoop() {
+        while (this.port && this.port.readable && this.keepReading) {
+          try {
+            this.reader = this.port.readable.getReader();
+            while (this.keepReading) {
+              const { value, done } = await this.reader.read();
+              if (done) break;
 
-        btn.className = "flex items-center gap-1.5 px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
-        btnText.innerText = "Putus Serial";
+              if (value && value.length > 0) {
+                for (let i = 0; i < value.length; i++) {
+                  this.buffer.push(value[i]);
+                }
 
-        updateHardwareBadge("direct_live");
+                while (this.buffer.length >= 43) {
+                  const startIndex = this.buffer.indexOf(0x5B);
+                  if (startIndex === -1) {
+                    this.buffer = [];
+                    break;
+                  }
+                  if (startIndex > 0) {
+                    this.buffer.splice(0, startIndex);
+                  }
+                  if (this.buffer.length < 43) break;
 
-        // Read loop
-        readDirectSerialLoop();
+                  if (this.buffer[42] === 0x5D) {
+                    const validPacket = this.buffer.slice(0, 43);
+                    this.buffer.splice(0, 43);
+                    
+                    const result = decodeProtek608(validPacket);
+                    if (result && result.value !== null && !isNaN(result.value)) {
+                      this.onData(result);
+                    }
+                  } else {
+                    this.buffer.shift();
+                  }
+                }
 
-      } catch (err) {
-        console.error("Direct serial connection failed:", err);
-        if (err.name !== "NotFoundError") {
-          alert("Gagal membuka port serial: " + err.message);
+                if (this.buffer.length > 300) this.buffer = this.buffer.slice(-86);
+              }
+            }
+          } catch (err) {
+            if (this.keepReading) console.error(`Read loop err (${this.type}):`, err);
+          } finally {
+            if (this.reader) {
+              try { this.reader.releaseLock(); } catch (e) {}
+              this.reader = null;
+            }
+          }
         }
+      }
+
+      async disconnect() {
+        this.keepReading = false;
+        if (this.reader) {
+          try { await this.reader.cancel(); } catch (e) {}
+        }
+        if (this.port) {
+          try { await this.port.close(); } catch (e) {}
+          this.port = null;
+        }
+        this.reader = null;
+        this.buffer = [];
       }
     }
 
-    async function readDirectSerialLoop() {
-      while (serialPort && serialPort.readable && keepReadingSerial) {
+    // Instansiasi Port Volt & Port Amp
+    const serialVoltDriver = new DashboardSerialPort("volt", (res) => {
+      liveMeasuredVolt = res.standardValue;
+      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, res.unit, "A", getActiveSourceLabel());
+
+      // Sync ke cloud
+      syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
+    });
+
+    const serialAmpDriver = new DashboardSerialPort("amp", (res) => {
+      liveMeasuredAmp = res.standardValue;
+      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, "V", res.unit, getActiveSourceLabel());
+
+      // Sync ke cloud
+      syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
+    });
+
+    let lastCloudSync = 0;
+    function syncTelemetryToCloud(v, a) {
+      const now = Date.now();
+      if (now - lastCloudSync < 300) return;
+      lastCloudSync = now;
+
+      const calcPower = (v !== null && a !== null) ? Math.round(v * a) : telemetry[currentTarget].power;
+
+      // 1. Supabase Sync
+      if (supabase) {
         try {
-          serialReader = serialPort.readable.getReader();
-          while (keepReadingSerial) {
-            const { value, done } = await serialReader.read();
-            if (done) break;
-            if (value && value.length > 0) {
-              for (let i = 0; i < value.length; i++) {
-                serialBuffer.push(value[i]);
-              }
+          supabase
+            .from('protek608_telemetry')
+            .insert([{
+              voltage: v || 0,
+              current: a || 0,
+              power: calcPower,
+              unit: 'V',
+              mode: 'DC',
+              target: currentTarget
+            }])
+            .then();
+        } catch (sbErr) {}
+      }
 
-              while (serialBuffer.length >= 43) {
-                const startIndex = serialBuffer.indexOf(0x5B);
-                if (startIndex === -1) {
-                  serialBuffer = [];
-                  break;
-                }
-                if (startIndex > 0) {
-                  serialBuffer.splice(0, startIndex);
-                }
-                if (serialBuffer.length < 43) break;
-
-                if (serialBuffer[42] === 0x5D) {
-                  const validPacket = serialBuffer.slice(0, 43);
-                  serialBuffer.splice(0, 43);
-                  
-                  const result = decodeProtek608(validPacket);
-                  if (result && result.voltage !== null && !isNaN(result.voltage)) {
-                    updateDashboardState(result.voltage, result.unit || "V", "Direct Serial Live");
-
-                    // 1. Sync to Supabase
-                    if (supabase) {
-                      try {
-                        supabase
-                          .from('protek608_telemetry')
-                          .insert([{
-                            voltage: result.voltage,
-                            unit: result.unit || 'V',
-                            mode: result.mode || 'DC',
-                            target: currentTarget
-                          }])
-                          .then();
-                      } catch (sbErr) {}
-                    }
-
-                    // 2. Sync to Firebase with channel key
-                    if (isFirebaseReady && firebaseDb) {
-                      try {
-                        const payload = {
-                          voltage: result.voltage,
-                          unit: result.unit,
-                          mode: result.mode,
-                          target: currentTarget,
-                          timestamp: Date.now()
-                        };
-                        set(ref(firebaseDb, "protek608/current"), payload);
-                        set(ref(firebaseDb, `protek608/${currentTarget}`), payload);
-                      } catch (fbErr) {}
-                    }
-                  }
-                } else {
-                  serialBuffer.shift();
-                }
-              }
-
-              if (serialBuffer.length > 300) serialBuffer = serialBuffer.slice(-86);
-            }
-          }
-        } catch (err) {
-          if (keepReadingSerial) console.error("Serial read loop err:", err);
-        } finally {
-          if (serialReader) {
-            try { serialReader.releaseLock(); } catch (e) {}
-            serialReader = null;
-          }
-        }
+      // 2. Firebase Sync
+      if (isFirebaseReady && firebaseDb) {
+        try {
+          const payload = {
+            voltage: v || 0,
+            current: a || 0,
+            power: calcPower,
+            unit: 'V',
+            unit_current: 'A',
+            target: currentTarget,
+            timestamp: now
+          };
+          set(ref(firebaseDb, "protek608/current"), payload);
+          set(ref(firebaseDb, `protek608/${currentTarget}`), payload);
+        } catch (fbErr) {}
       }
     }
 
     // ========================================================
-    // 8. UNIFIED STATUS BADGE ENGINE (Glitch-Free)
+    // 8. UNIFIED STATUS BADGE ENGINE
     // ========================================================
     function updateHardwareBadge(type, customText = "") {
       const badgeElem = document.getElementById("hardware-status-badge");
@@ -1280,12 +1376,27 @@
 
       if (!badgeElem || !textElem) return;
 
-      // If direct serial is actively connected, it ALWAYS takes 100% priority
-      if (isDirectSerialConnected && type !== "direct_disconnected") {
+      if (isDirectVoltConnected && isDirectAmpConnected) {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.25)]";
-        textElem.innerText = "Protek 608: Direct LIVE";
+        textElem.innerText = "Dual Protek: LIVE (V+A)";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
         pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+        return;
+      }
+
+      if (isDirectVoltConnected) {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-blue-500/15 rounded-full border border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]";
+        textElem.innerText = "Protek Volt: LIVE";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-blue-400";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75";
+        return;
+      }
+
+      if (isDirectAmpConnected) {
+        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-emerald-500/15 rounded-full border border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]";
+        textElem.innerText = "Protek Amp: LIVE";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-emerald-400";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
         return;
       }
 
@@ -1297,11 +1408,6 @@
       } else if (type === "standby") {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
         textElem.innerText = customText || "Supabase: Standby";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
-        pingElem.className = "hidden";
-      } else if (type === "direct_disconnected") {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = "Serial Terputus";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
         pingElem.className = "hidden";
       } else {
@@ -1325,9 +1431,9 @@
         .order('created_at', { ascending: false })
         .limit(1)
         .then(({ data, error }) => {
-          if (!error && data && data.length > 0 && !isDirectSerialConnected) {
+          if (!error && data && data.length > 0 && !isDirectVoltConnected && !isDirectAmpConnected) {
             const latest = data[0];
-            updateDashboardState(latest.voltage, latest.unit || "V", "Supabase Initial Sync");
+            updateDashboardState(latest.voltage, latest.current, latest.unit || "V", "A", "Supabase Initial Sync");
             updateHardwareBadge("supabase_live");
           }
         });
@@ -1340,17 +1446,16 @@
             'postgres_changes',
             { event: 'INSERT', schema: 'public', table: 'protek608_telemetry' },
             (payload) => {
-              // If local serial is connected, ignore incoming echo to prevent glitches
-              if (isDirectSerialConnected) return;
+              if (isDirectVoltConnected || isDirectAmpConnected) return;
 
               const row = payload.new;
               if (row && typeof row.voltage !== "undefined") {
                 updateHardwareBadge("supabase_live");
-                updateDashboardState(row.voltage, row.unit || "V", "Supabase Live Stream");
+                updateDashboardState(row.voltage, row.current, row.unit || "V", "A", "Supabase Live Stream");
 
                 clearTimeout(hardwareWatchdogTimer);
                 hardwareWatchdogTimer = setTimeout(() => {
-                  if (!isDirectSerialConnected) {
+                  if (!isDirectVoltConnected && !isDirectAmpConnected) {
                     updateHardwareBadge("standby", "Supabase: Standby");
                   }
                 }, 10000);
@@ -1363,21 +1468,65 @@
       }
     }
 
-    // Initialize on Load
+    // ========================================================
+    // 10. INITIALIZE & EVENT LISTENERS
+    // ========================================================
     document.addEventListener("DOMContentLoaded", () => {
       initChannelSelector();
 
-      const btnDirect = document.getElementById("btn-direct-serial");
-      if (btnDirect) {
-        btnDirect.addEventListener("click", toggleDirectSerial);
+      const btnVolt = document.getElementById("btn-serial-volt");
+      const btnVoltText = document.getElementById("btn-volt-text");
+      const btnAmp = document.getElementById("btn-serial-amp");
+      const btnAmpText = document.getElementById("btn-amp-text");
+
+      // Port 1 (Volt) Connect/Disconnect Toggle
+      if (btnVolt) {
+        btnVolt.addEventListener("click", async () => {
+          if (isDirectVoltConnected) {
+            await serialVoltDriver.disconnect();
+            isDirectVoltConnected = false;
+            btnVolt.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+            if (btnVoltText) btnVoltText.innerText = "Volt (P1)";
+            updateHardwareBadge(isDirectAmpConnected ? "amp_live" : "standby");
+          } else {
+            const ok = await serialVoltDriver.connect();
+            if (ok) {
+              isDirectVoltConnected = true;
+              btnVolt.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+              if (btnVoltText) btnVoltText.innerText = "Putus V (P1)";
+              updateHardwareBadge("volt_live");
+            }
+          }
+        });
+      }
+
+      // Port 2 (Ampere) Connect/Disconnect Toggle
+      if (btnAmp) {
+        btnAmp.addEventListener("click", async () => {
+          if (isDirectAmpConnected) {
+            await serialAmpDriver.disconnect();
+            isDirectAmpConnected = false;
+            btnAmp.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+            if (btnAmpText) btnAmpText.innerText = "Amp (P2)";
+            updateHardwareBadge(isDirectVoltConnected ? "volt_live" : "standby");
+          } else {
+            const ok = await serialAmpDriver.connect();
+            if (ok) {
+              isDirectAmpConnected = true;
+              btnAmp.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+              if (btnAmpText) btnAmpText.innerText = "Putus A (P2)";
+              updateHardwareBadge("amp_live");
+            }
+          }
+        });
       }
 
       initSupabaseListener();
-      updateDashboardState(0.0, "V", "Inisialisasi");
+      updateDashboardState(0.0, 0.0, "V", "A", "Inisialisasi");
       
       window.addEventListener("resize", () => {
         requestAnimationFrame(() => {
-          updateDashboardState(lastVoltage, "V", isDirectSerialConnected ? "Direct Serial Live" : "Cloud Realtime Live");
+          updateDashboardState(lastVoltage, liveMeasuredAmp, "V", "A", getActiveSourceLabel());
         });
       });
     });

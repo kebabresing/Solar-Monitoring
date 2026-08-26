@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voltage Monitor | Protek 608 - VEDC Malang</title>
+  <title>Dual Multimeter Monitor | Protek 608 - VEDC Malang</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/logo-boe.png">
@@ -11,14 +11,14 @@
   <!-- Google Fonts: Inter, Chakra Petch (Digital), JetBrains Mono (Terminal) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-gradient: #f3f6fa;
+      --bg-gradient: #f1f5f9;
       --card-bg: #ffffff;
       --card-border: #e2e8f0;
-      --card-shadow: 0 16px 40px -8px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.03);
+      --card-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.04);
       
       --text-main: #0f172a;
       --text-muted: #64748b;
@@ -29,6 +29,13 @@
       --primary-subtle: #eff6ff;
       --primary-border: #bfdbfe;
       
+      --secondary: #10b981;
+      --secondary-hover: #059669;
+      --secondary-subtle: #ecfdf5;
+      
+      --amber: #f59e0b;
+      --amber-subtle: #fffbeb;
+      
       --danger: #e11d48;
       --danger-hover: #be123c;
       --danger-subtle: #fff1f2;
@@ -36,11 +43,18 @@
       
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.35);
-      --warning: #f59e0b;
       
-      --display-bg: #f8fafc;
-      --display-border: #e2e8f0;
-      --digital-color: #1e40af;
+      --display-bg-volt: #eff6ff;
+      --display-border-volt: #bfdbfe;
+      --digital-color-volt: #1e40af;
+      
+      --display-bg-amp: #ecfdf5;
+      --display-border-amp: #a7f3d0;
+      --digital-color-amp: #065f46;
+
+      --display-bg-power: #fffbeb;
+      --display-border-power: #fde68a;
+      --digital-color-power: #92400e;
       
       --terminal-bg: #090d16;
       --terminal-text: #38bdf8;
@@ -74,7 +88,7 @@
       padding: 12px 18px;
       border-radius: 12px;
       margin-bottom: 16px;
-      max-width: 560px;
+      max-width: 680px;
       width: 100%;
       text-align: center;
       font-size: 0.88rem;
@@ -89,7 +103,7 @@
       border-radius: 24px;
       padding: 32px 28px;
       width: 100%;
-      max-width: 560px;
+      max-width: 680px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -103,7 +117,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #38bdf8, #2563eb, #10b981);
+      background: linear-gradient(90deg, #2563eb, #10b981, #f59e0b);
     }
 
     /* Header */
@@ -111,15 +125,17 @@
       width: 100%;
       text-align: center;
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
 
     .card-title {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.55rem;
+      font-size: 1.6rem;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--text-main);
-      margin-bottom: 4px;
     }
 
     .device-subtitle {
@@ -128,13 +144,158 @@
       font-weight: 500;
     }
 
+    /* Dual Display Grid */
+    .dual-display-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+
+    .meter-display-box {
+      border-radius: 18px;
+      padding: 18px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .box-volt {
+      background: var(--display-bg-volt);
+      border: 1.5px solid var(--display-border-volt);
+    }
+
+    .box-amp {
+      background: var(--display-bg-amp);
+      border: 1.5px solid var(--display-border-amp);
+    }
+
+    .display-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag-volt { color: #2563eb; }
+    .tag-amp { color: #059669; }
+
+    .meter-val-wrapper {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 6px;
+      margin: 2px 0 6px;
+    }
+
+    .meter-value {
+      font-family: 'Chakra Petch', monospace;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .val-volt { color: var(--digital-color-volt); }
+    .val-amp { color: var(--digital-color-amp); }
+
+    .meter-value.offline {
+      color: #94a3b8 !important;
+      opacity: 0.6;
+    }
+
+    .meter-unit {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .unit-volt { color: var(--primary); }
+    .unit-amp { color: var(--secondary); }
+
+    .mode-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .mode-volt { color: #1e40af; border: 1px solid #bfdbfe; }
+    .mode-amp { color: #065f46; border: 1px solid #a7f3d0; }
+
+    /* Power Calculation Bar */
+    .power-calc-bar {
+      background: var(--display-bg-power);
+      border: 1.5px solid var(--display-border-power);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      box-shadow: inset 0 1px 3px rgba(245, 158, 11, 0.05);
+    }
+
+    .power-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .power-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #92400e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .power-formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #b45309;
+    }
+
+    .power-value-box {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .power-value {
+      font-family: 'Chakra Petch', monospace;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--digital-color-power);
+      line-height: 1;
+    }
+
+    .power-unit {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #d97706;
+    }
+
     /* Status Grid */
     .status-grid {
       width: 100%;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 18px;
       background: #f8fafc;
       border: 1px solid #edf2f7;
       padding: 12px 14px;
@@ -148,7 +309,7 @@
     }
 
     .status-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 600;
@@ -159,7 +320,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--text-main);
       white-space: nowrap;
@@ -185,7 +346,7 @@
     }
 
     .status-dot.warning {
-      background-color: var(--warning);
+      background-color: var(--amber);
       box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
     }
 
@@ -199,107 +360,28 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* Display Container */
-    .display-container {
-      width: 100%;
-      background: #edf4ff;
-      border: 1.5px solid #dbeafe;
-      border-radius: 20px;
-      padding: 24px 20px 20px;
+    /* Dual Connection Controls */
+    .dual-controls-section {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      box-shadow: inset 0 2px 4px rgba(37, 99, 235, 0.03);
-    }
-
-    .display-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #3b82f6;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .voltage-wrapper {
-      display: flex;
-      align-items: baseline;
-      justify-content: center;
       gap: 10px;
-      margin: 2px 0 6px;
-    }
-
-    .voltage-value {
-      font-family: 'Chakra Petch', monospace;
-      font-size: 4rem;
-      font-weight: 700;
-      color: var(--digital-color);
-      letter-spacing: 0.5px;
-      line-height: 1;
-    }
-
-    .voltage-value.offline {
-      color: #94a3b8;
-      opacity: 0.7;
-    }
-
-    .voltage-unit {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .mode-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #1e40af;
-      background: #ffffff;
-      border: 1px solid #bfdbfe;
-      padding: 3px 12px;
-      border-radius: 16px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-    }
-
-    /* Last Update */
-    .last-update {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.76rem;
-      color: var(--text-muted);
       margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
-    .last-update span {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    /* Action Buttons */
-    .button-group {
-      width: 100%;
-      display: flex;
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 16px;
     }
 
     .btn {
-      flex: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 18px;
+      padding: 10px 14px;
       border-radius: 12px;
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -314,16 +396,26 @@
       transform: none !important;
     }
 
-    .btn-connect {
+    .btn-volt {
       background: var(--primary);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
     }
 
-    .btn-connect:hover:not(:disabled) {
+    .btn-volt:hover:not(:disabled) {
       background: var(--primary-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-amp {
+      background: #059669;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-amp:hover:not(:disabled) {
+      background: #047857;
+      transform: translateY(-1px);
     }
 
     .btn-disconnect {
@@ -335,6 +427,18 @@
     .btn-disconnect:hover:not(:disabled) {
       background: #ffe4e6;
       border-color: #fda4af;
+      transform: translateY(-1px);
+    }
+
+    .btn-dual-all {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 18px;
+      font-size: 0.88rem;
+    }
+
+    .btn-dual-all:hover:not(:disabled) {
+      background: #1e293b;
       transform: translateY(-1px);
     }
 
@@ -441,11 +545,6 @@
       color: #065f46;
     }
 
-    .diag-btn.active .sig-dot {
-      background-color: #10b981;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-    }
-
     .sig-dot {
       width: 7px;
       height: 7px;
@@ -454,14 +553,9 @@
       display: inline-block;
     }
 
-    .auto-poll-label {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      margin-left: auto;
+    .diag-btn.active .sig-dot {
+      background-color: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
     }
 
     /* Terminal / Raw Stream */
@@ -517,7 +611,7 @@
       border: 1px solid #1e293b;
       border-radius: 8px;
       padding: 6px 10px;
-      max-height: 70px;
+      max-height: 80px;
       overflow-y: auto;
       line-height: 1.4;
     }
@@ -528,36 +622,25 @@
     .diag-log .log-error { color: #f43f5e; }
     .diag-log .log-success { color: #34d399; }
 
-    /* Scrollbar */
-    .raw-content::-webkit-scrollbar, .diag-log::-webkit-scrollbar {
-      width: 4px;
-    }
-    .raw-content::-webkit-scrollbar-thumb, .diag-log::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 2px;
-    }
-
     /* Responsive */
-    @media (max-width: 480px) {
+    @media (max-width: 580px) {
       .monitoring-card {
-        padding: 24px 18px 20px;
+        padding: 24px 16px 20px;
         border-radius: 20px;
       }
-      .voltage-value {
-        font-size: 2.9rem;
+      .dual-display-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
       }
-      .voltage-unit {
-        font-size: 1.4rem;
-      }
-      .card-title {
-        font-size: 1.3rem;
+      .meter-value {
+        font-size: 2.4rem;
       }
       .status-grid {
-        grid-template-columns: 1fr;
-        gap: 6px;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
-      .button-group {
-        flex-direction: column;
+      .control-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -572,95 +655,131 @@
   <!-- Main Card -->
   <div class="monitoring-card">
     
-    <div class="card-header" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+    <!-- Card Header -->
+    <div class="card-header">
       <div style="background: white; padding: 6px 14px; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 2px;">
         <img src="assets/logo-boe.png" alt="BBPPMPV BOE Malang" style="height: 38px; width: auto; object-fit: contain; display: block;"/>
       </div>
-      <h1 class="card-title">Voltage Monitor</h1>
-      <div class="device-subtitle">Pemantauan Tegangan Realtime Protek 608 &bull; VEDC Malang</div>
-      <div style="margin-top: 8px;">
-        <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 0.76rem; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 9999px; text-decoration: none; font-weight: 600; transition: all 0.2s;">
+      <h1 class="card-title">Dual Multimeter Monitor</h1>
+      <div class="device-subtitle">Pemantauan Tegangan & Arus Beban Riil &bull; Protek 608 Dual Channel</div>
+      <div style="margin-top: 6px;">
+        <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; font-size: 0.76rem; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 9999px; text-decoration: none; font-weight: 600; transition: all 0.2s;">
           ☀️ Buka Dashboard Panel Surya &rarr;
         </a>
+      </div>
+    </div>
+
+    <!-- Dual Measurement Displays -->
+    <div class="dual-display-grid">
+      <!-- Volt Display -->
+      <div class="meter-display-box box-volt">
+        <div class="display-tag tag-volt">
+          <span>⚡</span> METER 1: TEGANGAN
+        </div>
+        <div class="meter-val-wrapper">
+          <div id="val-display-volt" class="meter-value val-volt offline">--.---</div>
+          <div id="unit-display-volt" class="meter-unit unit-volt">V</div>
+        </div>
+        <div id="mode-display-volt" class="mode-badge mode-volt">DC &bull; 9600 7N1</div>
+      </div>
+
+      <!-- Ampere Display -->
+      <div class="meter-display-box box-amp">
+        <div class="display-tag tag-amp">
+          <span>🔌</span> METER 2: ARUS BEBAN
+        </div>
+        <div class="meter-val-wrapper">
+          <div id="val-display-amp" class="meter-value val-amp offline">--.---</div>
+          <div id="unit-display-amp" class="meter-unit unit-amp">A</div>
+        </div>
+        <div id="mode-display-amp" class="mode-badge mode-amp">DC &bull; 9600 7N1</div>
+      </div>
+    </div>
+
+    <!-- Realtime Power Calculation Bar (P = V x I) -->
+    <div class="power-calc-bar">
+      <div class="power-label">
+        <span class="power-title">💡 Daya Listrik Riil (Aktif)</span>
+        <span class="power-formula">P = Voltase &times; Arus Beban</span>
+      </div>
+      <div class="power-value-box">
+        <div id="val-display-power" class="power-value">--.-</div>
+        <div id="unit-display-power" class="power-unit">W</div>
       </div>
     </div>
 
     <!-- Status Grid -->
     <div class="status-grid">
       <div class="status-item">
-        <span class="status-label">Meter Port</span>
+        <span class="status-label">Port 1 (Volt)</span>
         <div class="status-badge">
-          <span id="serial-dot" class="status-dot"></span>
-          <span id="serial-status-text">Disconnected</span>
+          <span id="dot-volt" class="status-dot"></span>
+          <span id="text-volt">Offline</span>
         </div>
       </div>
       <div class="status-item">
-        <span class="status-label">Data RX</span>
+        <span class="status-label">Port 2 (Ampere)</span>
         <div class="status-badge">
-          <span id="rx-dot" class="status-dot"></span>
-          <span id="rx-status-text">0 Bytes</span>
+          <span id="dot-amp" class="status-dot"></span>
+          <span id="text-amp">Offline</span>
         </div>
       </div>
       <div class="status-item">
-        <span class="status-label">Supabase Cloud</span>
+        <span class="status-label">Total RX</span>
         <div class="status-badge">
-          <span id="firebase-dot" class="status-dot"></span>
-          <span id="firebase-status-text">Connecting...</span>
+          <span id="dot-rx" class="status-dot"></span>
+          <span id="text-rx">0 Bytes</span>
+        </div>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Cloud Sync</span>
+        <div class="status-badge">
+          <span id="dot-cloud" class="status-dot"></span>
+          <span id="text-cloud">Siap</span>
         </div>
       </div>
     </div>
 
-    <!-- Voltage Display Box -->
-    <div class="display-container">
-      <div class="display-tag">NILAI PENGUKURAN</div>
-      <div class="voltage-wrapper">
-        <div id="voltage-display" class="voltage-value offline">--.---</div>
-        <div id="voltage-unit" class="voltage-unit">V</div>
+    <!-- Dual Connection Controls -->
+    <div class="dual-controls-section">
+      <div class="control-row">
+        <!-- Port 1 (Volt) -->
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-conn-volt" class="btn btn-volt" style="flex: 1;" type="button">
+            🔌 Konek Volt (Port 1)
+          </button>
+          <button id="btn-disc-volt" class="btn btn-disconnect" type="button" disabled title="Putuskan Volt Meter">
+            ✕
+          </button>
+        </div>
+        <!-- Port 2 (Ampere) -->
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-conn-amp" class="btn btn-amp" style="flex: 1;" type="button">
+            ⚡ Konek Ampere (Port 2)
+          </button>
+          <button id="btn-disc-amp" class="btn btn-disconnect" type="button" disabled title="Putuskan Ampere Meter">
+            ✕
+          </button>
+        </div>
       </div>
-      <div id="mode-display" class="mode-badge">DC</div>
     </div>
 
-    <!-- Last Update -->
-    <div class="last-update">
-      Pembaruan terakhir: <span id="last-update-time">--:--:--</span>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="button-group">
-      <button id="btn-connect" class="btn btn-connect" type="button">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 17H7A5 5 0 0 1 7 7h2"></path>
-          <path d="M15 7h2a5 5 0 1 1 0 10h-2"></path>
-          <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
-        Hubungkan Meter
-      </button>
-      <button id="btn-disconnect" class="btn btn-disconnect" type="button" disabled>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-        Putuskan
-      </button>
-    </div>
-
-    <!-- Protek 608 Checklist / Setup Guide -->
+    <!-- Hardware Setup Guide Accordion -->
     <div class="guide-box">
       <div class="guide-header">
-        <span>💡</span> <strong>Petunjuk Koneksi Protek 608:</strong>
+        <span>💡</span> <strong>Petunjuk Penggunaan 2 Multimeter Protek 608:</strong>
       </div>
       <ol class="guide-list">
-        <li>Nyalakan multimeter & pasang kabel optik RS-232 di slot belakang meter.</li>
-        <li><strong>Wajib aktifkan RS232:</strong> Tekan tombol <strong>MENU</strong> ➔ cari menu <strong>`RS-232C`</strong> ➔ tekan <strong>ENTER</strong> (ikon <strong>RS232C</strong> harus muncul di LCD multimeter).</li>
-        <li>Jika data belum masuk, buka menu <em>Diagnostik & Stream Sinyal</em> di bawah untuk menguji sinyal DTR/RTS atau memicu pengiriman data.</li>
+        <li><strong>Meter 1 (Volt):</strong> Selektor di posisi <code>V DC</code> &bull; Pasang probe secara <strong>Paralel</strong> pada sumber tegangan (Panel/Baterai/Beban).</li>
+        <li><strong>Meter 2 (Ampere):</strong> Selektor di posisi <code>A DC</code> atau <code>mA DC</code> &bull; Pasang probe secara <strong>Seri</strong> memotong jalur arus beban.</li>
+        <li><strong>Aktifkan RS-232 pada kedua meter:</strong> Tekan <strong>MENU</strong> ➔ pilih <strong>`RS-232C`</strong> ➔ tekan <strong>ENTER</strong> (ikon RS232C wajib muncul di LCD multimeter).</li>
       </ol>
     </div>
 
     <!-- Diagnostic & Signal Details -->
-    <details class="diag-details" open>
+    <details class="diag-details">
       <summary class="diag-summary">
-        <span>🔧 Diagnostik & Stream Serial</span>
+        <span>🔧 Diagnostik Sinyal & Stream Hex</span>
         <span style="font-size: 0.72rem; color: #3b82f6;">Detail ▼</span>
       </summary>
       <div class="diag-body">
@@ -673,12 +792,9 @@
           <button id="btn-toggle-rts" class="diag-btn active" type="button" title="RTS memberi daya pada kabel optocoupler">
             <span class="sig-dot"></span> RTS: <span id="txt-rts">HIGH</span>
           </button>
-          <button id="btn-trigger" class="diag-btn" type="button" title="Kirim karakter pemicu data ke meter">
-            ⚡ Pemicu Data
+          <button id="btn-trigger-all" class="diag-btn" type="button" title="Kirim trigger 'D\r\n' ke kedua meter">
+            ⚡ Pemicu Data (Trigger)
           </button>
-          <label class="auto-poll-label">
-            <input type="checkbox" id="chk-auto-poll"> Auto Poll (1s)
-          </label>
         </div>
 
         <!-- Raw Serial Monitor -->
@@ -692,7 +808,7 @@
 
         <!-- Diagnostic Log -->
         <div id="diag-log-container" class="diag-log">
-          <p class="log-info">[Sistem] Siap. Klik 'Hubungkan Meter' untuk memulai.</p>
+          <p class="log-info">[Sistem] Siap. Klik 'Konek Volt' atau 'Konek Ampere' untuk menghubungkan masing-masing port COM.</p>
         </div>
 
       </div>
@@ -700,14 +816,14 @@
 
   </div>
 
-  <!-- Supabase & Firebase Modular SDK & Core Application Logic -->
+  <!-- Supabase & Firebase Integration Script -->
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
     // ==========================================
-    // 1. SUPABASE CLOUD DATABASE CONFIGURATION
+    // 1. SUPABASE & FIREBASE CLOUD DATABASE
     // ==========================================
     const SUPABASE_URL = "https://onacbfrwlqnnwoxxhlie.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uYWNiZnJ3bHFubndveHhobGllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NTIzODAsImV4cCI6MjEwMzAyODM4MH0.OVCaVhBVS1CpKmOJDlqdibfJLwIlAS0opHNwR2tlTdc";
@@ -715,13 +831,12 @@
     let supabase = null;
     try {
       supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      updateFirebaseStatus("Ready (Supabase)", "connected");
+      updateStatus("cloud", "Supabase Siap", "connected");
       logDiagnostic("Supabase Cloud Database terhubung.", "success");
     } catch (e) {
       console.warn("Supabase init error:", e);
     }
 
-    // Optional Firebase Dual-Sync Config
     const firebaseConfig = {
       apiKey: "AIzaSyBcVYhGxOFO3yogJueAxwZacoAAYzm0h0M",
       authDomain: "voltage-monitoring-protek-608.firebaseapp.com",
@@ -731,48 +846,54 @@
 
     let firebaseDb = null;
     let isFirebaseReady = false;
-
     try {
       const app = initializeApp(firebaseConfig);
       firebaseDb = getDatabase(app);
       isFirebaseReady = true;
     } catch (err) {}
 
-    async function pushToCloudDatabase(voltage, unit, mode) {
-      const cleanUnit = unit || "V";
-      const cleanMode = mode || "DC";
+    // Throttle cloud sync to avoid spamming
+    let lastCloudSyncTime = 0;
 
-      // 1. Push to Supabase PostgreSQL Table (protek608_telemetry)
+    async function pushDualTelemetryToCloud(voltage, current, power) {
+      const now = Date.now();
+      if (now - lastCloudSyncTime < 250) return; // 4Hz max sync rate
+      lastCloudSyncTime = now;
+
+      // 1. Supabase Sync
       if (supabase) {
         try {
-          const { error } = await supabase
+          supabase
             .from('protek608_telemetry')
             .insert([{
               voltage: voltage,
-              unit: cleanUnit,
-              mode: cleanMode,
+              current: current,
+              power: power,
+              unit: "V",
+              mode: "DC",
               target: 'solar'
-            }]);
-          if (!error) {
-            updateFirebaseStatus("Connected (Supabase)", "connected");
-          } else {
-            console.error("Supabase insert error:", error);
-          }
-        } catch (sbErr) {
-          console.error("Supabase push failed:", sbErr);
-        }
+            }])
+            .then(({ error }) => {
+              if (!error) {
+                updateStatus("cloud", "Cloud Live", "connected");
+              }
+            });
+        } catch (sbErr) {}
       }
 
-      // 2. Dual Push to Firebase
+      // 2. Firebase Sync
       if (isFirebaseReady && firebaseDb) {
         try {
-          const currentRef = ref(firebaseDb, "protek608/current");
-          await set(currentRef, {
+          const payload = {
             voltage: voltage,
-            unit: cleanUnit,
-            mode: cleanMode,
-            timestamp: Date.now()
-          });
+            current: current,
+            power: power,
+            unit: "V",
+            unit_current: "A",
+            timestamp: now
+          };
+          set(ref(firebaseDb, "protek608/current"), payload);
+          set(ref(firebaseDb, "protek608/dual"), payload);
         } catch (fbErr) {}
       }
     }
@@ -780,29 +901,38 @@
     // ==========================================
     // 2. UI ELEMENTS & STATUS HELPERS
     // ==========================================
-    const elSerialDot = document.getElementById("serial-dot");
-    const elSerialStatusText = document.getElementById("serial-status-text");
-    const elRxDot = document.getElementById("rx-dot");
-    const elRxStatusText = document.getElementById("rx-status-text");
-    const elFirebaseDot = document.getElementById("firebase-dot");
-    const elFirebaseStatusText = document.getElementById("firebase-status-text");
-    
-    const elVoltageDisplay = document.getElementById("voltage-display");
-    const elVoltageUnit = document.getElementById("voltage-unit");
-    const elModeDisplay = document.getElementById("mode-display");
-    const elLastUpdateTime = document.getElementById("last-update-time");
-    
-    const elBtnConnect = document.getElementById("btn-connect");
-    const elBtnDisconnect = document.getElementById("btn-disconnect");
+    const elValVolt = document.getElementById("val-display-volt");
+    const elUnitVolt = document.getElementById("unit-display-volt");
+    const elModeVolt = document.getElementById("mode-display-volt");
+
+    const elValAmp = document.getElementById("val-display-amp");
+    const elUnitAmp = document.getElementById("unit-display-amp");
+    const elModeAmp = document.getElementById("mode-display-amp");
+
+    const elValPower = document.getElementById("val-display-power");
+    const elUnitPower = document.getElementById("unit-display-power");
+
+    const elDotVolt = document.getElementById("dot-volt");
+    const elTextVolt = document.getElementById("text-volt");
+    const elDotAmp = document.getElementById("dot-amp");
+    const elTextAmp = document.getElementById("text-amp");
+    const elDotRx = document.getElementById("dot-rx");
+    const elTextRx = document.getElementById("text-rx");
+    const elDotCloud = document.getElementById("dot-cloud");
+    const elTextCloud = document.getElementById("text-cloud");
+
+    const elBtnConnVolt = document.getElementById("btn-conn-volt");
+    const elBtnDiscVolt = document.getElementById("btn-disc-volt");
+    const elBtnConnAmp = document.getElementById("btn-conn-amp");
+    const elBtnDiscAmp = document.getElementById("btn-disc-amp");
     const elBrowserWarning = document.getElementById("browser-warning");
-    
+
     const elBtnToggleDtr = document.getElementById("btn-toggle-dtr");
     const elTxtDtr = document.getElementById("txt-dtr");
     const elBtnToggleRts = document.getElementById("btn-toggle-rts");
     const elTxtRts = document.getElementById("txt-rts");
-    const elBtnTrigger = document.getElementById("btn-trigger");
-    const elChkAutoPoll = document.getElementById("chk-auto-poll");
-    
+    const elBtnTriggerAll = document.getElementById("btn-trigger-all");
+
     const elRawByteCount = document.getElementById("raw-byte-count");
     const elRawStreamContent = document.getElementById("raw-stream-content");
     const elDiagLogContainer = document.getElementById("diag-log-container");
@@ -811,27 +941,35 @@
     let rtsState = true;
     let totalBytesReceived = 0;
     let validPacketsReceived = 0;
-    let autoPollTimer = null;
+
+    let currentVolt = null;
+    let currentAmp = null;
 
     function formatTime(date) {
       const pad = (n) => String(n).padStart(2, "0");
       return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
     }
 
-    function updateSerialStatus(text, state) {
-      elSerialStatusText.textContent = text;
-      elSerialDot.className = "status-dot " + (state || "");
-    }
-
-    function updateFirebaseStatus(text, state) {
-      elFirebaseStatusText.textContent = text;
-      elFirebaseDot.className = "status-dot " + (state || "");
+    function updateStatus(type, text, state) {
+      if (type === "volt") {
+        elTextVolt.textContent = text;
+        elDotVolt.className = "status-dot " + (state || "");
+      } else if (type === "amp") {
+        elTextAmp.textContent = text;
+        elDotAmp.className = "status-dot " + (state || "");
+      } else if (type === "rx") {
+        elTextRx.textContent = text;
+        elDotRx.className = "status-dot " + (state || "");
+      } else if (type === "cloud") {
+        elTextCloud.textContent = text;
+        elDotCloud.className = "status-dot " + (state || "");
+      }
     }
 
     function pulseRxIndicator() {
-      elRxDot.className = "status-dot connected pulse";
+      elDotRx.className = "status-dot connected pulse";
       setTimeout(() => {
-        elRxDot.className = "status-dot connected";
+        elDotRx.className = "status-dot connected";
       }, 300);
     }
 
@@ -844,29 +982,16 @@
       elDiagLogContainer.scrollTop = elDiagLogContainer.scrollHeight;
     }
 
-    function updateSignalButtonsUI() {
-      if (dtrState) {
-        elBtnToggleDtr.classList.add("active");
-        elTxtDtr.textContent = "HIGH";
-      } else {
-        elBtnToggleDtr.classList.remove("active");
-        elTxtDtr.textContent = "LOW";
+    function recalculatePower() {
+      if (currentVolt !== null && currentAmp !== null) {
+        const p = currentVolt * currentAmp;
+        elValPower.textContent = p >= 1000 ? (p / 1000).toFixed(3) : p.toFixed(2);
+        elUnitPower.textContent = p >= 1000 ? "kW" : "W";
+        pushDualTelemetryToCloud(currentVolt, currentAmp, p);
+      } else if (currentVolt !== null) {
+        // Only Volt known
+        pushDualTelemetryToCloud(currentVolt, 0, 0);
       }
-
-      if (rtsState) {
-        elBtnToggleRts.classList.add("active");
-        elTxtRts.textContent = "HIGH";
-      } else {
-        elBtnToggleRts.classList.remove("active");
-        elTxtRts.textContent = "LOW";
-      }
-    }
-
-    // Check Web Serial API support
-    if (!("serial" in navigator)) {
-      elBrowserWarning.style.display = "block";
-      elBtnConnect.disabled = true;
-      logDiagnostic("Web Serial API tidak didukung pada browser ini. Gunakan Chrome atau Edge.", "error");
     }
 
     // ==========================================
@@ -884,7 +1009,6 @@
       if (!buffer || buffer.length !== 43) return null;
       if (buffer[0] !== 0x5B || buffer[42] !== 0x5D) return null;
 
-      // STEP 1: Reconstruct 21 packed bytes from 40 nibbles
       const packet = new Uint8Array(21);
       let byteCount = 0;
       let lastNibble = 0;
@@ -894,7 +1018,6 @@
         if (buffer[i] === 0x5D) break;
 
         const thisNibble = reverseBits(buffer[i]);
-
         if (byteCount % 2 === 0) {
           lastNibble = thisNibble;
         } else {
@@ -903,7 +1026,6 @@
         byteCount++;
       }
 
-      // STEP 2: Decode 7-segment display digits
       const DIGIT_MAP = {
         0xFA: "0", 0x0A: "1", 0x0B: "1", 0xBC: "2", 0x9E: "3",
         0x4E: "4", 0xD6: "5", 0xF6: "6", 0x8A: "7", 0xFE: "8",
@@ -934,31 +1056,17 @@
       const d0bits = packet[12] & 0xFE;
 
       let mainStr = "";
-
-      // Negative sign
-      const isNegative = (packet[5] & 0x20) !== 0;
-      if (isNegative) mainStr += "-";
-
-      // Digit 4 (leftmost)
+      if ((packet[5] & 0x20) !== 0) mainStr += "-";
       mainStr += decodeDigit(d4bits);
       if (packet[6] & 0x10) mainStr += ".";
-
-      // Digit 3
       mainStr += decodeDigit(d3bits);
       if (packet[7] & 0x10) mainStr += ".";
-
-      // Digit 2
       mainStr += decodeDigit(d2bits);
       if (packet[8] & 0x10) mainStr += ".";
-
-      // Digit 1
       mainStr += decodeDigit(d1bits);
       if (packet[11] & 0x01) mainStr += ".";
-
-      // Digit 0 (rightmost)
       mainStr += decodeDigit(d0bits);
 
-      // STEP 3: Detect Unit and Mode
       let unit = "V";
       if (packet[14] & 0x40) unit = "V";
       else if (packet[13] & 0x04) unit = "Ω";
@@ -979,319 +1087,293 @@
 
       const trimmed = mainStr.trim();
       if (!trimmed || trimmed === "?" || !/[0-9]/.test(trimmed)) return null;
-
       const numValue = parseFloat(trimmed);
       if (isNaN(numValue)) return null;
 
+      // Calculate standard base value (Volt or Ampere)
+      let standardValue = numValue;
+      if (unitPrefix === "m") standardValue = numValue / 1000;
+      else if (unitPrefix === "μ" || unitPrefix === "u") standardValue = numValue / 1000000;
+      else if (unitPrefix === "k") standardValue = numValue * 1000;
+
       return {
-        voltage: numValue,
-        voltageStr: trimmed,
+        value: numValue,
+        standardValue: standardValue,
+        valueStr: trimmed,
         unit: unitPrefix + unit,
-        mode: mode,
-        modeClean: mode
+        rawUnit: unit,
+        prefix: unitPrefix,
+        isAmpere: (unit === "A"),
+        isVolt: (unit === "V"),
+        mode: mode
       };
     }
 
     // ==========================================
-    // 4. WEB SERIAL COMMUNICATION
+    // 4. DUAL WEB SERIAL DRIVER CLASS
     // ==========================================
-    let port = null;
-    let reader = null;
-    let keepReading = false;
-    let readLoopPromise = null;
-    let serialBuffer = [];
-
-    // Apply hardware signals (DTR / RTS) to power optical isolator
-    async function applySignals(dtr, rts) {
-      if (!port) return;
-      try {
-        await port.setSignals({
-          dataTerminalReady: dtr,
-          requestToSend: rts
-        });
-        updateSignalButtonsUI();
-        logDiagnostic(`Sinyal diperbarui: DTR=${dtr ? "HIGH" : "LOW"}, RTS=${rts ? "HIGH" : "LOW"}`, "info");
-      } catch (err) {
-        logDiagnostic(`Peringatan setSignals: ${err.message}`, "warn");
-      }
-    }
-
-    // Send trigger characters to multimeter
-    async function sendTrigger(cmd = "D\r\n") {
-      if (!port || !port.writable) {
-        logDiagnostic("Port belum terhubung atau tidak writable.", "warn");
-        return;
-      }
-      try {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(cmd);
-        const writer = port.writable.getWriter();
-        await writer.write(data);
-        writer.releaseLock();
-        logDiagnostic(`Pemicu terkirim: "${cmd.replace(/\r/g, '\\r').replace(/\n/g, '\\n')}"`, "info");
-      } catch (err) {
-        logDiagnostic(`Gagal kirim pemicu: ${err.message}`, "error");
-      }
-    }
-
-    // Connect to Protek 608
-    async function connectSerial() {
-      if (!("serial" in navigator)) {
-        alert("Web Serial API tidak didukung pada browser ini. Gunakan Google Chrome atau Microsoft Edge.");
-        return;
+    class SerialMeterPort {
+      constructor(type, onPacketCallback, onStatusCallback) {
+        this.type = type; // 'volt' or 'amp'
+        this.onPacket = onPacketCallback;
+        this.onStatus = onStatusCallback;
+        this.port = null;
+        this.reader = null;
+        this.keepReading = false;
+        this.buffer = [];
       }
 
-      // Protek 608 uses 9600 baud, 7 data bits, 1 stop bit, no parity (7N1)
-      const serialOptions = {
-        baudRate: 9600,
-        dataBits: 7,
-        stopBits: 1,
-        parity: "none"
-      };
+      async connect() {
+        if (!("serial" in navigator)) {
+          alert("Web Serial API tidak didukung pada browser ini. Gunakan Google Chrome atau Microsoft Edge.");
+          return false;
+        }
 
-      try {
-        logDiagnostic("Membuka dialog pemilihan COM port...", "info");
-        port = await navigator.serial.requestPort();
-        
-        updateSerialStatus("Opening...", "warning");
-        await port.open(serialOptions);
+        const serialOptions = {
+          baudRate: 9600,
+          dataBits: 7,
+          stopBits: 1,
+          parity: "none"
+        };
 
-        keepReading = true;
-        serialBuffer = [];
-        totalBytesReceived = 0;
-        validPacketsReceived = 0;
-        
-        updateSerialStatus("Connected", "connected");
-        elRxStatusText.textContent = "0 Bytes";
-        elRawByteCount.textContent = "0 bytes | 0 packet";
-        elRawStreamContent.textContent = "Port terbuka (9600 7N1). Menunggu byte...";
+        try {
+          this.onStatus("Opening...", "warning");
+          this.port = await navigator.serial.requestPort();
+          await this.port.open(serialOptions);
 
-        // Set DTR & RTS to HIGH to supply power to optical cable
-        await applySignals(dtrState, rtsState);
+          // Apply DTR & RTS signals
+          try {
+            await this.port.setSignals({ dataTerminalReady: true, requestToSend: true });
+          } catch (e) {}
 
-        elBtnConnect.disabled = true;
-        elBtnDisconnect.disabled = false;
-        logDiagnostic("Port COM berhasil dibuka. Sinyal DTR & RTS aktif.", "success");
+          this.keepReading = true;
+          this.buffer = [];
+          this.onStatus("Connected", "connected");
+          logDiagnostic(`[Port ${this.type.toUpperCase()}] Terhubung sukses (9600 7N1).`, "success");
 
-        // Start reading loop
-        readLoopPromise = readSerialLoop();
-      } catch (err) {
-        console.error("Serial connection failed:", err);
-        updateSerialStatus("Disconnected", "disconnected");
-        elBtnConnect.disabled = false;
-        elBtnDisconnect.disabled = true;
-        if (err.name !== "NotFoundError") {
-          logDiagnostic(`Gagal membuka port: ${err.message}`, "error");
-          alert("Gagal membuka Serial Port: " + err.message);
-        } else {
-          logDiagnostic("Pemilihan port dibatalkan oleh pengguna.", "warn");
+          this.startReadLoop();
+          return true;
+        } catch (err) {
+          console.error(`Port ${this.type} open error:`, err);
+          this.onStatus("Offline", "disconnected");
+          if (err.name !== "NotFoundError") {
+            logDiagnostic(`[Port ${this.type.toUpperCase()}] Gagal membuka: ${err.message}`, "error");
+            alert(`Gagal membuka port (${this.type}): ${err.message}`);
+          } else {
+            logDiagnostic(`[Port ${this.type.toUpperCase()}] Dibatalkan pengguna.`, "warn");
+          }
+          return false;
         }
       }
-    }
 
-    // Read loop with 43-byte buffer framing (0x5B ... 0x5D)
-    async function readSerialLoop() {
-      while (port && port.readable && keepReading) {
-        try {
-          reader = port.readable.getReader();
-          
-          while (keepReading) {
-            const { value, done } = await reader.read();
-            if (done) break;
+      async startReadLoop() {
+        while (this.port && this.port.readable && this.keepReading) {
+          try {
+            this.reader = this.port.readable.getReader();
+            while (this.keepReading) {
+              const { value, done } = await this.reader.read();
+              if (done) break;
 
-            if (value && value.length > 0) {
-              totalBytesReceived += value.length;
-              elRxStatusText.textContent = `${totalBytesReceived} B`;
-              pulseRxIndicator();
+              if (value && value.length > 0) {
+                totalBytesReceived += value.length;
+                elTextRx.textContent = `${totalBytesReceived} B`;
+                pulseRxIndicator();
 
-              // Append incoming chunks to serialBuffer
-              for (let i = 0; i < value.length; i++) {
-                serialBuffer.push(value[i]);
-              }
-
-              // Update Raw Hex View
-              const hexPreview = Array.from(serialBuffer.slice(-30))
-                .map(b => b.toString(16).toUpperCase().padStart(2, '0'))
-                .join(' ');
-              elRawStreamContent.textContent = hexPreview || "Menerima data...";
-              elRawByteCount.textContent = `${totalBytesReceived} bytes | ${validPacketsReceived} packet`;
-
-              // Process packets framed by 0x5B and 0x5D
-              while (serialBuffer.length >= 43) {
-                const startIndex = serialBuffer.indexOf(0x5B);
-                
-                if (startIndex === -1) {
-                  serialBuffer = [];
-                  break;
+                for (let i = 0; i < value.length; i++) {
+                  this.buffer.push(value[i]);
                 }
 
-                if (startIndex > 0) {
-                  serialBuffer.splice(0, startIndex);
+                // Update hex preview
+                const hexPreview = Array.from(this.buffer.slice(-20))
+                  .map(b => b.toString(16).toUpperCase().padStart(2, '0'))
+                  .join(' ');
+                elRawStreamContent.textContent = `[${this.type.toUpperCase()}] ` + (hexPreview || "Menerima byte...");
+                elRawByteCount.textContent = `${totalBytesReceived} bytes | ${validPacketsReceived} packets`;
+
+                // Packet framing (0x5B ... 0x5D)
+                while (this.buffer.length >= 43) {
+                  const startIndex = this.buffer.indexOf(0x5B);
+                  if (startIndex === -1) {
+                    this.buffer = [];
+                    break;
+                  }
+                  if (startIndex > 0) {
+                    this.buffer.splice(0, startIndex);
+                  }
+                  if (this.buffer.length < 43) break;
+
+                  if (this.buffer[42] === 0x5D) {
+                    const validPacket = this.buffer.slice(0, 43);
+                    this.buffer.splice(0, 43);
+                    validPacketsReceived++;
+                    this.handlePacket(validPacket);
+                  } else {
+                    this.buffer.shift();
+                  }
                 }
 
-                if (serialBuffer.length < 43) {
-                  break;
-                }
-
-                if (serialBuffer[42] === 0x5D) {
-                  const validPacket = serialBuffer.slice(0, 43);
-                  serialBuffer.splice(0, 43);
-                  validPacketsReceived++;
-                  handleReceivedPacket(validPacket);
-                } else {
-                  serialBuffer.shift();
-                }
-              }
-
-              if (serialBuffer.length > 300) {
-                serialBuffer = serialBuffer.slice(-86);
+                if (this.buffer.length > 300) this.buffer = this.buffer.slice(-86);
               }
             }
-          }
-        } catch (err) {
-          if (keepReading) {
-            console.error("Serial read loop error:", err);
-            logDiagnostic(`Read error: ${err.message}`, "error");
-          }
-        } finally {
-          if (reader) {
-            try {
-              reader.releaseLock();
-            } catch (e) {}
-            reader = null;
+          } catch (err) {
+            if (this.keepReading) {
+              console.error(`Read error on ${this.type}:`, err);
+              logDiagnostic(`[Port ${this.type.toUpperCase()}] Read error: ${err.message}`, "error");
+            }
+          } finally {
+            if (this.reader) {
+              try { this.reader.releaseLock(); } catch (e) {}
+              this.reader = null;
+            }
           }
         }
       }
-    }
 
-    // Handle a validated 43-byte packet
-    function handleReceivedPacket(packet) {
-      try {
-        const result = decodeProtek608(packet);
-
-        if (result && result.voltage !== null && !isNaN(result.voltage)) {
-          elVoltageDisplay.textContent = result.voltageStr;
-          elVoltageDisplay.classList.remove("offline");
-          elVoltageUnit.textContent = result.unit || "V";
-          elModeDisplay.textContent = result.mode;
-
-          const now = new Date();
-          elLastUpdateTime.textContent = formatTime(now);
-
-          logDiagnostic(`Data OK: ${result.voltageStr} ${result.unit} (${result.mode})`, "success");
-          pushToCloudDatabase(result.voltage, result.unit, result.modeClean);
-        } else {
-          logDiagnostic("Paket 43B diterima tapi digit decode tidak valid.", "warn");
+      handlePacket(packet) {
+        const res = decodeProtek608(packet);
+        if (res && res.value !== null && !isNaN(res.value)) {
+          this.onPacket(res);
         }
-      } catch (err) {
-        console.error("Packet processing error:", err);
-        logDiagnostic(`Packet parse error: ${err.message}`, "error");
-      }
-    }
-
-    // Disconnect Serial cleanly without stream lock errors
-    async function disconnectSerial() {
-      keepReading = false;
-      
-      if (autoPollTimer) {
-        clearInterval(autoPollTimer);
-        autoPollTimer = null;
-        elChkAutoPoll.checked = false;
       }
 
-      if (reader) {
+      async sendTrigger(cmd = "D\r\n") {
+        if (!this.port || !this.port.writable) return;
         try {
-          await reader.cancel();
-        } catch (err) {
-          console.warn("Reader cancel:", err);
-        }
+          const encoder = new TextEncoder();
+          const writer = this.port.writable.getWriter();
+          await writer.write(encoder.encode(cmd));
+          writer.releaseLock();
+        } catch (e) {}
       }
 
-      if (readLoopPromise) {
-        try {
-          await readLoopPromise;
-        } catch (err) {
-          console.warn("Read loop exit:", err);
+      async disconnect() {
+        this.keepReading = false;
+        if (this.reader) {
+          try { await this.reader.cancel(); } catch (e) {}
         }
-        readLoopPromise = null;
-      }
-
-      if (port) {
-        try {
-          await port.close();
-        } catch (err) {
-          console.warn("Port close:", err);
+        if (this.port) {
+          try { await this.port.close(); } catch (e) {}
+          this.port = null;
         }
-        port = null;
+        this.reader = null;
+        this.buffer = [];
+        this.onStatus("Offline", "disconnected");
+        logDiagnostic(`[Port ${this.type.toUpperCase()}] Terputus (Disconnected).`, "info");
       }
-
-      reader = null;
-      serialBuffer = [];
-
-      updateSerialStatus("Disconnected", "disconnected");
-      elRxDot.className = "status-dot";
-      elVoltageDisplay.textContent = "--.---";
-      elVoltageDisplay.classList.add("offline");
-      elBtnConnect.disabled = false;
-      elBtnDisconnect.disabled = true;
-      logDiagnostic("Port Serial terputus (Disconnected).", "info");
-    }
-
-    // USB auto-disconnect event
-    if ("serial" in navigator) {
-      navigator.serial.addEventListener("disconnect", () => {
-        logDiagnostic("Kabel USB / perangkat terlepas.", "warn");
-        disconnectSerial();
-      });
     }
 
     // ==========================================
-    // 5. EVENT LISTENERS
+    // 5. INSTANTIATE DUAL SERIAL PORTS
     // ==========================================
-    elBtnConnect.addEventListener("click", () => {
-      connectSerial();
+    const voltMeter = new SerialMeterPort(
+      "volt",
+      (res) => {
+        currentVolt = res.standardValue;
+        elValVolt.textContent = res.valueStr;
+        elValVolt.classList.remove("offline");
+        elUnitVolt.textContent = res.unit;
+        elModeVolt.textContent = `${res.mode} • LIVE`;
+        recalculatePower();
+        logDiagnostic(`[VOLT] ${res.valueStr} ${res.unit}`, "info");
+      },
+      (text, state) => updateStatus("volt", text, state)
+    );
+
+    const ampMeter = new SerialMeterPort(
+      "amp",
+      (res) => {
+        currentAmp = res.standardValue;
+        elValAmp.textContent = res.valueStr;
+        elValAmp.classList.remove("offline");
+        elUnitAmp.textContent = res.unit;
+        elModeAmp.textContent = `${res.mode} • LIVE`;
+        recalculatePower();
+        logDiagnostic(`[ARUS] ${res.valueStr} ${res.unit}`, "info");
+      },
+      (text, state) => updateStatus("amp", text, state)
+    );
+
+    // Check Web Serial API support
+    if (!("serial" in navigator)) {
+      elBrowserWarning.style.display = "block";
+      elBtnConnVolt.disabled = true;
+      elBtnConnAmp.disabled = true;
+    }
+
+    // ==========================================
+    // 6. EVENT LISTENERS
+    // ==========================================
+    elBtnConnVolt.addEventListener("click", async () => {
+      const ok = await voltMeter.connect();
+      if (ok) {
+        elBtnConnVolt.disabled = true;
+        elBtnDiscVolt.disabled = false;
+      }
     });
 
-    elBtnDisconnect.addEventListener("click", () => {
-      disconnectSerial();
+    elBtnDiscVolt.addEventListener("click", async () => {
+      await voltMeter.disconnect();
+      elBtnConnVolt.disabled = false;
+      elBtnDiscVolt.disabled = true;
+      currentVolt = null;
+      elValVolt.textContent = "--.---";
+      elValVolt.classList.add("offline");
+      recalculatePower();
+    });
+
+    elBtnConnAmp.addEventListener("click", async () => {
+      const ok = await ampMeter.connect();
+      if (ok) {
+        elBtnConnAmp.disabled = true;
+        elBtnDiscAmp.disabled = false;
+      }
+    });
+
+    elBtnDiscAmp.addEventListener("click", async () => {
+      await ampMeter.disconnect();
+      elBtnConnAmp.disabled = false;
+      elBtnDiscAmp.disabled = true;
+      currentAmp = null;
+      elValAmp.textContent = "--.---";
+      elValAmp.classList.add("offline");
+      recalculatePower();
+    });
+
+    elBtnTriggerAll.addEventListener("click", () => {
+      voltMeter.sendTrigger("D\r\n");
+      ampMeter.sendTrigger("D\r\n");
+      logDiagnostic("Trigger data terkirim ke kedua meter.", "info");
     });
 
     elBtnToggleDtr.addEventListener("click", async () => {
       dtrState = !dtrState;
-      await applySignals(dtrState, rtsState);
+      if (dtrState) {
+        elBtnToggleDtr.classList.add("active");
+        elTxtDtr.textContent = "HIGH";
+      } else {
+        elBtnToggleDtr.classList.remove("active");
+        elTxtDtr.textContent = "LOW";
+      }
+      try {
+        if (voltMeter.port) await voltMeter.port.setSignals({ dataTerminalReady: dtrState, requestToSend: rtsState });
+        if (ampMeter.port) await ampMeter.port.setSignals({ dataTerminalReady: dtrState, requestToSend: rtsState });
+      } catch (e) {}
     });
 
     elBtnToggleRts.addEventListener("click", async () => {
       rtsState = !rtsState;
-      await applySignals(dtrState, rtsState);
-    });
-
-    elBtnTrigger.addEventListener("click", () => {
-      sendTrigger("D\r\n");
-    });
-
-    elChkAutoPoll.addEventListener("change", (e) => {
-      if (e.target.checked) {
-        if (!port) {
-          alert("Hubungkan meter terlebih dahulu sebelum mengaktifkan Auto Poll.");
-          e.target.checked = false;
-          return;
-        }
-        logDiagnostic("Auto Poll aktif (1 detik).", "info");
-        autoPollTimer = setInterval(() => {
-          sendTrigger("D\r\n");
-        }, 1000);
+      if (rtsState) {
+        elBtnToggleRts.classList.add("active");
+        elTxtRts.textContent = "HIGH";
       } else {
-        if (autoPollTimer) {
-          clearInterval(autoPollTimer);
-          autoPollTimer = null;
-          logDiagnostic("Auto Poll dinonaktifkan.", "info");
-        }
+        elBtnToggleRts.classList.remove("active");
+        elTxtRts.textContent = "LOW";
       }
+      try {
+        if (voltMeter.port) await voltMeter.port.setSignals({ dataTerminalReady: dtrState, requestToSend: rtsState });
+        if (ampMeter.port) await ampMeter.port.setSignals({ dataTerminalReady: dtrState, requestToSend: rtsState });
+      } catch (e) {}
     });
-
-    // Initialize Firebase
-    initFirebase();
   </script>
 </body>
 </html>
