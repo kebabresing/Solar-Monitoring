@@ -867,15 +867,15 @@
             .from('protek608_telemetry')
             .insert([{
               voltage: voltage,
-              current: current,
-              power: power,
               unit: "V",
               mode: "DC",
               target: 'solar'
             }])
             .then(({ error }) => {
               if (!error) {
-                updateStatus("cloud", "Cloud Live", "connected");
+                updateStatus("cloud", "Supabase Live", "connected");
+              } else {
+                console.warn("Supabase insert error:", error);
               }
             });
         } catch (sbErr) {}

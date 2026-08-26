@@ -1337,13 +1337,13 @@
             .from('protek608_telemetry')
             .insert([{
               voltage: v || 0,
-              current: a || 0,
-              power: calcPower,
               unit: 'V',
               mode: 'DC',
               target: currentTarget
             }])
-            .then();
+            .then(({ error }) => {
+              if (error) console.warn("Supabase insert error:", error);
+            });
         } catch (sbErr) {}
       }
 
@@ -1402,24 +1402,24 @@
 
       if (type === "supabase_live" || type === "cloud_live" || type === "firebase_live") {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
-        textElem.innerText = customText || "Cloud: LIVE (Realtime)";
+        textElem.innerText = customText || "Supabase: LIVE";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
         pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
       } else if (type === "standby") {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = customText || "Cloud: Standby";
+        textElem.innerText = customText || "Supabase: Standby";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
         pingElem.className = "hidden";
       } else {
         badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = customText || "Menghubungkan Cloud...";
+        textElem.innerText = customText || "Menghubungkan Supabase...";
         dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
         pingElem.className = "animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-50";
       }
     }
 
     // ========================================================
-    // 9. CLOUD REALTIME LISTENERS (Firebase & Supabase)
+    // 9. CLOUD REALTIME LISTENERS (Supabase & Firebase)
     // ========================================================
     function initFirebaseListener() {
       if (!isFirebaseReady || !firebaseDb) return;
@@ -1429,7 +1429,7 @@
           if (isDirectVoltConnected || isDirectAmpConnected) return; // Prioritaskan USB lokal jika terhubung
           const data = snapshot.val();
           if (data && (typeof data.voltage !== "undefined" || typeof data.current !== "undefined")) {
-            updateHardwareBadge("cloud_live", "Cloud: LIVE (Firebase)");
+            updateHardwareBadge("cloud_live", "Supabase: LIVE");
             updateDashboardState(
               data.voltage,
               data.current,
@@ -1441,7 +1441,7 @@
             clearTimeout(hardwareWatchdogTimer);
             hardwareWatchdogTimer = setTimeout(() => {
               if (!isDirectVoltConnected && !isDirectAmpConnected) {
-                updateHardwareBadge("standby", "Cloud: Standby");
+                updateHardwareBadge("standby", "Supabase: Standby");
               }
             }, 10000);
           }
@@ -1460,16 +1460,19 @@
           const { data, error } = await supabase
             .from('protek608_telemetry')
             .select('*')
-            .order('created_at', { ascending: false })
+            .order('id', { ascending: false })
             .limit(1);
 
           if (!error && data && data.length > 0) {
             const latest = data[0];
-            const ageMs = latest.created_at ? (Date.now() - new Date(latest.created_at).getTime()) : 0;
-            const isFresh = ageMs < 15000; // Data masih baru dalam 15 detik terakhir
-
-            updateHardwareBadge(isFresh ? "supabase_live" : "standby", isFresh ? "Supabase: LIVE" : "Supabase: Standby");
-            updateDashboardState(latest.voltage, latest.current, latest.unit || "V", "A", `Supabase Sync (${(latest.target || 'Live').toUpperCase()})`);
+            updateHardwareBadge("supabase_live", "Supabase: LIVE");
+            updateDashboardState(
+              latest.voltage, 
+              (typeof latest.current !== "undefined") ? latest.current : null, 
+              latest.unit || "V", 
+              "A", 
+              `Supabase (${(latest.target || 'Live').toUpperCase()})`
+            );
 
             clearTimeout(hardwareWatchdogTimer);
             hardwareWatchdogTimer = setTimeout(() => {
@@ -1499,7 +1502,13 @@
               const row = payload.new;
               if (row && typeof row.voltage !== "undefined") {
                 updateHardwareBadge("supabase_live", "Supabase: LIVE");
-                updateDashboardState(row.voltage, row.current, row.unit || "V", "A", `Supabase Live (${(row.target || 'Live').toUpperCase()})`);
+                updateDashboardState(
+                  row.voltage, 
+                  (typeof row.current !== "undefined") ? row.current : null, 
+                  row.unit || "V", 
+                  "A", 
+                  `Supabase Live (${(row.target || 'Live').toUpperCase()})`
+                );
 
                 clearTimeout(hardwareWatchdogTimer);
                 hardwareWatchdogTimer = setTimeout(() => {
@@ -1515,8 +1524,8 @@
         console.warn("Supabase Realtime error:", subErr);
       }
 
-      // 3. Fallback Polling setiap 2.5 detik (menjamin HP selalu update tanpa delay)
-      setInterval(fetchLatestSupabase, 2500);
+      // 3. Fallback Polling setiap 2 detik
+      setInterval(fetchLatestSupabase, 2000);
     }
 
     // ========================================================
