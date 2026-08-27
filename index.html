@@ -260,58 +260,57 @@
 
   <!-- Top Header Navigation Bar -->
   <header class="sticky top-0 w-full z-50 glass-header backdrop-blur-2xl border-b transition-all shadow-[0_4px_25px_rgba(30,58,138,0.06)]">
-    <div class="h-20 max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between gap-3 relative z-10">
+    <div class="min-h-16 md:h-20 max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 py-2 md:py-0 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 md:gap-3 relative z-10">
       
       <!-- Left: Logo & Title -->
-      <div class="flex items-center gap-3 md:gap-4">
-        <div class="h-12 md:h-13 px-3 py-1.5 bg-white/95 rounded-2xl border border-blue-100/80 flex items-center justify-center shadow-[0_4px_16px_rgba(30,58,138,0.08)] hover:scale-105 transition">
-          <img src="assets/logo-boe.png" alt="Logo BBPPMPV BOE Malang" class="h-8 md:h-9 w-auto object-contain"/>
+      <div class="flex items-center gap-2.5 sm:gap-3 md:gap-4 min-w-0">
+        <div class="h-10 w-10 sm:h-12 sm:w-12 md:h-13 md:w-auto px-1.5 sm:px-2 md:px-3 py-1 bg-white/95 rounded-xl sm:rounded-2xl border border-blue-100/80 flex items-center justify-center shadow-[0_4px_16px_rgba(30,58,138,0.08)] shrink-0 hover:scale-105 transition">
+          <img src="assets/logo-boe.png" alt="Logo BBPPMPV BOE Malang" class="h-7 sm:h-8 md:h-9 w-auto object-contain"/>
         </div>
-        <div>
-          <h1 class="text-base md:text-xl xl:text-2xl font-bold tracking-tight title-adaptive flex items-center gap-2">
+        <div class="min-w-0">
+          <h1 class="text-xs sm:text-base md:text-xl xl:text-2xl font-bold tracking-tight title-adaptive truncate sm:overflow-visible">
             MONITORING PLTS BBPPMPV BOE
           </h1>
-          <p class="hidden sm:block text-xs text-sub-adaptive font-medium">
+          <p class="hidden sm:block text-[11px] md:text-xs text-sub-adaptive font-medium truncate">
             Sistem Pemantauan Energi Panel Surya Realtime &bull; VEDC Malang
           </p>
         </div>
       </div>
 
       <!-- Right: Channel Selector, Serial Connect, Theme Switcher & Status -->
-      <div class="flex items-center gap-2 md:gap-3">
+      <div class="flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0 ml-auto sm:ml-0">
         
         <!-- DUAL DIRECT SERIAL CONNECT BUTTONS -->
-        <div class="flex items-center gap-1.5">
+        <div class="flex items-center gap-1 sm:gap-1.5">
           <!-- Button Port 1 (Volt) -->
-          <button id="btn-serial-volt" class="h-9 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-            <span class="material-symbols-outlined text-[17px]">bolt</span>
+          <button id="btn-serial-volt" class="h-8 sm:h-9 px-2 sm:px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1 sm:gap-1.5 cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[15px] sm:text-[17px]">bolt</span>
             <span id="btn-volt-text">Volt (P1)</span>
           </button>
 
           <!-- Button Port 2 (Ampere) -->
-          <button id="btn-serial-amp" class="h-9 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-            <span class="material-symbols-outlined text-[17px]">speed</span>
+          <button id="btn-serial-amp" class="h-8 sm:h-9 px-2 sm:px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1 sm:gap-1.5 cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[15px] sm:text-[17px]">speed</span>
             <span id="btn-amp-text">Amp (P2)</span>
           </button>
         </div>
 
-
         <!-- THEME SWITCHER ICON-ONLY TOGGLE BUTTON -->
-        <button id="btn-theme-toggle" class="w-9 h-9 flex items-center justify-center bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-yellow-400 border border-slate-200/90 dark:border-white/10 rounded-xl shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0" title="Ganti Tema (Siang / Malam)">
-          <span class="material-symbols-outlined text-[19px] text-amber-500" id="theme-toggle-icon">dark_mode</span>
+        <button id="btn-theme-toggle" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-yellow-400 border border-slate-200/90 dark:border-white/10 rounded-lg sm:rounded-xl shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0" title="Ganti Tema (Siang / Malam)">
+          <span class="material-symbols-outlined text-[17px] sm:text-[19px] text-amber-500" id="theme-toggle-icon">dark_mode</span>
         </button>
 
         <!-- Live Status Badge -->
-        <div id="hardware-status-badge" class="h-9 px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap">
+        <div id="hardware-status-badge" class="h-8 sm:h-9 px-2 sm:px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-lg sm:rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
           <span class="relative flex h-2 w-2">
             <span id="hardware-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
             <span id="hardware-dot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
           </span>
-          <span id="hardware-status-text" class="text-xs font-bold tracking-wide uppercase">Online</span>
+          <span id="hardware-status-text" class="text-[10px] sm:text-xs font-bold tracking-wide uppercase">Online</span>
         </div>
 
         <!-- Clean Clock & Date Section -->
-        <div class="hidden sm:flex flex-col items-end border-l border-slate-300/60 dark:border-white/10 pl-3 md:pl-4 py-0.5 text-right">
+        <div class="hidden lg:flex flex-col items-end border-l border-slate-300/60 dark:border-white/10 pl-3 md:pl-4 py-0.5 text-right">
           <span class="text-base md:text-lg font-black tracking-tight text-main-adaptive font-mono leading-none" id="current-time">--:--:--</span>
           <span class="text-[10px] md:text-[11px] font-bold text-sub-adaptive uppercase tracking-wider whitespace-nowrap mt-1" id="current-date">--</span>
         </div>
@@ -321,98 +320,98 @@
   </header>
 
   <!-- Main Content Grid -->
-  <main class="flex-1 w-full max-w-[1920px] mx-auto p-4 md:p-8 flex flex-col gap-6 relative z-10">
+  <main class="flex-1 w-full max-w-[1920px] mx-auto p-3 sm:p-5 md:p-8 flex flex-col gap-4 md:gap-6 relative z-10">
     
     <!-- Top Row: Main Metric & Energy Flow Visualizer -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-stretch">
       
       <!-- Card 1: Main Metric Display (Dynamic according to selected measurement focus) -->
-      <div class="lg:col-span-4 glass-card-adaptive rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden group" id="main-metric-card">
+      <div class="lg:col-span-4 glass-card-adaptive rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col justify-between relative overflow-hidden group" id="main-metric-card">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-amber-500/5 opacity-40 pointer-events-none"></div>
 
         <div class="relative z-10">
           <!-- Label -->
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-500 border border-blue-500/25 flex items-center justify-center shadow-sm" id="main-metric-icon-box">
-                <span class="material-symbols-outlined text-[24px]" id="main-metric-icon">wb_sunny</span>
+          <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-500/15 text-blue-500 border border-blue-500/25 flex items-center justify-center shadow-sm shrink-0" id="main-metric-icon-box">
+                <span class="material-symbols-outlined text-[20px] sm:text-[24px]" id="main-metric-icon">wb_sunny</span>
               </div>
-              <h2 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase" id="main-metric-title">
+              <h2 class="text-[11px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase truncate" id="main-metric-title">
                 Produksi Energi Panel Surya (PV)
               </h2>
             </div>
-            <span class="text-[11px] font-bold px-2.5 py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-lg border border-emerald-500/30 font-mono" id="solar-mode-tag">REALTIME</span>
+            <span class="text-[10px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-md sm:rounded-lg border border-emerald-500/30 font-mono shrink-0 ml-2" id="solar-mode-tag">REALTIME</span>
           </div>
 
           <!-- Large Value Display -->
-          <div class="my-4">
+          <div class="my-2 sm:my-4">
             <div class="flex items-baseline font-black tracking-tight font-mono">
-              <span id="val-solar-kw" class="text-6xl md:text-7xl xl:text-8xl font-black val-primary-adaptive">0.00</span>
-              <span class="text-3xl md:text-4xl text-blue-500 ml-3 font-sans font-extrabold" id="val-solar-unit">W</span>
+              <span id="val-solar-kw" class="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-black val-primary-adaptive">0.00</span>
+              <span class="text-2xl sm:text-3xl md:text-4xl text-blue-500 ml-2 sm:ml-3 font-sans font-extrabold" id="val-solar-unit">W</span>
             </div>
             
             <!-- Direct Multimeter Measured Reading -->
-            <div class="mt-3 p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex flex-wrap items-center justify-between gap-2 shadow-sm">
-              <div class="flex items-center gap-2 text-xs">
-                <span class="material-symbols-outlined text-[18px] text-amber-500">electric_meter</span>
+            <div class="mt-2.5 sm:mt-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-blue-500/10 border border-blue-500/20 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 shadow-sm">
+              <div class="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+                <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-amber-500">electric_meter</span>
                 <span class="text-sub-adaptive font-semibold" id="label-raw-meter">Protek 608:</span>
-                <span id="val-raw-meter" class="font-mono font-extrabold text-sm text-main-adaptive">0.000 V</span>
+                <span id="val-raw-meter" class="font-mono font-extrabold text-xs sm:text-sm text-main-adaptive">0.000 V</span>
               </div>
-              <div class="text-[11px] text-sub-adaptive font-mono font-medium" id="val-meter-update">Menunggu data...</div>
+              <div class="text-[10px] sm:text-[11px] text-sub-adaptive font-mono font-medium" id="val-meter-update">Menunggu data...</div>
             </div>
 
             <!-- Prominent Dual Metric Badges for Voltage & Current -->
-            <div class="grid grid-cols-2 gap-3 mt-3.5" id="sub-telemetry-row">
-              <div class="p-3 sub-metric-box rounded-2xl border flex flex-col shadow-sm min-w-0">
-                <span class="text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[14px] text-blue-500">bolt</span> Tegangan
+            <div class="grid grid-cols-2 gap-2 sm:gap-3 mt-2.5 sm:mt-3.5" id="sub-telemetry-row">
+              <div class="p-2.5 sm:p-3 sub-metric-box rounded-xl sm:rounded-2xl border flex flex-col shadow-sm min-w-0">
+                <span class="text-[10px] sm:text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px] sm:text-[14px] text-blue-500">bolt</span> Tegangan
                 </span>
-                <span id="val-pv-volt" class="text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5 truncate">0.0 V</span>
+                <span id="val-pv-volt" class="text-base sm:text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5 truncate">0.0 V</span>
               </div>
-              <div class="p-3 sub-metric-box rounded-2xl border flex flex-col shadow-sm min-w-0">
-                <span class="text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[14px] text-emerald-500">speed</span> Arus
+              <div class="p-2.5 sm:p-3 sub-metric-box rounded-xl sm:rounded-2xl border flex flex-col shadow-sm min-w-0">
+                <span class="text-[10px] sm:text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px] sm:text-[14px] text-emerald-500">speed</span> Arus
                 </span>
-                <span id="val-pv-amp" class="text-lg md:text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 truncate">0.000 A</span>
+                <span id="val-pv-amp" class="text-base sm:text-lg md:text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 truncate">0.000 A</span>
               </div>
             </div>
-            <p class="text-[11px] text-sub-adaptive mt-2.5 font-mono px-0.5 leading-relaxed min-h-[14px]" id="solar-desc-status"></p>
+            <p class="text-[10px] sm:text-[11px] text-sub-adaptive mt-2 sm:mt-2.5 font-mono px-0.5 leading-relaxed min-h-[14px]" id="solar-desc-status"></p>
           </div>
         </div>
 
-        <div class="flex flex-col gap-2 mt-4 relative z-10">
-          <div class="inline-flex items-center gap-2.5 bg-blue-500/15 rounded-2xl py-2 px-3.5 w-fit border border-blue-500/25 text-blue-600 dark:text-blue-400 shadow-sm">
-            <span class="material-symbols-outlined text-[18px] text-blue-500" id="appliance-icon">lightbulb</span>
-            <span class="text-xs font-semibold" id="appliance-capacity-text">≈ Menunggu transmisi data dari Protek 608</span>
+        <div class="flex flex-col gap-2 mt-3 sm:mt-4 relative z-10">
+          <div class="inline-flex items-center gap-2 sm:gap-2.5 bg-blue-500/15 rounded-xl sm:rounded-2xl py-1.5 sm:py-2 px-2.5 sm:px-3.5 w-fit border border-blue-500/25 text-blue-600 dark:text-blue-400 shadow-sm max-w-full">
+            <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-blue-500 shrink-0" id="appliance-icon">lightbulb</span>
+            <span class="text-[11px] sm:text-xs font-semibold truncate" id="appliance-capacity-text">≈ Menunggu transmisi data dari Protek 608</span>
           </div>
         </div>
       </div>
 
       <!-- Card 2: Real-time Energy Flow Visualizer (8 cols on desktop) -->
-      <div class="lg:col-span-8 glass-card-adaptive rounded-3xl p-6 md:p-8 relative flex flex-col justify-between min-h-[400px] overflow-hidden group">
+      <div class="lg:col-span-8 glass-card-adaptive rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 relative flex flex-col justify-between min-h-[360px] md:min-h-[400px] overflow-hidden group">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5 opacity-50 pointer-events-none"></div>
         
         <!-- Header Row -->
         <div class="flex items-center justify-between mb-2 z-10">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center text-blue-500 shadow-sm">
-              <span class="material-symbols-outlined text-[22px]">hub</span>
+          <div class="flex items-center gap-2 sm:gap-2.5">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center text-blue-500 shadow-sm">
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]">hub</span>
             </div>
-            <h2 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">
+            <h2 class="text-[11px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase">
               Aliran Distribusi Energi Real-Time
             </h2>
           </div>
-          <div class="flex items-center gap-2 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/30 text-red-600 dark:text-red-400 shadow-sm">
+          <div class="flex items-center gap-1.5 sm:gap-2 bg-red-500/10 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-red-500/30 text-red-600 dark:text-red-400 shadow-sm">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
             </span>
-            <span class="text-xs font-bold tracking-wider" id="flow-stream-status">LIVE</span>
+            <span class="text-[10px] sm:text-xs font-bold tracking-wider" id="flow-stream-status">LIVE</span>
           </div>
         </div>
 
         <!-- Flow Visualizer Canvas Container -->
-        <div class="relative flex-1 flex items-center justify-center my-4 min-h-[260px]">
+        <div class="relative flex-1 flex items-center justify-center my-3 sm:my-4 min-h-[240px] sm:min-h-[260px]">
           
           <!-- SVG Connecting Curves Layer -->
           <svg class="absolute inset-0 w-full h-full pointer-events-none" id="flow-svg" style="z-index: 1;">
@@ -420,55 +419,55 @@
           </svg>
 
           <!-- Interactive Node Graph Layout -->
-          <div class="w-full flex flex-col md:flex-row items-center justify-between px-2 md:px-8 gap-8 md:gap-4 relative z-10">
+          <div class="w-full flex flex-col md:flex-row items-center justify-between px-1 sm:px-4 md:px-8 gap-5 sm:gap-6 md:gap-4 relative z-10">
             
             <!-- Source Node: Solar / Panel Surya (PV) -->
-            <div class="flex flex-col items-center gap-3 flow-node group cursor-pointer" id="node-solar">
-              <div id="node-solar-ring" class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-amber-500/10 shadow-[0_0_35px_rgba(245,158,11,0.25)] flex items-center justify-center relative overflow-hidden border-2 border-amber-400 group-hover:scale-105 transition duration-300">
+            <div class="flex flex-col items-center gap-2 sm:gap-3 flow-node group cursor-pointer" id="node-solar">
+              <div id="node-solar-ring" class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-amber-500/10 shadow-[0_0_35px_rgba(245,158,11,0.25)] flex items-center justify-center relative overflow-hidden border-2 border-amber-400 group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-amber-500/10 animate-[spin_12s_linear_infinite]"></div>
-                <div class="absolute inset-2 rounded-full border border-dashed border-amber-400/50 animate-[spin_20s_linear_infinite_reverse]"></div>
-                <span class="material-symbols-outlined text-amber-500 text-[44px] md:text-[50px] transition duration-300 group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+                <div class="absolute inset-1.5 sm:inset-2 rounded-full border border-dashed border-amber-400/50 animate-[spin_20s_linear_infinite_reverse]"></div>
+                <span class="material-symbols-outlined text-amber-500 text-[36px] sm:text-[44px] md:text-[50px] transition duration-300 group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
               </div>
               <div class="text-center">
-                <div class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Panel Surya (PV)</div>
-                <div class="text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5" id="flow-solar-val">0.0 W</div>
+                <div class="text-[10px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase">Panel Surya (PV)</div>
+                <div class="text-base sm:text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5" id="flow-solar-val">0.0 W</div>
               </div>
             </div>
 
             <!-- Central Splitter / Inverter Node -->
-            <div class="flex flex-col items-center gap-2 flow-node my-4 md:my-0" id="node-split">
-              <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 rotate-45 flex items-center justify-center border-2 border-white shadow-xl shadow-blue-500/25 hover:scale-110 transition">
-                <span class="material-symbols-outlined text-white -rotate-45 text-[26px]">electric_bolt</span>
+            <div class="flex flex-col items-center gap-1.5 sm:gap-2 flow-node my-1 sm:my-2 md:my-0" id="node-split">
+              <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-blue-600 rotate-45 flex items-center justify-center border-2 border-white shadow-xl shadow-blue-500/25 hover:scale-110 transition">
+                <span class="material-symbols-outlined text-white -rotate-45 text-[20px] sm:text-[24px] md:text-[26px]">electric_bolt</span>
               </div>
-              <span class="text-[11px] font-bold text-sub-adaptive tracking-wider uppercase mt-1">Inverter / MPPT</span>
+              <span class="text-[10px] sm:text-[11px] font-bold text-sub-adaptive tracking-wider uppercase mt-1">Inverter / MPPT</span>
             </div>
 
             <!-- Destination Nodes: Load & Battery -->
-            <div class="flex flex-row md:flex-col gap-6 md:gap-8 w-full md:w-auto justify-around">
+            <div class="flex flex-row md:flex-col gap-3 sm:gap-6 md:gap-8 w-full md:w-auto justify-around items-center">
               
               <!-- Destination 1: Used / Beban Rumah -->
-              <div class="flex items-center gap-4 flow-node group cursor-pointer" id="node-used">
-                <div class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full flow-node-box flex items-center justify-center border-2 group-hover:border-blue-400 shadow-md relative transition duration-300 group-hover:scale-105">
-                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-blue-400/40 border-dashed animate-[spin_16s_linear_infinite]"></div>
-                  <span class="material-symbols-outlined text-blue-500 text-[32px] md:text-[36px]">apartment</span>
+              <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 flow-node group cursor-pointer text-center sm:text-left" id="node-used">
+                <div class="w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-full flow-node-box flex items-center justify-center border-2 group-hover:border-blue-400 shadow-md relative transition duration-300 group-hover:scale-105 shrink-0">
+                  <div class="absolute inset-0 rounded-xl sm:rounded-2xl md:rounded-full border-2 border-blue-400/40 border-dashed animate-[spin_16s_linear_infinite]"></div>
+                  <span class="material-symbols-outlined text-blue-500 text-[24px] sm:text-[30px] md:text-[36px]">apartment</span>
                 </div>
                 <div>
-                  <div class="text-lg md:text-2xl font-black text-main-adaptive font-mono" id="flow-used-val">0 W</div>
-                  <div class="text-xs font-bold text-blue-500 tracking-wider uppercase" id="flow-used-label">Beban Listrik</div>
-                  <div class="hidden sm:block text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-used-desc">Peralatan Aktif</div>
+                  <div class="text-base sm:text-lg md:text-2xl font-black text-main-adaptive font-mono" id="flow-used-val">0 W</div>
+                  <div class="text-[10px] sm:text-xs font-bold text-blue-500 tracking-wider uppercase" id="flow-used-label">Beban Listrik</div>
+                  <div class="hidden sm:block text-[10px] sm:text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-used-desc">Peralatan Aktif</div>
                 </div>
               </div>
 
               <!-- Destination 2: Stored / Baterai -->
-              <div class="flex items-center gap-4 flow-node group cursor-pointer" id="node-stored">
-                <div id="node-stored-box" class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full bg-emerald-500/15 border-emerald-500/30 flex items-center justify-center border-2 group-hover:border-emerald-400 shadow-md relative transition duration-300 group-hover:scale-105">
-                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-emerald-400/40 border-dashed animate-[spin_16s_linear_infinite_reverse]"></div>
-                  <span id="node-battery-icon" class="material-symbols-outlined text-emerald-500 text-[32px] md:text-[36px]">battery_charging_full</span>
+              <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 flow-node group cursor-pointer text-center sm:text-left" id="node-stored">
+                <div id="node-stored-box" class="w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-full bg-emerald-500/15 border-emerald-500/30 flex items-center justify-center border-2 group-hover:border-emerald-400 shadow-md relative transition duration-300 group-hover:scale-105 shrink-0">
+                  <div class="absolute inset-0 rounded-xl sm:rounded-2xl md:rounded-full border-2 border-emerald-400/40 border-dashed animate-[spin_16s_linear_infinite_reverse]"></div>
+                  <span id="node-battery-icon" class="material-symbols-outlined text-emerald-500 text-[24px] sm:text-[30px] md:text-[36px]">battery_charging_full</span>
                 </div>
                 <div>
-                  <div class="text-lg md:text-2xl font-black text-emerald-500 font-mono" id="flow-stored-val">0 W</div>
-                  <div class="text-xs font-bold text-emerald-500 tracking-wider uppercase" id="flow-stored-label">Standby</div>
-                  <div class="hidden sm:block text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-stored-desc">Status Baterai</div>
+                  <div class="text-base sm:text-lg md:text-2xl font-black text-emerald-500 font-mono" id="flow-stored-val">0 W</div>
+                  <div class="text-[10px] sm:text-xs font-bold text-emerald-500 tracking-wider uppercase" id="flow-stored-label">Standby</div>
+                  <div class="hidden sm:block text-[10px] sm:text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-stored-desc">Status Baterai</div>
                 </div>
               </div>
 
@@ -479,13 +478,13 @@
         </div>
 
         <!-- Footer Legend -->
-        <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-300/30 text-xs text-sub-adaptive gap-2 z-10">
-          <div class="flex items-center gap-4 font-semibold">
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Produksi PV</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Beban AC</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Aliran Baterai</span>
+        <div class="flex flex-wrap items-center justify-between pt-3 sm:pt-4 border-t border-slate-300/30 text-[10px] sm:text-xs text-sub-adaptive gap-2 z-10">
+          <div class="flex items-center gap-2.5 sm:gap-4 font-semibold flex-wrap">
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-500"></span> Produksi PV</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-blue-500"></span> Beban AC</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500"></span> Aliran Baterai</span>
           </div>
-          <div class="text-[11px] text-sub-adaptive font-mono" id="footer-sys-info">Data Real-Time Sensor &bull; MPPT Active</div>
+          <div class="text-[10px] sm:text-[11px] text-sub-adaptive font-mono" id="footer-sys-info">Data Real-Time Sensor &bull; MPPT Active</div>
         </div>
 
       </div>
@@ -493,56 +492,56 @@
     </div>
 
     <!-- Bottom Row: 3 Detail Metric Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       
       <!-- Bottom Card 1: Total Energi Hari Ini -->
-      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
+      <div class="glass-card-adaptive rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
         <div class="flex items-center justify-between relative z-10">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:scale-105 transition shadow-sm">
-              <span class="material-symbols-outlined text-[22px]">energy_savings_leaf</span>
+          <div class="flex items-center gap-2.5 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:scale-105 transition shadow-sm shrink-0">
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]">energy_savings_leaf</span>
             </div>
-            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Energi Akumulasi Hari Ini</h3>
+            <h3 class="text-[11px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase">Energi Akumulasi Hari Ini</h3>
           </div>
-          <span class="text-xs font-bold text-blue-500 font-mono bg-blue-500/15 px-2.5 py-1 rounded-lg border border-blue-500/30">Realtime kWh</span>
+          <span class="text-[10px] sm:text-xs font-bold text-blue-500 font-mono bg-blue-500/15 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-blue-500/30">Realtime kWh</span>
         </div>
 
-        <div class="my-5 relative z-10">
-          <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
+        <div class="my-3 sm:my-5 relative z-10">
+          <div class="text-3xl sm:text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
             <span id="val-daily-kwh">0.000</span>
-            <span class="text-2xl text-sub-adaptive ml-2 font-sans font-bold">kWh</span>
+            <span class="text-xl sm:text-2xl text-sub-adaptive ml-2 font-sans font-bold">kWh</span>
           </div>
-          <div class="flex items-center gap-2 mt-2 text-xs text-emerald-500 font-bold">
-            <span class="material-symbols-outlined text-[16px]">bolt</span>
+          <div class="flex items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2 text-[11px] sm:text-xs text-emerald-500 font-bold">
+            <span class="material-symbols-outlined text-[14px] sm:text-[16px]">bolt</span>
             <span>Diakumulasikan realtime dari input Protek 608</span>
           </div>
         </div>
 
-        <p class="text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-3 relative z-10 font-medium">
+        <p class="text-[11px] sm:text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-2.5 sm:pt-3 relative z-10 font-medium">
           Total energi bersih yang diproduksi panel surya selama sesi pengukuran aktif.
         </p>
       </div>
 
       <!-- Bottom Card 2: Cadangan Energi / Baterai -->
-      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
+      <div class="glass-card-adaptive rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
         <div class="relative z-10 flex justify-between items-center">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 group-hover:scale-105 transition shadow-sm">
-              <span class="material-symbols-outlined text-[22px]">battery_saver</span>
+          <div class="flex items-center gap-2.5 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 group-hover:scale-105 transition shadow-sm shrink-0">
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]">battery_saver</span>
             </div>
-            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Status Baterai Bank</h3>
+            <h3 class="text-[11px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase">Status Baterai Bank</h3>
           </div>
           
-          <div id="battery-badge-pill" class="px-3 py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-bold border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+          <div id="battery-badge-pill" class="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] sm:text-xs font-bold border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
             <div id="battery-badge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
             <span id="battery-badge-text">STANDBY</span>
           </div>
         </div>
 
-        <div class="relative z-10 my-4">
-          <div class="flex justify-between items-end mb-2.5">
-            <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono" id="val-battery-pct">-- %</div>
-            <div class="text-xs text-sub-adaptive font-mono flex gap-3 text-right">
+        <div class="relative z-10 my-3 sm:my-4">
+          <div class="flex justify-between items-end mb-2 sm:mb-2.5">
+            <div class="text-3xl sm:text-4xl md:text-5xl font-black text-main-adaptive font-mono" id="val-battery-pct">-- %</div>
+            <div class="text-[11px] sm:text-xs text-sub-adaptive font-mono flex gap-2 sm:gap-3 text-right">
               <span><b class="text-main-adaptive font-bold" id="val-batt-volt">--</b> V</span>
               <span class="text-emerald-500 font-bold" id="val-batt-current">-- A</span>
               <span><b class="text-main-adaptive font-bold" id="val-batt-watt">--</b> W</span>
@@ -550,7 +549,7 @@
           </div>
 
           <!-- Segmented Battery Level Bar (10 segments) -->
-          <div class="w-full h-7 bg-slate-300/30 rounded-xl flex gap-1 p-1 border border-slate-400/30" id="battery-segments">
+          <div class="w-full h-6 sm:h-7 bg-slate-300/30 rounded-lg sm:rounded-xl flex gap-1 p-1 border border-slate-400/30" id="battery-segments">
             <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
             <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
             <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
@@ -564,7 +563,7 @@
           </div>
         </div>
 
-        <div class="text-xs text-sub-adaptive flex items-center justify-between border-t border-slate-300/30 pt-3 relative z-10 font-medium">
+        <div class="text-[11px] sm:text-xs text-sub-adaptive flex flex-wrap items-center justify-between border-t border-slate-300/30 pt-2.5 sm:pt-3 relative z-10 font-medium gap-1">
           <div class="flex flex-col gap-0.5">
             <span id="batt-capacity-label">Tegangan Terminal: <b id="val-batt-terminal-mode" class="text-main-adaptive font-bold">Real Telemetry</b></span>
             <span id="spec-batt-type" class="text-[10px] text-blue-500 font-mono font-bold"></span>
@@ -574,30 +573,30 @@
       </div>
 
       <!-- Bottom Card 3: Listrik Digunakan (Load) -->
-      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
+      <div class="glass-card-adaptive rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
         <div class="flex items-center justify-between relative z-10">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-500 group-hover:scale-105 transition shadow-sm">
-              <span class="material-symbols-outlined text-[22px]">bolt</span>
+          <div class="flex items-center gap-2.5 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-500 group-hover:scale-105 transition shadow-sm shrink-0">
+              <span class="material-symbols-outlined text-[18px] sm:text-[22px]">bolt</span>
             </div>
-            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Beban Listrik Digunakan</h3>
+            <h3 class="text-[11px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase">Beban Listrik Digunakan</h3>
           </div>
-          <div class="text-xs font-bold text-blue-500 bg-blue-500/15 border border-blue-500/30 px-2.5 py-1 rounded-lg" id="val-load-kwh-daily">
+          <div class="text-[10px] sm:text-xs font-bold text-blue-500 bg-blue-500/15 border border-blue-500/30 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg" id="val-load-kwh-daily">
             Hari ini: 0.000 kWh
           </div>
         </div>
 
-        <div class="my-5 relative z-10">
-          <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
+        <div class="my-3 sm:my-5 relative z-10">
+          <div class="text-3xl sm:text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
             <span id="val-load-w">0</span>
-            <span class="text-2xl text-sub-adaptive ml-2 font-sans font-bold">W</span>
+            <span class="text-xl sm:text-2xl text-sub-adaptive ml-2 font-sans font-bold">W</span>
           </div>
-          <div class="text-xs text-sub-adaptive font-mono mt-2 flex items-center gap-2">
+          <div class="text-[11px] sm:text-xs text-sub-adaptive font-mono mt-1.5 sm:mt-2 flex items-center gap-2">
             <span>Tegangan Beban: <b id="val-load-volt">220.0 V</b> &bull; Arus: <b id="val-load-amp">0.00 A</b></span>
           </div>
         </div>
 
-        <p class="text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-3 relative z-10 font-medium">
+        <p class="text-[11px] sm:text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-2.5 sm:pt-3 relative z-10 font-medium">
           Konsumsi daya beban fasilitas yang terhubung ke jaringan PLTS.
         </p>
       </div>
