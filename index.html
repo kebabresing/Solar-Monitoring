@@ -118,20 +118,126 @@
       }
     }
     
-    /* Custom subtle scrollbar */
+    /* Subtle custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(16, 20, 21, 0.6);
+      background: rgba(240, 245, 255, 0.3);
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(148, 163, 184, 0.4);
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(100, 116, 139, 0.6);
+    }
+
+    /* Base Body Smooth Theme Transitions */
+    body {
+      transition: background 0.4s ease, color 0.4s ease;
+      background-attachment: fixed;
+    }
+
+    /* 1. LIGHT THEME (Mode Cerah Lapangan VEDC) */
+    .theme-light {
+      background: 
+        linear-gradient(135deg, rgba(235, 245, 255, 0.38) 0%, rgba(245, 250, 255, 0.46) 50%, rgba(230, 242, 255, 0.38) 100%),
+        url('assets/lapangan.jpg') center/cover no-repeat fixed;
+      color: #1e293b;
+    }
+    .theme-light .glass-card-adaptive {
+      background: rgba(255, 255, 255, 0.62) !important;
+      backdrop-filter: blur(14px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.80) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.98) !important;
+      box-shadow: 
+        0 18px 45px -10px rgba(15, 35, 75, 0.10), 
+        0 2px 8px rgba(0, 0, 0, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    }
+    .theme-light .glass-card-adaptive:hover {
+      background: rgba(255, 255, 255, 0.74) !important;
+      box-shadow: 
+        0 24px 50px -12px rgba(15, 35, 75, 0.16), 
+        0 0 0 1px rgba(255, 255, 255, 1) !important;
+      transform: translateY(-2px);
+    }
+    .theme-light .glass-header {
+      background: rgba(255, 255, 255, 0.65) !important;
+      border-color: rgba(255, 255, 255, 0.50) !important;
+    }
+    .theme-light .glass-channel-bar {
+      background: rgba(255, 255, 255, 0.45) !important;
+      border-color: rgba(255, 255, 255, 0.40) !important;
+    }
+    .theme-light .text-main-adaptive { color: #0f172a !important; }
+    .theme-light .text-sub-adaptive { color: #475569 !important; }
+    .theme-light .sub-metric-box {
+      background: rgba(255, 255, 255, 0.80) !important;
+      border-color: rgba(226, 232, 240, 0.80) !important;
+    }
+    .theme-light .flow-node-box {
+      background: #eff6ff !important;
+      border-color: #bfdbfe !important;
+    }
+    .theme-light .title-adaptive { color: #0f172a !important; }
+    .theme-light .val-primary-adaptive { color: #0f172a !important; }
+
+    /* 2. DARK THEME (Mode Malam Asli Yang Di-ACC Dosen) */
+    .theme-dark {
+      background: #0b0f14 !important;
+      background-image: linear-gradient(135deg, #0b0f14 0%, #0f172a 50%, #131b2e 100%) !important;
+      color: #e0e3e5 !important;
+    }
+    .theme-dark .glass-card-adaptive {
+      background: rgba(20, 26, 36, 0.90) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+      box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    }
+    .theme-dark .glass-card-adaptive:hover {
+      background: rgba(24, 32, 46, 0.95) !important;
+      border-color: rgba(255, 224, 131, 0.20) !important;
+      box-shadow: 0 18px 45px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 224, 131, 0.08) !important;
+      transform: translateY(-2px);
+    }
+    .theme-dark .glass-header {
+      background: rgba(11, 15, 20, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+    .theme-dark .glass-channel-bar {
+      background: rgba(17, 23, 34, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+    .theme-dark .title-adaptive { color: #ffecb9 !important; }
+    .theme-dark .text-main-adaptive { color: #e0e3e5 !important; }
+    .theme-dark .text-sub-adaptive { color: #d1c6ab !important; }
+    .theme-dark .val-primary-adaptive { 
+      color: #ffecb9 !important; 
+      text-shadow: 0 0 25px rgba(255, 224, 131, 0.25);
+    }
+    .theme-dark .sub-metric-box {
+      background: rgba(12, 19, 34, 0.85) !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+    .theme-dark .flow-node-box {
+      background: #182030 !important;
+      border-color: rgba(190, 209, 255, 0.25) !important;
+    }
+    .theme-dark #node-solar-ring {
+      background: #1c1b18 !important;
+      border-color: rgba(255, 224, 131, 0.45) !important;
+      box-shadow: 0 0 35px rgba(255, 224, 131, 0.15) !important;
+    }
+    .theme-dark #node-stored-box {
+      background: #182030 !important;
+      border-color: rgba(74, 225, 118, 0.40) !important;
+      box-shadow: 0 0 30px rgba(74, 225, 118, 0.12) !important;
     }
 
     .glow-primary {
@@ -140,193 +246,168 @@
     .glow-secondary {
       filter: drop-shadow(0 0 20px rgba(74, 225, 118, 0.3));
     }
-    .glow-card {
-      box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    }
-    
+
     @keyframes pulse-bar {
-      0%, 100% { opacity: 1; filter: brightness(1.2); }
-      50% { opacity: 0.5; filter: brightness(0.9); }
+      0%, 100% { opacity: 1; filter: brightness(1.1); }
+      50% { opacity: 0.6; filter: brightness(0.9); }
     }
     .animate-pulse-bar {
       animation: pulse-bar 1.2s infinite ease-in-out;
     }
   </style>
 </head>
-<body class="bg-[#0b0f14] bg-gradient-to-br from-[#0b0f14] via-[#0f172a] to-[#131b2e] font-sans text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<body class="theme-dark font-sans min-h-screen flex flex-col selection:bg-yellow-500 selection:text-black relative overflow-x-hidden">
 
   <!-- Top Header Navigation Bar -->
-  <header class="sticky top-0 w-full z-50 bg-[#0b0f14]/90 backdrop-blur-2xl border-b border-white/5 transition-all">
-    <div class="h-20 max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between gap-3">
+  <header class="sticky top-0 w-full z-50 glass-header backdrop-blur-2xl border-b transition-all shadow-[0_4px_25px_rgba(30,58,138,0.06)]">
+    <div class="h-20 max-w-[1920px] mx-auto px-4 md:px-8 flex items-center justify-between gap-3 relative z-10">
       
       <!-- Left: Logo & Title -->
       <div class="flex items-center gap-3 md:gap-4">
-        <div class="h-11 md:h-12 px-2.5 md:px-3 py-1 bg-white/95 rounded-2xl border border-white/20 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.12)]">
-          <img src="assets/logo-boe.png" alt="Logo BBPPMPV BOE Malang" class="h-7 md:h-9 w-auto object-contain"/>
+        <div class="h-12 md:h-13 px-3 py-1.5 bg-white/95 rounded-2xl border border-blue-100/80 flex items-center justify-center shadow-[0_4px_16px_rgba(30,58,138,0.08)] hover:scale-105 transition">
+          <img src="assets/logo-boe.png" alt="Logo BBPPMPV BOE Malang" class="h-8 md:h-9 w-auto object-contain"/>
         </div>
         <div>
-          <h1 class="text-base md:text-xl xl:text-2xl font-bold tracking-tight text-primary flex items-center gap-2">
-            MONITORING ENERGI SURYA VEDC MALANG
+          <h1 class="text-base md:text-xl xl:text-2xl font-bold tracking-tight title-adaptive flex items-center gap-2">
+            MONITORING PLTS BBPPMPV BOE
           </h1>
-          <p class="hidden sm:block text-xs text-on-surface-variant/80">
-            Sistem Pemantauan Energi Panel Surya Realtime &bull; BBPPMPV BOE (VEDC) Malang
+          <p class="hidden sm:block text-xs text-sub-adaptive font-medium">
+            Sistem Pemantauan Energi Panel Surya Realtime &bull; VEDC Malang
           </p>
         </div>
       </div>
 
-      <!-- Right: Channel Selector, Serial Connect & Status -->
+      <!-- Right: Channel Selector, Serial Connect, Theme Switcher & Status -->
       <div class="flex items-center gap-2 md:gap-3">
         
         <!-- DUAL DIRECT SERIAL CONNECT BUTTONS -->
         <div class="flex items-center gap-1.5">
           <!-- Button Port 1 (Volt) -->
-          <button id="btn-serial-volt" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition">
-            <span class="material-symbols-outlined text-[16px]">bolt</span>
-            <span id="btn-volt-text" class="hidden sm:inline">Volt (P1)</span>
+          <button id="btn-serial-volt" class="h-9 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[17px]">bolt</span>
+            <span id="btn-volt-text">Volt (P1)</span>
           </button>
 
           <!-- Button Port 2 (Ampere) -->
-          <button id="btn-serial-amp" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-semibold shadow-sm transition">
-            <span class="material-symbols-outlined text-[16px]">speed</span>
-            <span id="btn-amp-text" class="hidden sm:inline">Amp (P2)</span>
+          <button id="btn-serial-amp" class="h-9 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+            <span class="material-symbols-outlined text-[17px]">speed</span>
+            <span id="btn-amp-text">Amp (P2)</span>
           </button>
         </div>
 
+
+        <!-- THEME SWITCHER ICON-ONLY TOGGLE BUTTON -->
+        <button id="btn-theme-toggle" class="w-9 h-9 flex items-center justify-center bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-yellow-400 border border-slate-200/90 dark:border-white/10 rounded-xl shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0" title="Ganti Tema (Siang / Malam)">
+          <span class="material-symbols-outlined text-[19px] text-amber-500" id="theme-toggle-icon">dark_mode</span>
+        </button>
+
         <!-- Live Status Badge -->
-        <div id="hardware-status-badge" class="flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.12)]">
-          <span class="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
-            <span id="hardware-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-            <span id="hardware-dot" class="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400"></span>
+        <div id="hardware-status-badge" class="h-9 px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap">
+          <span class="relative flex h-2 w-2">
+            <span id="hardware-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+            <span id="hardware-dot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
           </span>
-          <span id="hardware-status-text" class="text-[11px] md:text-xs font-semibold tracking-wider uppercase">Menghubungkan...</span>
+          <span id="hardware-status-text" class="text-xs font-bold tracking-wide uppercase">Online</span>
         </div>
 
-        <!-- Clock & Date -->
-        <div class="hidden xl:flex flex-col items-end border-l border-white/10 pl-3">
-          <span class="text-base font-bold tracking-tight text-on-surface font-mono" id="current-time">--:--:--</span>
-          <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider" id="current-date">--</span>
+        <!-- Clean Clock & Date Section -->
+        <div class="hidden sm:flex flex-col items-end border-l border-slate-300/60 dark:border-white/10 pl-3 md:pl-4 py-0.5 text-right">
+          <span class="text-base md:text-lg font-black tracking-tight text-main-adaptive font-mono leading-none" id="current-time">--:--:--</span>
+          <span class="text-[10px] md:text-[11px] font-bold text-sub-adaptive uppercase tracking-wider whitespace-nowrap mt-1" id="current-date">--</span>
         </div>
-
-        <!-- Link to meter.html in a new tab -->
-        <a href="meter.html" target="_blank" title="Buka Halaman Serial Multimeter & Diagnostik" class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high border border-white/10 rounded-xl text-xs text-on-surface-variant hover:text-on-surface transition">
-          <span class="material-symbols-outlined text-[18px]">terminal</span>
-          <span class="hidden md:inline">Dual Meter View</span>
-        </a>
 
       </div>
     </div>
   </header>
 
-  <!-- Interactive Measurement Channel Bar -->
-  <div class="w-full bg-[#111722]/90 border-b border-white/5 px-4 md:px-8 py-2.5">
-    <div class="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-      
-      <!-- Probe Focus Selector -->
-      <div class="flex items-center gap-2">
-        <span class="text-on-surface-variant font-medium flex items-center gap-1">
-          <span class="material-symbols-outlined text-[16px] text-primary">pin_drop</span>
-          Titik Ukur Probe Protek 608:
-        </span>
-        <div class="inline-flex rounded-xl p-0.5 bg-black/40 border border-white/10" id="channel-selector-group">
-          <button id="target-solar" class="px-3 py-1 rounded-lg font-semibold text-xs transition bg-primary text-on-primary shadow-sm" data-target="solar">
-            ☀️ Panel Surya (PV)
-          </button>
-          <button id="target-battery" class="px-3 py-1 rounded-lg font-semibold text-xs transition text-on-surface-variant hover:text-on-surface" data-target="battery">
-            🔋 Baterai Bank
-          </button>
-          <button id="target-load" class="px-3 py-1 rounded-lg font-semibold text-xs transition text-on-surface-variant hover:text-on-surface" data-target="load">
-            ⚡ Beban Listrik (Load)
-          </button>
-        </div>
-      </div>
-
-      <!-- System Specs Quick Info -->
-      <div class="flex items-center gap-4 text-on-surface-variant/80 font-mono text-[11px]">
-        <span>Sistem Baterai: <b class="text-on-surface" id="spec-batt-type">12V / 24V Auto-Sense</b></span>
-        <span>&bull;</span>
-        <span>Mode MPPT: <b class="text-secondary">Tracking Aktif</b></span>
-      </div>
-
-    </div>
-  </div>
-
   <!-- Main Content Grid -->
-  <main class="flex-1 w-full max-w-[1920px] mx-auto p-4 md:p-8 flex flex-col gap-6">
+  <main class="flex-1 w-full max-w-[1920px] mx-auto p-4 md:p-8 flex flex-col gap-6 relative z-10">
     
     <!-- Top Row: Main Metric & Energy Flow Visualizer -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
       
       <!-- Card 1: Main Metric Display (Dynamic according to selected measurement focus) -->
-      <div class="lg:col-span-4 bg-[#141a24]/90 backdrop-blur-xl rounded-3xl p-6 md:p-8 flex flex-col justify-between glow-card relative overflow-hidden group border border-white/5" id="main-metric-card">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-700 pointer-events-none"></div>
-        <div class="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="lg:col-span-4 glass-card-adaptive rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden group" id="main-metric-card">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-amber-500/5 opacity-40 pointer-events-none"></div>
 
-        <div>
+        <div class="relative z-10">
           <!-- Label -->
           <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2">
-              <div class="p-2 rounded-xl bg-primary/10 text-primary flex items-center justify-center" id="main-metric-icon-box">
-                <span class="material-symbols-outlined text-[22px]" id="main-metric-icon">wb_sunny</span>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-500 border border-blue-500/25 flex items-center justify-center shadow-sm" id="main-metric-icon-box">
+                <span class="material-symbols-outlined text-[24px]" id="main-metric-icon">wb_sunny</span>
               </div>
-              <h2 class="text-xs font-bold text-on-surface-variant tracking-widest uppercase" id="main-metric-title">
+              <h2 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase" id="main-metric-title">
                 Produksi Energi Panel Surya (PV)
               </h2>
             </div>
-            <span class="text-[11px] px-2.5 py-1 bg-white/5 rounded-lg border border-white/5 font-mono text-primary" id="solar-mode-tag">REALTIME</span>
+            <span class="text-[11px] font-bold px-2.5 py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-lg border border-emerald-500/30 font-mono" id="solar-mode-tag">REALTIME</span>
           </div>
 
           <!-- Large Value Display -->
           <div class="my-4">
-            <div class="flex items-baseline font-black tracking-tight text-primary glow-primary font-mono">
-              <span id="val-solar-kw" class="text-6xl md:text-7xl xl:text-8xl">0.00</span>
-              <span class="text-3xl md:text-4xl text-primary/60 ml-3 font-sans font-semibold" id="val-solar-unit">kW</span>
+            <div class="flex items-baseline font-black tracking-tight font-mono">
+              <span id="val-solar-kw" class="text-6xl md:text-7xl xl:text-8xl font-black val-primary-adaptive">0.00</span>
+              <span class="text-3xl md:text-4xl text-blue-500 ml-3 font-sans font-extrabold" id="val-solar-unit">W</span>
             </div>
             
             <!-- Direct Multimeter Measured Reading -->
-            <div class="mt-3 p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-wrap items-center justify-between gap-2">
+            <div class="mt-3 p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex flex-wrap items-center justify-between gap-2 shadow-sm">
               <div class="flex items-center gap-2 text-xs">
-                <span class="material-symbols-outlined text-[18px] text-yellow-400">electric_meter</span>
-                <span class="text-on-surface-variant" id="label-raw-meter">Tegangan Terukur (Protek 608):</span>
-                <span id="val-raw-meter" class="font-mono font-bold text-yellow-300">0.000 V</span>
+                <span class="material-symbols-outlined text-[18px] text-amber-500">electric_meter</span>
+                <span class="text-sub-adaptive font-semibold" id="label-raw-meter">Protek 608:</span>
+                <span id="val-raw-meter" class="font-mono font-extrabold text-sm text-main-adaptive">0.000 V</span>
               </div>
-              <div class="text-[11px] text-on-surface-variant/80 font-mono" id="val-meter-update">Menunggu data...</div>
+              <div class="text-[11px] text-sub-adaptive font-mono font-medium" id="val-meter-update">Menunggu data...</div>
             </div>
 
-            <!-- Real Telemetry Sub-Info -->
-            <div class="text-xs text-primary/80 font-mono mt-2.5 flex items-center gap-3" id="sub-telemetry-row">
-              <span>Tegangan Array: <b id="val-pv-volt" class="text-on-surface">0.0 V</b></span>
-              <span>&bull;</span>
-              <span>Arus Array: <b id="val-pv-amp" class="text-secondary">0.0 A</b></span>
+            <!-- Prominent Dual Metric Badges for Voltage & Current -->
+            <div class="grid grid-cols-2 gap-3 mt-3.5" id="sub-telemetry-row">
+              <div class="p-3 sub-metric-box rounded-2xl border flex flex-col shadow-sm min-w-0">
+                <span class="text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px] text-blue-500">bolt</span> Tegangan
+                </span>
+                <span id="val-pv-volt" class="text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5 truncate">0.0 V</span>
+              </div>
+              <div class="p-3 sub-metric-box rounded-2xl border flex flex-col shadow-sm min-w-0">
+                <span class="text-[11px] font-bold text-sub-adaptive uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px] text-emerald-500">speed</span> Arus
+                </span>
+                <span id="val-pv-amp" class="text-lg md:text-xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 truncate">0.000 A</span>
+              </div>
             </div>
+            <p class="text-[11px] text-sub-adaptive mt-2.5 font-mono px-0.5 leading-relaxed min-h-[14px]" id="solar-desc-status"></p>
           </div>
         </div>
 
-        <div class="flex flex-col gap-4 mt-4">
-          <p class="text-xs md:text-sm text-on-surface-variant leading-relaxed" id="solar-desc-status">
-            Daya listrik aktual yang diproduksi oleh susunan panel surya dari radiasi sinar matahari.
-          </p>
-          
-          <div class="inline-flex items-center gap-2.5 bg-primary/10 rounded-2xl py-2.5 px-3.5 w-fit border border-primary/20 text-primary shadow-sm">
-            <span class="material-symbols-outlined text-[20px] text-primary" id="appliance-icon">lightbulb</span>
-            <span class="text-xs font-medium" id="appliance-capacity-text">≈ Menunggu transmisi data dari Protek 608</span>
+        <div class="flex flex-col gap-2 mt-4 relative z-10">
+          <div class="inline-flex items-center gap-2.5 bg-blue-500/15 rounded-2xl py-2 px-3.5 w-fit border border-blue-500/25 text-blue-600 dark:text-blue-400 shadow-sm">
+            <span class="material-symbols-outlined text-[18px] text-blue-500" id="appliance-icon">lightbulb</span>
+            <span class="text-xs font-semibold" id="appliance-capacity-text">≈ Menunggu transmisi data dari Protek 608</span>
           </div>
         </div>
       </div>
 
       <!-- Card 2: Real-time Energy Flow Visualizer (8 cols on desktop) -->
-      <div class="lg:col-span-8 bg-[#111722]/90 backdrop-blur-xl rounded-3xl p-6 md:p-8 glow-card relative flex flex-col justify-between border border-white/5 min-h-[400px] overflow-hidden">
+      <div class="lg:col-span-8 glass-card-adaptive rounded-3xl p-6 md:p-8 relative flex flex-col justify-between min-h-[400px] overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5 opacity-50 pointer-events-none"></div>
         
         <!-- Header Row -->
         <div class="flex items-center justify-between mb-2 z-10">
           <div class="flex items-center gap-2.5">
-            <span class="material-symbols-outlined text-secondary text-[22px]">hub</span>
-            <h2 class="text-xs font-bold text-on-surface-variant tracking-widest uppercase">
+            <div class="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center text-blue-500 shadow-sm">
+              <span class="material-symbols-outlined text-[22px]">hub</span>
+            </div>
+            <h2 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">
               Aliran Distribusi Energi Real-Time
             </h2>
           </div>
-          <div class="flex items-center gap-2 bg-secondary/10 px-3.5 py-1.5 rounded-full border border-secondary/20 shadow-[0_0_12px_rgba(74,225,118,0.15)]">
-            <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-            <span class="text-xs font-bold text-secondary tracking-wider" id="flow-stream-status">LIVE STREAM</span>
+          <div class="flex items-center gap-2 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/30 text-red-600 dark:text-red-400 shadow-sm">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+            </span>
+            <span class="text-xs font-bold tracking-wider" id="flow-stream-status">LIVE</span>
           </div>
         </div>
 
@@ -343,23 +424,23 @@
             
             <!-- Source Node: Solar / Panel Surya (PV) -->
             <div class="flex flex-col items-center gap-3 flow-node group cursor-pointer" id="node-solar">
-              <div id="node-solar-ring" class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-[#182030] shadow-[0_0_35px_rgba(255,224,131,0.2)] flex items-center justify-center relative overflow-hidden border border-primary/30 group-hover:border-primary transition duration-300">
-                <div class="absolute inset-0 bg-primary/10 animate-[spin_12s_linear_infinite]"></div>
-                <div class="absolute inset-2 rounded-full border border-dashed border-primary/30 animate-[spin_20s_linear_infinite_reverse]"></div>
-                <span class="material-symbols-outlined text-primary text-[44px] md:text-[50px] glow-primary transition duration-300 group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+              <div id="node-solar-ring" class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-amber-500/10 shadow-[0_0_35px_rgba(245,158,11,0.25)] flex items-center justify-center relative overflow-hidden border-2 border-amber-400 group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-amber-500/10 animate-[spin_12s_linear_infinite]"></div>
+                <div class="absolute inset-2 rounded-full border border-dashed border-amber-400/50 animate-[spin_20s_linear_infinite_reverse]"></div>
+                <span class="material-symbols-outlined text-amber-500 text-[44px] md:text-[50px] transition duration-300 group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
               </div>
               <div class="text-center">
-                <div class="text-xs font-bold text-on-surface-variant tracking-wider uppercase">Panel Surya (PV)</div>
-                <div class="text-lg md:text-xl font-bold text-primary font-mono mt-0.5" id="flow-solar-val">0.00 kW</div>
+                <div class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Panel Surya (PV)</div>
+                <div class="text-lg md:text-xl font-black text-main-adaptive font-mono mt-0.5" id="flow-solar-val">0.0 W</div>
               </div>
             </div>
 
             <!-- Central Splitter / Inverter Node -->
             <div class="flex flex-col items-center gap-2 flow-node my-4 md:my-0" id="node-split">
-              <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#1e293b] rotate-45 flex items-center justify-center border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)] hover:scale-105 transition">
-                <span class="material-symbols-outlined text-yellow-300 -rotate-45 text-[26px]">electric_bolt</span>
+              <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 rotate-45 flex items-center justify-center border-2 border-white shadow-xl shadow-blue-500/25 hover:scale-110 transition">
+                <span class="material-symbols-outlined text-white -rotate-45 text-[26px]">electric_bolt</span>
               </div>
-              <span class="text-[11px] font-semibold text-on-surface-variant tracking-wider uppercase mt-1">Inverter / MPPT</span>
+              <span class="text-[11px] font-bold text-sub-adaptive tracking-wider uppercase mt-1">Inverter / MPPT</span>
             </div>
 
             <!-- Destination Nodes: Load & Battery -->
@@ -367,27 +448,27 @@
               
               <!-- Destination 1: Used / Beban Rumah -->
               <div class="flex items-center gap-4 flow-node group cursor-pointer" id="node-used">
-                <div class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full bg-[#182030] flex items-center justify-center border border-tertiary-container/30 group-hover:border-tertiary-container shadow-lg relative transition duration-300">
-                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-tertiary-container/20 border-dashed animate-[spin_16s_linear_infinite]"></div>
-                  <span class="material-symbols-outlined text-tertiary-container text-[32px] md:text-[36px]">apartment</span>
+                <div class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full flow-node-box flex items-center justify-center border-2 group-hover:border-blue-400 shadow-md relative transition duration-300 group-hover:scale-105">
+                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-blue-400/40 border-dashed animate-[spin_16s_linear_infinite]"></div>
+                  <span class="material-symbols-outlined text-blue-500 text-[32px] md:text-[36px]">apartment</span>
                 </div>
                 <div>
-                  <div class="text-lg md:text-2xl font-bold text-on-surface font-mono" id="flow-used-val">0 W</div>
-                  <div class="text-xs font-bold text-tertiary-fixed tracking-wider uppercase">Beban Listrik</div>
-                  <div class="hidden sm:block text-[11px] text-on-surface-variant mt-0.5" id="flow-used-desc">Peralatan Aktif</div>
+                  <div class="text-lg md:text-2xl font-black text-main-adaptive font-mono" id="flow-used-val">0 W</div>
+                  <div class="text-xs font-bold text-blue-500 tracking-wider uppercase" id="flow-used-label">Beban Listrik</div>
+                  <div class="hidden sm:block text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-used-desc">Peralatan Aktif</div>
                 </div>
               </div>
 
               <!-- Destination 2: Stored / Baterai -->
               <div class="flex items-center gap-4 flow-node group cursor-pointer" id="node-stored">
-                <div id="node-stored-box" class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full bg-[#182030] flex items-center justify-center border border-secondary/30 group-hover:border-secondary shadow-lg relative transition duration-300">
-                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-secondary/20 border-dashed animate-[spin_16s_linear_infinite_reverse]"></div>
-                  <span id="node-battery-icon" class="material-symbols-outlined text-secondary text-[32px] md:text-[36px] glow-secondary">battery_charging_full</span>
+                <div id="node-stored-box" class="w-18 h-18 md:w-20 md:h-20 p-4 rounded-2xl md:rounded-full bg-emerald-500/15 border-emerald-500/30 flex items-center justify-center border-2 group-hover:border-emerald-400 shadow-md relative transition duration-300 group-hover:scale-105">
+                  <div class="absolute inset-0 rounded-2xl md:rounded-full border-2 border-emerald-400/40 border-dashed animate-[spin_16s_linear_infinite_reverse]"></div>
+                  <span id="node-battery-icon" class="material-symbols-outlined text-emerald-500 text-[32px] md:text-[36px]">battery_charging_full</span>
                 </div>
                 <div>
-                  <div class="text-lg md:text-2xl font-bold text-secondary font-mono" id="flow-stored-val">0 W</div>
-                  <div class="text-xs font-bold text-secondary-fixed tracking-wider uppercase" id="flow-stored-label">Standby</div>
-                  <div class="hidden sm:block text-[11px] text-on-surface-variant mt-0.5" id="flow-stored-desc">Status Baterai</div>
+                  <div class="text-lg md:text-2xl font-black text-emerald-500 font-mono" id="flow-stored-val">0 W</div>
+                  <div class="text-xs font-bold text-emerald-500 tracking-wider uppercase" id="flow-stored-label">Standby</div>
+                  <div class="hidden sm:block text-[11px] text-sub-adaptive font-medium mt-0.5" id="flow-stored-desc">Status Baterai</div>
                 </div>
               </div>
 
@@ -398,13 +479,13 @@
         </div>
 
         <!-- Footer Legend -->
-        <div class="flex flex-wrap items-center justify-between pt-4 border-t border-white/5 text-xs text-on-surface-variant gap-2 z-10">
-          <div class="flex items-center gap-4">
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#ffe083]"></span> Produksi PV</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#bed1ff]"></span> Beban AC</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#4ae176]"></span> Aliran Baterai</span>
+        <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-300/30 text-xs text-sub-adaptive gap-2 z-10">
+          <div class="flex items-center gap-4 font-semibold">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Produksi PV</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Beban AC</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Aliran Baterai</span>
           </div>
-          <div class="text-[11px] text-on-surface-variant/70 font-mono" id="footer-sys-info">Efisiensi Konverter: 96.5% &bull; MPPT Active</div>
+          <div class="text-[11px] text-sub-adaptive font-mono" id="footer-sys-info">Data Real-Time Sensor &bull; MPPT Active</div>
         </div>
 
       </div>
@@ -415,107 +496,108 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
       <!-- Bottom Card 1: Total Energi Hari Ini -->
-      <div class="bg-[#141a24]/90 backdrop-blur-xl rounded-3xl p-6 md:p-7 flex flex-col justify-between glow-card border border-white/5 hover:border-primary/20 transition group">
-        <div class="flex items-center justify-between">
+      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
+        <div class="flex items-center justify-between relative z-10">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 transition">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:scale-105 transition shadow-sm">
               <span class="material-symbols-outlined text-[22px]">energy_savings_leaf</span>
             </div>
-            <h3 class="text-xs font-bold text-on-surface-variant tracking-wider uppercase">Energi Akumulasi Hari Ini</h3>
+            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Energi Akumulasi Hari Ini</h3>
           </div>
-          <span class="text-xs text-on-surface-variant font-mono bg-white/5 px-2.5 py-1 rounded-lg">Realtime kWh</span>
+          <span class="text-xs font-bold text-blue-500 font-mono bg-blue-500/15 px-2.5 py-1 rounded-lg border border-blue-500/30">Realtime kWh</span>
         </div>
 
-        <div class="my-5">
-          <div class="text-4xl md:text-5xl font-black text-on-surface font-mono tracking-tight flex items-baseline">
+        <div class="my-5 relative z-10">
+          <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
             <span id="val-daily-kwh">0.000</span>
-            <span class="text-2xl text-on-surface-variant/80 ml-2 font-sans font-medium">kWh</span>
+            <span class="text-2xl text-sub-adaptive ml-2 font-sans font-bold">kWh</span>
           </div>
-          <div class="flex items-center gap-2 mt-2 text-xs text-secondary font-medium">
+          <div class="flex items-center gap-2 mt-2 text-xs text-emerald-500 font-bold">
             <span class="material-symbols-outlined text-[16px]">bolt</span>
             <span>Diakumulasikan realtime dari input Protek 608</span>
           </div>
         </div>
 
-        <p class="text-xs md:text-sm text-on-surface-variant/80 leading-relaxed border-t border-white/5 pt-3">
+        <p class="text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-3 relative z-10 font-medium">
           Total energi bersih yang diproduksi panel surya selama sesi pengukuran aktif.
         </p>
       </div>
 
       <!-- Bottom Card 2: Cadangan Energi / Baterai -->
-      <div class="bg-[#141a24]/90 backdrop-blur-xl rounded-3xl p-6 md:p-7 flex flex-col justify-between glow-card border border-white/5 relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-t from-secondary/5 to-transparent pointer-events-none"></div>
-
+      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
         <div class="relative z-10 flex justify-between items-center">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary group-hover:scale-105 transition">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 group-hover:scale-105 transition shadow-sm">
               <span class="material-symbols-outlined text-[22px]">battery_saver</span>
             </div>
-            <h3 class="text-xs font-bold text-on-surface-variant tracking-wider uppercase">Status Baterai Bank</h3>
+            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Status Baterai Bank</h3>
           </div>
           
-          <div id="battery-badge-pill" class="px-3 py-1 bg-white/10 text-on-surface rounded-full text-xs font-bold border border-white/10 flex items-center gap-1.5 shadow-sm">
-            <div id="battery-badge-dot" class="w-1.5 h-1.5 rounded-full bg-white/40"></div>
+          <div id="battery-badge-pill" class="px-3 py-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-bold border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+            <div id="battery-badge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
             <span id="battery-badge-text">STANDBY</span>
           </div>
         </div>
 
         <div class="relative z-10 my-4">
           <div class="flex justify-between items-end mb-2.5">
-            <div class="text-4xl md:text-5xl font-black text-on-surface font-mono" id="val-battery-pct">-- %</div>
-            <div class="text-xs text-on-surface-variant font-mono flex gap-3 text-right">
-              <span><b class="text-on-surface" id="val-batt-volt">--</b> V</span>
-              <span class="text-secondary font-bold" id="val-batt-current">-- A</span>
-              <span><b class="text-on-surface" id="val-batt-watt">--</b> W</span>
+            <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono" id="val-battery-pct">-- %</div>
+            <div class="text-xs text-sub-adaptive font-mono flex gap-3 text-right">
+              <span><b class="text-main-adaptive font-bold" id="val-batt-volt">--</b> V</span>
+              <span class="text-emerald-500 font-bold" id="val-batt-current">-- A</span>
+              <span><b class="text-main-adaptive font-bold" id="val-batt-watt">--</b> W</span>
             </div>
           </div>
 
           <!-- Segmented Battery Level Bar (10 segments) -->
-          <div class="w-full h-7 bg-surface-container-highest/80 rounded-xl flex gap-1 p-1 border border-white/5" id="battery-segments">
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
-            <div class="h-full flex-1 bg-[#1a2332] rounded-md opacity-40"></div>
+          <div class="w-full h-7 bg-slate-300/30 rounded-xl flex gap-1 p-1 border border-slate-400/30" id="battery-segments">
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
+            <div class="h-full flex-1 bg-slate-300/40 rounded-md"></div>
           </div>
         </div>
 
-        <div class="text-xs text-on-surface-variant/80 flex items-center justify-between border-t border-white/5 pt-3">
-          <span id="batt-capacity-label">Tegangan Terminal: <b id="val-batt-terminal-mode">Real Telemetry</b></span>
-          <span class="text-secondary font-mono font-medium" id="val-batt-est">Menunggu Input</span>
+        <div class="text-xs text-sub-adaptive flex items-center justify-between border-t border-slate-300/30 pt-3 relative z-10 font-medium">
+          <div class="flex flex-col gap-0.5">
+            <span id="batt-capacity-label">Tegangan Terminal: <b id="val-batt-terminal-mode" class="text-main-adaptive font-bold">Real Telemetry</b></span>
+            <span id="spec-batt-type" class="text-[10px] text-blue-500 font-mono font-bold"></span>
+          </div>
+          <span class="text-emerald-500 font-mono font-bold" id="val-batt-est">Menunggu Input</span>
         </div>
       </div>
 
       <!-- Bottom Card 3: Listrik Digunakan (Load) -->
-      <div class="bg-[#141a24]/90 backdrop-blur-xl rounded-3xl p-6 md:p-7 flex flex-col justify-between glow-card border border-white/5 hover:border-tertiary-container/20 transition group">
-        <div class="flex items-center justify-between">
+      <div class="glass-card-adaptive rounded-3xl p-6 md:p-7 flex flex-col justify-between relative overflow-hidden group">
+        <div class="flex items-center justify-between relative z-10">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-tertiary-container/10 border border-tertiary-container/20 flex items-center justify-center text-tertiary-container group-hover:scale-105 transition">
+            <div class="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-500 group-hover:scale-105 transition shadow-sm">
               <span class="material-symbols-outlined text-[22px]">bolt</span>
             </div>
-            <h3 class="text-xs font-bold text-on-surface-variant tracking-wider uppercase">Beban Listrik Digunakan</h3>
+            <h3 class="text-xs font-bold text-sub-adaptive tracking-wider uppercase">Beban Listrik Digunakan</h3>
           </div>
-          <div class="text-xs font-semibold text-tertiary-fixed bg-tertiary-container/15 px-2.5 py-1 rounded-lg border border-tertiary-container/20" id="val-load-kwh-daily">
+          <div class="text-xs font-bold text-blue-500 bg-blue-500/15 border border-blue-500/30 px-2.5 py-1 rounded-lg" id="val-load-kwh-daily">
             Hari ini: 0.000 kWh
           </div>
         </div>
 
-        <div class="my-5">
-          <div class="text-4xl md:text-5xl font-black text-on-surface font-mono tracking-tight flex items-baseline">
+        <div class="my-5 relative z-10">
+          <div class="text-4xl md:text-5xl font-black text-main-adaptive font-mono tracking-tight flex items-baseline">
             <span id="val-load-w">0</span>
-            <span class="text-2xl text-on-surface-variant/80 ml-2 font-sans font-medium">W</span>
+            <span class="text-2xl text-sub-adaptive ml-2 font-sans font-bold">W</span>
           </div>
-          <div class="text-xs text-tertiary-fixed/80 font-mono mt-2 flex items-center gap-2">
+          <div class="text-xs text-sub-adaptive font-mono mt-2 flex items-center gap-2">
             <span>Tegangan Beban: <b id="val-load-volt">220.0 V</b> &bull; Arus: <b id="val-load-amp">0.00 A</b></span>
           </div>
         </div>
 
-        <p class="text-xs md:text-sm text-on-surface-variant/80 leading-relaxed border-t border-white/5 pt-3">
+        <p class="text-xs md:text-sm text-sub-adaptive leading-relaxed border-t border-slate-300/30 pt-3 relative z-10 font-medium">
           Konsumsi daya beban fasilitas yang terhubung ke jaringan PLTS.
         </p>
       </div>
@@ -583,7 +665,7 @@
       const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
       const timeElem = document.getElementById("current-time");
       const dateElem = document.getElementById("current-date");
-      if (timeElem) timeElem.innerText = now.toLocaleTimeString("id-ID", { hour12: false });
+      if (timeElem) timeElem.innerText = now.toTimeString().split(" ")[0];
       if (dateElem) dateElem.innerText = now.toLocaleDateString("id-ID", options);
     }
     setInterval(updateClock, 1000);
@@ -716,23 +798,23 @@
         svg.appendChild(flowLine);
       };
 
-      // 1. Solar to Inverter
-      if (solarPowerW > 5) {
-        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (solarPowerW / 2500) * 1.8)) + 's';
-        createPath(pSolar, pSplit, '#ffe083', 'rgba(255, 224, 131, 0.6)', dur, true);
+      // 1. Solar to Inverter / MPPT (Sensitif bahkan untuk daya kecil > 0.05 W)
+      if (solarPowerW > 0.05) {
+        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (solarPowerW / 500) * 1.5)) + 's';
+        createPath(pSolar, pSplit, '#f59e0b', 'rgba(245, 158, 11, 0.6)', dur, true);
       }
 
       // 2. Inverter to Load (Home)
-      if (loadPowerW > 5) {
-        createPath(pSplit, pUsed, '#bed1ff', 'rgba(190, 209, 255, 0.6)', '1.4s', true);
+      if (loadPowerW > 0.05) {
+        createPath(pSplit, pUsed, '#3b82f6', 'rgba(59, 130, 246, 0.6)', '1.4s', true);
       }
 
       // 3. Battery Flow (Charging: Split -> Battery | Discharging: Battery -> Split)
-      if (batteryPowerW > 5) {
-        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (batteryPowerW / 2000) * 1.8)) + 's';
-        createPath(pSplit, pStored, '#4ae176', 'rgba(74, 225, 118, 0.6)', dur, true);
-      } else if (batteryPowerW < -5) {
-        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (Math.abs(batteryPowerW) / 1000) * 1.5)) + 's';
+      if (batteryPowerW > 0.05) {
+        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (batteryPowerW / 500) * 1.5)) + 's';
+        createPath(pSplit, pStored, '#10b981', 'rgba(16, 185, 129, 0.6)', dur, true);
+      } else if (batteryPowerW < -0.05) {
+        const dur = Math.max(0.6, Math.min(2.5, 2.5 - (Math.abs(batteryPowerW) / 500) * 1.5)) + 's';
         createPath(pStored, pSplit, '#facc15', 'rgba(250, 204, 21, 0.6)', dur, true);
       }
     }
@@ -769,77 +851,48 @@
       const hasRealAmp = (liveMeasuredAmp !== null && !isNaN(liveMeasuredAmp));
 
       // Update Telemetry based on user's target probe connection
+      // PRINSIP: Hanya data NYATA dari Protek 608 yang ditampilkan. Tidak ada estimasi/dummy.
       if (currentTarget === "solar") {
         telemetry.solar.voltage = v;
         telemetry.solar.isLive = true;
 
         if (hasRealAmp) {
-          // REAL MEASUREMENT: P = V x I (100% precision)
+          // Keduanya terhubung: P = V × I (presisi penuh)
           telemetry.solar.current = liveMeasuredAmp.toFixed(3);
           telemetry.solar.power = parseFloat((v * liveMeasuredAmp).toFixed(2));
         } else {
-          // Fallback Estimation when only 1 meter is connected
-          telemetry.solar.current = (v > 2.0) ? Math.min(20.0, (v / 18.0) * 5.5).toFixed(2) : "0.00";
-          telemetry.solar.power = parseFloat((v * parseFloat(telemetry.solar.current)).toFixed(1));
+          // Hanya Protek Volt yang terhubung — arus & daya tidak diketahui
+          telemetry.solar.current = null;
+          telemetry.solar.power = 0;
         }
+
 
         const solarP = telemetry.solar.power;
-        const estLoad = Math.min(solarP, 300);
-        const surplus = solarP - estLoad;
 
-        telemetry.load.power = estLoad;
-        telemetry.load.current = (estLoad / 220.0).toFixed(2);
-        telemetry.battery.power = surplus;
-        telemetry.battery.voltage = (12.4 + (solarP > 100 ? 1.4 : 0)).toFixed(2);
-        
-        const battInfo = calculateBatterySOC(parseFloat(telemetry.battery.voltage));
-        telemetry.battery.soc = battInfo.soc;
-        telemetry.battery.status = surplus > 10 ? "SEDANG MENGISI" : (solarP === 0 ? "DISCHARGING" : "STANDBY");
+        // === PURE REAL-LIFE — HANYA DATA SENSOR NYATA ===
+        // Tidak ada estimasi, tidak ada dummy, tidak ada simulasi.
+        // Baterai dan Beban hanya bisa ditampilkan jika ada sensor fisik terpasang.
 
-      } else if (currentTarget === "battery") {
-        telemetry.battery.voltage = v;
-        telemetry.battery.isLive = true;
-        
-        const battInfo = calculateBatterySOC(v);
-        telemetry.battery.soc = battInfo.soc;
-        telemetry.battery.status = battInfo.status;
+        // Beban Listrik — tidak ada sensor terpasang
+        telemetry.load.power   = 0;
+        telemetry.load.voltage = null;
+        telemetry.load.current = null;
 
-        if (hasRealAmp) {
-          telemetry.battery.current = liveMeasuredAmp.toFixed(3);
-          telemetry.battery.power = Math.round(v * liveMeasuredAmp * (battInfo.charging ? 1 : -1));
-        } else {
-          telemetry.battery.power = battInfo.charging ? Math.round(v * 8.5) : -Math.round(v * 2.5);
-          telemetry.battery.current = (Math.abs(telemetry.battery.power) / (v || 12)).toFixed(1);
-        }
-
-        if (battInfo.charging) {
-          telemetry.solar.power = Math.round(Math.abs(telemetry.battery.power) + 150);
-          telemetry.solar.voltage = (v * 1.4).toFixed(1);
-          telemetry.solar.current = (telemetry.solar.power / (parseFloat(telemetry.solar.voltage) || 1)).toFixed(2);
-          telemetry.load.power = 150;
-        } else {
-          telemetry.solar.power = 0;
-          telemetry.solar.voltage = 0;
-          telemetry.solar.current = "0.00";
-          telemetry.load.power = Math.abs(telemetry.battery.power);
-        }
-
-      } else if (currentTarget === "load") {
-        telemetry.load.voltage = v;
-        telemetry.load.isLive = true;
-
-        if (hasRealAmp) {
-          telemetry.load.current = liveMeasuredAmp.toFixed(3);
-          telemetry.load.power = Math.round(v * liveMeasuredAmp);
-        } else {
-          telemetry.load.current = (v > 100 ? (v / 220) * 1.8 : 0).toFixed(2);
-          telemetry.load.power = Math.round(v * parseFloat(telemetry.load.current));
-        }
+        // Baterai Bank — tidak ada sensor terpasang
+        telemetry.battery.power   = 0;
+        telemetry.battery.current = null;
+        telemetry.battery.voltage = null;
+        telemetry.battery.soc     = null;
+        telemetry.battery.status  = 'Tidak Ada Sensor';
       }
 
-      // Realtime Energy Integration (No dummy numbers!)
-      if (dtHours < 0.1 && dtHours > 0) {
+      // Realtime Energy Integration: Integrasi Energi (kWh) = ∫ Power (W) dt / 1000
+      // Membedakan Power sesaat (Watt) dengan Akumulasi Energi (kWh)
+      if (dtHours < 0.1 && dtHours > 0 && telemetry.solar.power > 0) {
         accumulatedPvKwh += (telemetry.solar.power * dtHours) / 1000;
+      }
+      // FIX #6: Akumulasi Energi Beban (kWh) — sebelumnya tidak pernah diisi
+      if (dtHours < 0.1 && dtHours > 0 && telemetry.load.power > 0) {
         accumulatedLoadKwh += (telemetry.load.power * dtHours) / 1000;
       }
 
@@ -861,56 +914,71 @@
       if (currentTarget === "solar") {
         const solarP = telemetry.solar.power;
         if (elSolarKw && elSolarUnit) {
-          if (solarP >= 1000) {
-            elSolarKw.innerText = (solarP / 1000).toFixed(2);
-            elSolarUnit.innerText = "kW";
-          } else if (solarP >= 10) {
-            elSolarKw.innerText = solarP.toFixed(1);
-            elSolarUnit.innerText = "W";
+          if (hasRealAmp && solarP > 0) {
+            if (solarP >= 1000) {
+              elSolarKw.innerText = (solarP / 1000).toFixed(2);
+              elSolarUnit.innerText = "kW";
+            } else {
+              elSolarKw.innerText = solarP.toFixed(2);
+              elSolarUnit.innerText = "W";
+            }
           } else {
-            elSolarKw.innerText = solarP.toFixed(2);
-            elSolarUnit.innerText = "W";
+            // Hanya 1 meter → hanya tampilkan tegangan, daya tidak bisa dihitung
+            elSolarKw.innerText = v.toFixed(2);
+            elSolarUnit.innerText = "V";
           }
         }
         if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp 
-            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.solar.current).toFixed(3)} A`
-            : `${v.toFixed(3)} ${unit}`;
+          elRawMeter.innerText = hasRealAmp
+            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
+            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
         }
-        if (elPvVolt) elPvVolt.innerText = telemetry.solar.voltage + " V";
-        if (elPvAmp) elPvAmp.innerText = telemetry.solar.current + " A" + (hasRealAmp ? " (Riil)" : "");
-        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp 
-          ? `Daya aktual terukur riil dari 2 Multimeter: ${solarP} Watt (P = V × I).`
-          : "Daya listrik aktual yang diproduksi oleh susunan panel surya dari radiasi sinar matahari.";
-        if (elApplianceText) elApplianceText.innerText = telemetry.solar.power > 100 ? `≈ Memproduksi ${telemetry.solar.power} Watt daya bersih` : "≈ Radiasi matahari rendah / belum aktif";
-        if (elApplianceIcon) elApplianceIcon.innerText = telemetry.solar.power > 500 ? "wb_sunny" : "lightbulb";
+        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
+        if (elPvAmp)  elPvAmp.innerText  = hasRealAmp ? liveMeasuredAmp.toFixed(3) + " A" : "-- A";
+        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp
+          ? `P = V × I = ${v.toFixed(2)} V × ${liveMeasuredAmp.toFixed(3)} A = ${solarP} W (Terukur presisi)`
+          : `Tegangan PV: ${v.toFixed(3)} V — Sambungkan Protek P2 (Amp) untuk hitung daya`;
+        if (elApplianceText) elApplianceText.innerText = hasRealAmp
+          ? (solarP > 0 ? `Produksi: ${solarP} W (P = V × I)` : "Produksi: 0 W (Tidak ada radiasi)")
+          : "Hubungkan Protek P2 untuk mengukur daya";
+        if (elApplianceIcon) elApplianceIcon.innerText = hasRealAmp && solarP > 100 ? "wb_sunny" : "lightbulb";
 
       } else if (currentTarget === "battery") {
         if (elSolarKw) elSolarKw.innerText = v.toFixed(2);
         if (elSolarUnit) elSolarUnit.innerText = "V";
         if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp 
-            ? `${v.toFixed(2)} V • ${parseFloat(telemetry.battery.current).toFixed(2)} A`
-            : `${v.toFixed(3)} ${unit}`;
+          elRawMeter.innerText = hasRealAmp
+            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
+            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
         }
-        if (elPvVolt) elPvVolt.innerText = `SOC: ${telemetry.battery.soc}%`;
-        if (elPvAmp) elPvAmp.innerText = `${telemetry.battery.status} (${telemetry.battery.current} A)`;
-        if (elSolarDesc) elSolarDesc.innerText = `Mengukur langsung terminal Baterai Bank. Kondisi: ${telemetry.battery.status} (${telemetry.battery.soc}%).`;
-        if (elApplianceText) elApplianceText.innerText = `Tegangan terminal baterai terukur presisi via Protek 608`;
+        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
+        if (elPvAmp) {
+          const ampVal = telemetry.battery.current;
+          elPvAmp.innerText = ampVal !== null ? parseFloat(ampVal).toFixed(3) + " A" : "-- A";
+        }
+        if (elSolarDesc) elSolarDesc.innerText = `Terminal Baterai: ${v.toFixed(3)} V — SOC: ${telemetry.battery.soc}% (${telemetry.battery.status})`;
+        if (elApplianceText) elApplianceText.innerText = hasRealAmp
+          ? `SOC: ${telemetry.battery.soc}% — ${telemetry.battery.status}`
+          : `SOC: ${telemetry.battery.soc}% — Hubungkan P2 untuk ukur arus`;
         if (elApplianceIcon) elApplianceIcon.innerText = "battery_charging_full";
 
       } else if (currentTarget === "load") {
-        if (elSolarKw) elSolarKw.innerText = telemetry.load.power;
-        if (elSolarUnit) elSolarUnit.innerText = "W";
+        const loadP = telemetry.load.power;
+        if (elSolarKw) elSolarKw.innerText = hasRealAmp ? loadP : v.toFixed(2);
+        if (elSolarUnit) elSolarUnit.innerText = hasRealAmp ? "W" : "V";
         if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp 
-            ? `${v.toFixed(1)} V • ${parseFloat(telemetry.load.current).toFixed(2)} A`
-            : `${v.toFixed(2)} ${unit}`;
+          elRawMeter.innerText = hasRealAmp
+            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
+            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
         }
-        if (elPvVolt) elPvVolt.innerText = v.toFixed(1) + " V";
-        if (elPvAmp) elPvAmp.innerText = telemetry.load.current + " A" + (hasRealAmp ? " (Riil)" : "");
-        if (elSolarDesc) elSolarDesc.innerText = `Konsumsi daya beban listrik aktif: ${telemetry.load.power} Watt.`;
-        if (elApplianceText) elApplianceText.innerText = `Konsumsi daya beban aktif: ${telemetry.load.power} Watt`;
+        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
+        if (elPvAmp)  elPvAmp.innerText  = hasRealAmp ? liveMeasuredAmp.toFixed(3) + " A" : "-- A";
+        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp
+          ? `P = V × I = ${v.toFixed(2)} V × ${liveMeasuredAmp.toFixed(3)} A = ${loadP} W (Terukur presisi)`
+          : `Tegangan Beban: ${v.toFixed(3)} V — Sambungkan Protek P2 (Amp) untuk hitung daya`;
+        if (elApplianceText) elApplianceText.innerText = hasRealAmp
+          ? `Konsumsi: ${loadP} W (P = V × I)`
+          : "Hubungkan Protek P2 untuk mengukur daya beban";
         if (elApplianceIcon) elApplianceIcon.innerText = "bolt";
       }
 
@@ -919,6 +987,8 @@
       // 2. Flow Nodes Update
       const elFlowSolar = document.getElementById("flow-solar-val");
       const elFlowUsed = document.getElementById("flow-used-val");
+      const elFlowUsedLabel = document.getElementById("flow-used-label");
+      const elFlowUsedDesc = document.getElementById("flow-used-desc");
       const elFlowStored = document.getElementById("flow-stored-val");
       const elFlowStoredLabel = document.getElementById("flow-stored-label");
       const elFlowStoredDesc = document.getElementById("flow-stored-desc");
@@ -928,28 +998,44 @@
         const fsp = telemetry.solar.power;
         elFlowSolar.innerText = fsp >= 1000 ? (fsp / 1000).toFixed(2) + " kW" : fsp.toFixed(1) + " W";
       }
-      if (elFlowUsed) elFlowUsed.innerText = telemetry.load.power + " W";
+      // Update node Beban Listrik
+      const loadP = telemetry.load.power;
+      if (elFlowUsed) {
+        elFlowUsed.innerText = loadP >= 1000 ? (loadP / 1000).toFixed(2) + " kW" : loadP.toFixed(1) + " W";
+        elFlowUsed.className = loadP > 0.05
+          ? "text-lg md:text-2xl font-bold text-blue-400 font-mono"
+          : "text-lg md:text-2xl font-bold text-on-surface-variant font-mono";
+      }
+      if (elFlowUsedLabel) {
+        elFlowUsedLabel.innerText = loadP > 0.05 ? "BEBAN AKTIF" : "BEBAN LISTRIK";
+        elFlowUsedLabel.className = loadP > 0.05
+          ? "text-xs font-bold text-blue-400 tracking-wider uppercase"
+          : "text-xs font-bold text-on-surface-variant tracking-wider uppercase";
+      }
+      if (elFlowUsedDesc) {
+        elFlowUsedDesc.innerText = loadP > 0.05 ? "Peralatan Menyala" : "Peralatan Aktif";
+      }
 
       const battP = telemetry.battery.power;
       const absBattP = Math.abs(battP);
 
-      if (battP > 5) {
+      if (battP > 0.05) {
         if (elFlowStored) {
-          elFlowStored.innerText = absBattP + " W";
+          elFlowStored.innerText = absBattP >= 1000 ? (absBattP / 1000).toFixed(2) + " kW" : absBattP.toFixed(1) + " W";
           elFlowStored.className = "text-lg md:text-2xl font-bold text-secondary font-mono";
         }
         if (elFlowStoredLabel) {
           elFlowStoredLabel.innerText = "MENGISI (CHARGE)";
           elFlowStoredLabel.className = "text-xs font-bold text-secondary-fixed tracking-wider uppercase";
         }
-        if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Surplus Mengisi Baterai";
+        if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Daya PV Mengisi Baterai";
         if (elBatteryIcon) {
           elBatteryIcon.innerText = "battery_charging_full";
           elBatteryIcon.className = "material-symbols-outlined text-secondary text-[32px] md:text-[36px] glow-secondary";
         }
-      } else if (battP < -5) {
+      } else if (battP < -0.05) {
         if (elFlowStored) {
-          elFlowStored.innerText = absBattP + " W";
+          elFlowStored.innerText = absBattP >= 1000 ? (absBattP / 1000).toFixed(2) + " kW" : absBattP.toFixed(1) + " W";
           elFlowStored.className = "text-lg md:text-2xl font-bold text-yellow-400 font-mono";
         }
         if (elFlowStoredLabel) {
@@ -958,7 +1044,7 @@
         }
         if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Baterai Menyuplai Beban";
         if (elBatteryIcon) {
-          elBatteryIcon.innerText = "battery_profile";
+          elBatteryIcon.innerText = "battery_alert"; // FIX #3: battery_profile tidak ada di Material Symbols
           elBatteryIcon.className = "material-symbols-outlined text-yellow-400 text-[32px] md:text-[36px]";
         }
       } else {
@@ -991,24 +1077,45 @@
       const elBattText = document.getElementById("battery-badge-text");
       const elBattEst = document.getElementById("val-batt-est");
 
-      if (elBattPct) elBattPct.innerText = telemetry.battery.soc + " %";
-      if (elBattVolt) elBattVolt.innerText = telemetry.battery.voltage;
-      if (elBattCurrent) elBattCurrent.innerText = (battP >= 0 ? "+" : "-") + (telemetry.battery.current || "0.0") + " A";
-      if (elBattWatt) elBattWatt.innerText = absBattP;
+      // FIX: Tampilkan "--" atau nilai voltase tanpa akhiran " V" karena HTML sudah memiliki teks " V" di luar tag <b>
+      if (elBattPct) elBattPct.innerText = telemetry.battery.soc !== null ? telemetry.battery.soc + " %" : "-- %";
+      if (elBattVolt) elBattVolt.innerText = telemetry.battery.voltage !== null ? telemetry.battery.voltage : "--";
+      if (elBattCurrent) {
+        if (telemetry.battery.current !== null && telemetry.battery.current !== undefined) {
+          elBattCurrent.innerText = (battP >= 0 ? "+" : "-") + telemetry.battery.current + " A";
+        } else {
+          elBattCurrent.innerText = "-- A";
+        }
+      }
+      if (elBattWatt) elBattWatt.innerText = telemetry.battery.voltage !== null ? absBattP : "--";
 
-      if (battP > 5) {
-        if (elBattPill) elBattPill.className = "px-3 py-1 bg-secondary/15 text-secondary rounded-full text-xs font-bold border border-secondary/30 flex items-center gap-1.5 shadow-[0_0_10px_rgba(74,225,118,0.15)]";
-        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-secondary animate-ping";
+      // FIX #12: spec-batt-type kini ada di HTML — tampilkan auto-sense dan bersihkan saat tidak aktif
+      const elSpecBatt = document.getElementById("spec-batt-type");
+      if (elSpecBatt) {
+        if (currentTarget === "battery" && v > 1.0) {
+          const battInfo = calculateBatterySOC(v);
+          if (battInfo.nominal > 0) {
+            elSpecBatt.innerText = `${battInfo.nominal}V Sistem Auto-Sense`;
+          }
+        } else {
+          elSpecBatt.innerText = "";
+        }
+      }
+
+      // FIX #5: Threshold konsisten dengan flow node (> 0.05W), diubah dari 5W ke 1W
+      if (battP > 1) {
+        if (elBattPill) elBattPill.className = "px-3 py-1 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-500/30 flex items-center gap-1.5 shadow-sm";
+        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping";
         if (elBattText) elBattText.innerText = "SEDANG MENGISI";
         if (elBattEst) elBattEst.innerText = `Arus Pengisian: +${telemetry.battery.current} A`;
-      } else if (battP < -5) {
-        if (elBattPill) elBattPill.className = "px-3 py-1 bg-yellow-500/15 text-yellow-400 rounded-full text-xs font-bold border border-yellow-500/30 flex items-center gap-1.5";
-        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse";
+      } else if (battP < -1) {
+        if (elBattPill) elBattPill.className = "px-3 py-1 bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-yellow-400 rounded-full text-xs font-bold border border-amber-200 dark:border-yellow-500/30 flex items-center gap-1.5 shadow-sm";
+        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse";
         if (elBattText) elBattText.innerText = "DISCHARGING";
         if (elBattEst) elBattEst.innerText = `Arus Beban: -${telemetry.battery.current} A`;
       } else {
-        if (elBattPill) elBattPill.className = "px-3 py-1 bg-white/10 text-on-surface rounded-full text-xs font-bold border border-white/10 flex items-center gap-1.5";
-        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-white/40";
+        if (elBattPill) elBattPill.className = "px-3 py-1 bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300 rounded-full text-xs font-bold border border-slate-200 dark:border-white/10 flex items-center gap-1.5";
+        if (elBattDot) elBattDot.className = "w-1.5 h-1.5 rounded-full bg-slate-400";
         if (elBattText) elBattText.innerText = "STANDBY";
         if (elBattEst) elBattEst.innerText = "Daya Seimbang";
       }
@@ -1021,13 +1128,13 @@
         for (let i = 1; i <= 10; i++) {
           const seg = document.createElement("div");
           if (i <= activeSegments) {
-            if (i === activeSegments && battP > 5) {
-              seg.className = "h-full flex-1 bg-secondary rounded-md shadow-sm animate-pulse-bar";
+            if (i === activeSegments && battP > 1) { // FIX #5: threshold sinkron
+              seg.className = "h-full flex-1 bg-emerald-500 rounded-md shadow-sm animate-pulse-bar";
             } else {
-              seg.className = "h-full flex-1 bg-secondary rounded-md shadow-sm";
+              seg.className = "h-full flex-1 bg-emerald-500 rounded-md shadow-sm";
             }
           } else {
-            seg.className = "h-full flex-1 bg-[#1a2332] rounded-md opacity-40";
+            seg.className = "h-full flex-1 bg-slate-200 dark:bg-white/10 rounded-md";
           }
           containerSegments.appendChild(seg);
         }
@@ -1040,54 +1147,12 @@
       const elLoadKwh = document.getElementById("val-load-kwh-daily");
 
       if (elLoadW) elLoadW.innerText = telemetry.load.power;
-      if (elLoadVolt) elLoadVolt.innerText = telemetry.load.voltage + " V";
-      if (elLoadAmp) elLoadAmp.innerText = telemetry.load.current + " A";
+      if (elLoadVolt) elLoadVolt.innerText = telemetry.load.voltage ? telemetry.load.voltage + " V" : "-- V";
+      if (elLoadAmp) elLoadAmp.innerText = (telemetry.load.current !== null && telemetry.load.current !== undefined) ? telemetry.load.current + " A" : "-- A";
       if (elLoadKwh) elLoadKwh.innerText = "Hari ini: " + accumulatedLoadKwh.toFixed(3) + " kWh";
 
       // Draw SVG Flow Lines
       drawFlowLines(telemetry.solar.power, telemetry.load.power, battP);
-    }
-
-    // ========================================================
-    // 6. CHANNEL SELECTOR HANDLER
-    // ========================================================
-    function initChannelSelector() {
-      const btnSolar = document.getElementById("target-solar");
-      const btnBattery = document.getElementById("target-battery");
-      const btnLoad = document.getElementById("target-load");
-      const labelRaw = document.getElementById("label-raw-meter");
-      const mainTitle = document.getElementById("main-metric-title");
-      const mainIcon = document.getElementById("main-metric-icon");
-
-      function setActiveChannel(target) {
-        currentTarget = target;
-        [btnSolar, btnBattery, btnLoad].forEach(b => {
-          b.className = "px-3 py-1 rounded-lg font-semibold text-xs transition text-on-surface-variant hover:text-on-surface";
-        });
-
-        if (target === "solar") {
-          btnSolar.className = "px-3 py-1 rounded-lg font-semibold text-xs transition bg-primary text-on-primary shadow-sm";
-          if (labelRaw) labelRaw.innerText = "Tegangan PV (Protek 608):";
-          if (mainTitle) mainTitle.innerText = "Produksi Energi Panel Surya (PV)";
-          if (mainIcon) mainIcon.innerText = "wb_sunny";
-        } else if (target === "battery") {
-          btnBattery.className = "px-3 py-1 rounded-lg font-semibold text-xs transition bg-secondary text-on-secondary shadow-sm";
-          if (labelRaw) labelRaw.innerText = "Tegangan Baterai (Protek 608):";
-          if (mainTitle) mainTitle.innerText = "Tegangan Terminal Baterai Bank";
-          if (mainIcon) mainIcon.innerText = "battery_charging_full";
-        } else if (target === "load") {
-          btnLoad.className = "px-3 py-1 rounded-lg font-semibold text-xs transition bg-blue-500 text-white shadow-sm";
-          if (labelRaw) labelRaw.innerText = "Tegangan Beban (Protek 608):";
-          if (mainTitle) mainTitle.innerText = "Tegangan Output Beban Listrik";
-          if (mainIcon) mainIcon.innerText = "bolt";
-        }
-
-        updateDashboardState(lastVoltage, liveMeasuredAmp, "V", "A", getActiveSourceLabel());
-      }
-
-      btnSolar.addEventListener("click", () => setActiveChannel("solar"));
-      btnBattery.addEventListener("click", () => setActiveChannel("battery"));
-      btnLoad.addEventListener("click", () => setActiveChannel("load"));
     }
 
     function getActiveSourceLabel() {
@@ -1346,7 +1411,7 @@
     let lastCloudSync = 0;
     function syncTelemetryToCloud(v, a) {
       const now = Date.now();
-      if (now - lastCloudSync < 1000) return; // 1 insert/detik max (hemat quota Supabase)
+      if (now - lastCloudSync < 500) return; // FIX #10: max 2x/detik (sinkron dengan meter.html 500ms)
       lastCloudSync = now;
 
       const calcPower = (v !== null && a !== null) ? Math.round(v * a) : telemetry[currentTarget].power;
@@ -1440,44 +1505,44 @@
       if (!badgeElem || !textElem) return;
 
       if (isDirectVoltConnected && isDirectAmpConnected) {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.25)]";
+        badgeElem.className = "h-9 px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
         textElem.innerText = "Dual Protek: LIVE (V+A)";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
-        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-600";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75";
         return;
       }
 
       if (isDirectVoltConnected) {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-blue-500/15 rounded-full border border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]";
+        badgeElem.className = "h-9 px-3.5 bg-blue-500/10 dark:bg-blue-500/15 rounded-xl border border-blue-500/25 text-blue-700 dark:text-blue-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
         textElem.innerText = "Protek Volt: LIVE";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-blue-400";
-        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-blue-600";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75";
         return;
       }
 
       if (isDirectAmpConnected) {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-emerald-500/15 rounded-full border border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]";
+        badgeElem.className = "h-9 px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
         textElem.innerText = "Protek Amp: LIVE";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-emerald-400";
-        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-600";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75";
         return;
       }
 
       if (type === "supabase_live" || type === "cloud_live" || type === "firebase_live") {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-secondary/15 rounded-full border border-secondary/30 text-secondary shadow-[0_0_15px_rgba(74,225,118,0.2)]";
-        textElem.innerText = customText || "Supabase: LIVE (V+A)";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-secondary";
-        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75";
+        badgeElem.className = "h-9 px-3.5 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-xl border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
+        textElem.innerText = customText || "Online (Cloud Live)";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-600";
+        pingElem.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75";
       } else if (type === "standby") {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/15 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = customText || "Supabase: Standby";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
+        badgeElem.className = "h-9 px-3.5 bg-amber-500/10 dark:bg-amber-500/15 rounded-xl border border-amber-500/25 text-amber-700 dark:text-amber-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
+        textElem.innerText = customText || "Standby";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-500";
         pingElem.className = "hidden";
       } else {
-        badgeElem.className = "flex items-center gap-1.5 md:gap-2 px-3 py-1.5 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400";
-        textElem.innerText = customText || "Menghubungkan Supabase...";
-        dotElem.className = "relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-yellow-400";
-        pingElem.className = "animate-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-50";
+        badgeElem.className = "h-9 px-3.5 bg-blue-500/10 dark:bg-blue-500/15 rounded-xl border border-blue-500/25 text-blue-700 dark:text-blue-400 shadow-xs inline-flex items-center gap-2 whitespace-nowrap";
+        textElem.innerText = customText || "Menghubungkan...";
+        dotElem.className = "relative inline-flex rounded-full h-2 w-2 bg-blue-500";
+        pingElem.className = "animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-50";
       }
     }
 
@@ -1506,9 +1571,10 @@
             clearTimeout(hardwareWatchdogTimer);
             hardwareWatchdogTimer = setTimeout(() => {
               if (!isDirectVoltConnected && !isDirectAmpConnected) {
-                updateHardwareBadge("standby", "Cloud: Standby");
+                updateHardwareBadge("standby", "Standby");
+                updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
               }
-            }, 10000);
+            }, 6000);
           }
         });
       } catch (fbErr) {
@@ -1545,9 +1611,10 @@
             clearTimeout(hardwareWatchdogTimer);
             hardwareWatchdogTimer = setTimeout(() => {
               if (!isDirectVoltConnected && !isDirectAmpConnected) {
-                updateHardwareBadge("standby", "Supabase: Standby");
+                updateHardwareBadge("standby", "Standby");
+                updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
               }
-            }, 10000);
+            }, 6000);
           }
         } catch (err) {
           console.warn("Supabase fetch error:", err);
@@ -1584,9 +1651,10 @@
                 clearTimeout(hardwareWatchdogTimer);
                 hardwareWatchdogTimer = setTimeout(() => {
                   if (!isDirectVoltConnected && !isDirectAmpConnected) {
-                    updateHardwareBadge("standby", "Supabase: Standby");
+                    updateHardwareBadge("standby", "Standby");
+                    updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
                   }
-                }, 10000);
+                }, 6000);
               }
             }
           )
@@ -1604,10 +1672,57 @@
     }
 
     // ========================================================
-    // 10. INITIALIZE & EVENT LISTENERS
+    // 10. THEME SWITCHER ENGINE (Mode Siang / Mode Malam)
+    // ========================================================
+    function initThemeSwitcher() {
+      const btnToggle = document.getElementById("btn-theme-toggle");
+      const iconToggle = document.getElementById("theme-toggle-icon");
+      // FIX #13: element "theme-toggle-text" tidak ada di HTML — dead variable dihapus
+      // const textToggle = document.getElementById("theme-toggle-text");
+      
+      const savedTheme = localStorage.getItem("solar_theme_mode") || "theme-dark";
+      applyTheme(savedTheme);
+
+      if (btnToggle) {
+        btnToggle.addEventListener("click", () => {
+          const isDark = document.body.classList.contains("theme-dark");
+          const nextTheme = isDark ? "theme-light" : "theme-dark";
+          applyTheme(nextTheme);
+        });
+      }
+
+      function applyTheme(theme) {
+        document.body.classList.remove("theme-light", "theme-dark");
+        document.body.classList.add(theme);
+        localStorage.setItem("solar_theme_mode", theme);
+
+        if (theme === "theme-dark") {
+          if (iconToggle) {
+            iconToggle.innerText = "light_mode";
+            iconToggle.className = "material-symbols-outlined text-[19px] text-yellow-400";
+          }
+          if (btnToggle) {
+            btnToggle.className = "w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/15 text-yellow-400 border border-white/10 rounded-xl shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0";
+            btnToggle.title = "Beralih ke Mode Siang";
+          }
+        } else {
+          if (iconToggle) {
+            iconToggle.innerText = "dark_mode";
+            iconToggle.className = "material-symbols-outlined text-[19px] text-amber-500";
+          }
+          if (btnToggle) {
+            btnToggle.className = "w-9 h-9 flex items-center justify-center bg-white/80 hover:bg-white text-slate-700 border border-slate-200/90 rounded-xl shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0";
+            btnToggle.title = "Beralih ke Mode Malam";
+          }
+        }
+      }
+    }
+
+    // ========================================================
+    // 11. INITIALIZE & EVENT LISTENERS
     // ========================================================
     document.addEventListener("DOMContentLoaded", () => {
-      initChannelSelector();
+      initThemeSwitcher();
 
       const btnVolt = document.getElementById("btn-serial-volt");
       const btnVoltText = document.getElementById("btn-volt-text");
@@ -1624,14 +1739,17 @@
           if (isDirectVoltConnected) {
             await serialVoltDriver.disconnect();
             isDirectVoltConnected = false;
-            btnVolt.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+            liveMeasuredVolt = 0.0;
+            lastVoltage = 0.0;
+            btnVolt.className = "h-9 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
             if (btnVoltText) btnVoltText.innerText = "Volt (P1)";
             updateHardwareBadge(isDirectAmpConnected ? "amp_live" : "standby");
+            updateDashboardState(0.0, isDirectAmpConnected ? liveMeasuredAmp : null, "V", lastAmpUnit, getActiveSourceLabel());
           } else {
             const ok = await serialVoltDriver.connect();
             if (ok) {
               isDirectVoltConnected = true;
-              btnVolt.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+              btnVolt.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
               if (btnVoltText) btnVoltText.innerText = "Putus V (P1)";
               updateHardwareBadge("volt_live");
             }
@@ -1649,14 +1767,16 @@
           if (isDirectAmpConnected) {
             await serialAmpDriver.disconnect();
             isDirectAmpConnected = false;
-            btnAmp.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+            liveMeasuredAmp = null;
+            btnAmp.className = "h-9 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
             if (btnAmpText) btnAmpText.innerText = "Amp (P2)";
             updateHardwareBadge(isDirectVoltConnected ? "volt_live" : "standby");
+            updateDashboardState(isDirectVoltConnected ? liveMeasuredVolt : 0.0, null, lastVoltUnit, "A", getActiveSourceLabel());
           } else {
             const ok = await serialAmpDriver.connect();
             if (ok) {
               isDirectAmpConnected = true;
-              btnAmp.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/40 rounded-xl text-xs font-semibold shadow-sm transition";
+              btnAmp.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
               if (btnAmpText) btnAmpText.innerText = "Putus A (P2)";
               updateHardwareBadge("amp_live");
             }
@@ -1666,7 +1786,7 @@
 
       initSupabaseListener();
       initFirebaseListener();
-      updateDashboardState(0.0, null, "V", "A", "Inisialisasi");
+      updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
       
       window.addEventListener("resize", () => {
         requestAnimationFrame(() => {

@@ -857,7 +857,7 @@
 
     async function pushDualTelemetryToCloud(voltage, current, power) {
       const now = Date.now();
-      if (now - lastCloudSyncTime < 250) return; // 4Hz max sync rate
+      if (now - lastCloudSyncTime < 500) return; // FIX #10: max 2x/detik (sinkron dengan index.html 500ms)
       lastCloudSyncTime = now;
 
       // 1. Supabase Sync (Kirim V, A, dan Watt via target payload)
