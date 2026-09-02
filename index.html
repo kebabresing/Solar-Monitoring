@@ -1480,9 +1480,10 @@
       if (now - lastCloudSync < CLOUD_SYNC_INTERVAL_MS) return;
       lastCloudSync = now;
 
-      const calcPower = (v !== null && a !== null) ? Math.round(v * Math.abs(a)) : telemetry.solar.power;
-      const safeV = (v !== null && v !== undefined && !isNaN(v)) ? v : 0;
-      const safeA = (a !== null && a !== undefined && !isNaN(a)) ? a : 0;
+      const calcPower = (v !== null && a !== null) ? Math.round(v * Math.abs(a)) : Math.round(telemetry.solar.power);
+      // Bulatkan nilai ke 3 desimal presisi (misal: 12.072) agar tidak ada floating-point liar (seperti 336.4108948...)
+      const safeV = (v !== null && v !== undefined && !isNaN(v)) ? parseFloat(Number(v).toFixed(3)) : 0;
+      const safeA = (a !== null && a !== undefined && !isNaN(a)) ? parseFloat(Number(a).toFixed(3)) : 0;
       const unitCurrent = (safeA !== 0 && Math.abs(safeA) < 1) ? 'mA' : 'A';
 
       // 1. Supabase Sync
