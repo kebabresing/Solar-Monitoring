@@ -780,6 +780,7 @@
     let consecutiveAmpSpike  = 0; // FIX ANOMALI: dulu arus sama sekali tidak difilter
     const MAX_SPIKE_REJECT   = 5;
     const MAX_PLAUSIBLE_AMP  = 10; // Protek 608 batas fisik ±10A DC — di atas ini pasti packet korup
+    const MAX_PLAUSIBLE_VOLT = 60; // Panel surya 12V, OC max ~50V. Di atas ini pasti packet korup (titik desimal hilang)
 
     // Hysteresis untuk switch tampilan W <-> kW agar tidak "loncat" bolak-balik
     // saat daya berosilasi tepat di sekitar ambang 1000W.
@@ -806,25 +807,34 @@
       let v = hasNewVoltage ? parseFloat(rawVoltage) : (liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage);
 
       if (hasNewVoltage) {
-        if (unit === "mV") v = v / 1000;
+        // CATATAN: TIDAK ada konversi mV di sini — standardValue dari decoder sudah dalam Volt.
+        // Konversi ganda (decoder + di sini) dihapus karena menyebabkan nilai 1000x terlalu kecil.
         v = Math.max(0, v);
 
-        // Anti-spike: tolak lonjakan 1 frame, tapi auto-reset setelah MAX_SPIKE_REJECT
-        // penolakan berturut-turut (artinya user ganti range / nilai memang berubah nyata)
         const prevVolt = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
         let spikeRejected = false;
 
-        if (prevVolt !== null && prevVolt > 1) {
+        // Filter 1: Batas plausibilitas absolut — berlaku untuk SEMUA pembacaan termasuk yang pertama.
+        // Panel surya 12V, open-circuit max ~50V. Nilai di atas 60V pasti paket korup
+        // (misal titik desimal hilang: 12.07V → 1207V).
+        if (v > MAX_PLAUSIBLE_VOLT) {
+          console.warn(`[VOLT] Nilai mustahil dibuang: ${v.toFixed(3)}V (maks ${MAX_PLAUSIBLE_VOLT}V)`);
+          spikeRejected = true;
+        }
+
+        // Filter 2: Anti-spike rasio — tolak lonjakan vs pembacaan sebelumnya
+        if (!spikeRejected && prevVolt !== null && prevVolt > 1) {
           if (v === 0 && prevVolt > 5) {
             console.warn(`[VOLT] 0V spike dibuang (prev: ${prevVolt.toFixed(3)}V)`);
             spikeRejected = true;
-          } else if (v < prevVolt * 0.50 || v > prevVolt * 4.0) {
+          } else if (v < prevVolt * 0.50 || v > prevVolt * 3.0) {
             consecutiveVoltSpike++;
             if (consecutiveVoltSpike < MAX_SPIKE_REJECT) {
               console.warn(`[VOLT] Spike dibuang: ${v.toFixed(3)}V vs prev ${prevVolt.toFixed(3)}V (reject #${consecutiveVoltSpike})`);
               spikeRejected = true;
             } else {
               // Terlalu banyak penolakan = ganti range / nilai memang berubah → reset
+              // Tapi tetap cek plausibilitas (MAX_PLAUSIBLE_VOLT sudah dicek di atas)
               console.warn(`[VOLT] Reset spike setelah ${MAX_SPIKE_REJECT}x tolak → terima ${v.toFixed(3)}V`);
               consecutiveVoltSpike = 0;
             }
@@ -849,8 +859,8 @@
       let a = hasNewCurrent ? parseFloat(rawCurrent) : liveMeasuredAmp;
 
       if (hasNewCurrent) {
-        if (unitAmp === "mA") a = a / 1000;
-        else if (unitAmp === "μA" || unitAmp === "uA") a = a / 1000000;
+        // CATATAN: TIDAK ada konversi mA/μA di sini — standardValue dari decoder sudah dalam Ampere.
+        // Konversi ganda (decoder + di sini) dihapus karena menyebabkan nilai 1000x terlalu kecil.
 
         const prevAmp = liveMeasuredAmp;
         let ampRejected = false;
@@ -1437,20 +1447,23 @@
       // yang benar-benar baru datang (yang lain dikirim null agar tidak ikut
       // dianggap "pembacaan baru" dan tidak mengganggu nilai yang sudah ada).
       if (res.isAmpere || res.rawUnit === "A") {
-        lastAmpUnit = res.unit || "A";
+        // Gunakan rawUnit ("A") bukan unit ("mA") karena standardValue sudah dalam Ampere.
+        // Jika pakai res.unit="mA", updateDashboardState akan konversi LAGI → nilai 1000x salah.
+        lastAmpUnit = res.rawUnit || "A";
         updateDashboardState(null, res.standardValue, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       } else if (res.isVolt || res.rawUnit === "V") {
-        lastVoltUnit = res.unit || "V";
+        // Gunakan rawUnit ("V") bukan unit ("mV") karena standardValue sudah dalam Volt.
+        lastVoltUnit = res.rawUnit || "V";
         updateDashboardState(res.standardValue, null, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       } else {
         // Fallback jika mode tidak spesifik
         if (sourceDriverType === "amp") {
-          lastAmpUnit = res.unit || "A";
+          lastAmpUnit = res.rawUnit || "A";
           updateDashboardState(null, res.standardValue, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
         } else {
-          lastVoltUnit = res.unit || "V";
+          lastVoltUnit = res.rawUnit || "V";
           updateDashboardState(res.standardValue, null, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
         }
       }
