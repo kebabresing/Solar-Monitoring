@@ -1488,16 +1488,34 @@
       // 1. Supabase Sync
       if (supabase) {
         try {
+          // Kirim data lengkap (voltage, current, power). Jika kolom current/power belum ada di tabel Supabase,
+          // tangani fallback agar data voltase tetap tersimpan tanpa error fatal.
+          const sbPayload = {
+            voltage: safeV,
+            current: safeA,
+            power: calcPower,
+            unit: 'V',
+            mode: 'DC',
+            target: `solar#${safeA}#${calcPower}`
+          };
           supabase
             .from('protek608_telemetry')
-            .insert([{
-              voltage: safeV,
-              unit: 'V',
-              mode: 'DC',
-              target: `solar#${safeA}#${calcPower}`
-            }])
+            .insert([sbPayload])
             .then(({ error }) => {
-              if (error) console.warn("Supabase insert error:", error);
+              if (error) {
+                // Jika error karena kolom current/power belum ada di schema Supabase, fallback kirim format lama
+                if (error.code === 'PGRST204' || (error.message && error.message.includes('column'))) {
+                  console.warn("Kolom current/power belum ada di Supabase, fallback format standar:", error.message);
+                  supabase.from('protek608_telemetry').insert([{
+                    voltage: safeV,
+                    unit: 'V',
+                    mode: 'DC',
+                    target: `solar#${safeA}#${calcPower}`
+                  }]);
+                } else {
+                  console.warn("Supabase insert error:", error);
+                }
+              }
             });
         } catch (sbErr) {}
       }
