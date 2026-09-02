@@ -718,11 +718,11 @@
     // HELPER: Format angka tanpa trailing zeros
     // Contoh: 12.500 → "12.5", 12.000 → "12", 12.340 → "12.34"
     // ========================================================
-    function formatV(n, maxDec = 3) {
+    function formatV(n, maxDec = 2) {
       if (n === null || n === undefined || isNaN(n)) return "--";
       return parseFloat(n.toFixed(maxDec)).toString();
     }
-    function formatA(n, maxDec = 3) {
+    function formatA(n, maxDec = 2) {
       if (n === null || n === undefined || isNaN(n)) return "--";
       return parseFloat(n.toFixed(maxDec)).toString();
     }
