@@ -186,70 +186,97 @@
     .theme-light .title-adaptive { color: #0f172a !important; }
     .theme-light .val-primary-adaptive { color: #0f172a !important; }
 
-    /* 2. DARK THEME (Mode Malam Asli Yang Di-ACC Dosen) */
+    /* 2. DARK THEME (Modern Deep Obsidian & Sleek Glassmorphism) */
     .theme-dark {
-      background: #0b0f14 !important;
-      background-image: linear-gradient(135deg, #0b0f14 0%, #0f172a 50%, #131b2e 100%) !important;
-      color: #e0e3e5 !important;
+      background-color: #070a12 !important;
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(30, 58, 138, 0.22) 0px, transparent 50%),
+        radial-gradient(at 85% 20%, rgba(245, 158, 11, 0.12) 0px, transparent 45%),
+        radial-gradient(at 50% 85%, rgba(16, 185, 129, 0.14) 0px, transparent 55%),
+        linear-gradient(145deg, #070a12 0%, #0b1120 50%, #080d1a 100%) !important;
+      color: #f1f5f9 !important;
+      -webkit-font-smoothing: antialiased;
     }
     .theme-dark .glass-card-adaptive {
-      background: rgba(20, 26, 36, 0.90) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
-      box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+      background: rgba(13, 20, 36, 0.75) !important;
+      backdrop-filter: blur(24px) saturate(190%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+      box-shadow: 
+        0 20px 50px -12px rgba(0, 0, 0, 0.70), 
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     }
     .theme-dark .glass-card-adaptive:hover {
-      background: rgba(24, 32, 46, 0.95) !important;
-      border-color: rgba(255, 224, 131, 0.20) !important;
-      box-shadow: 0 18px 45px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 224, 131, 0.08) !important;
+      background: rgba(18, 28, 50, 0.85) !important;
+      border-color: rgba(59, 130, 246, 0.35) !important;
+      border-top-color: rgba(96, 165, 250, 0.55) !important;
+      box-shadow: 
+        0 25px 60px -10px rgba(0, 0, 0, 0.80), 
+        0 0 30px rgba(59, 130, 246, 0.14) !important;
       transform: translateY(-2px);
     }
     .theme-dark .glass-header {
-      background: rgba(11, 15, 20, 0.92) !important;
-      border-color: rgba(255, 255, 255, 0.06) !important;
+      background: rgba(9, 13, 24, 0.88) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45) !important;
     }
     .theme-dark .glass-channel-bar {
-      background: rgba(17, 23, 34, 0.92) !important;
-      border-color: rgba(255, 255, 255, 0.06) !important;
+      background: rgba(15, 23, 42, 0.90) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
     }
-    .theme-dark .title-adaptive { color: #ffecb9 !important; }
-    .theme-dark .text-main-adaptive { color: #e0e3e5 !important; }
-    .theme-dark .text-sub-adaptive { color: #d1c6ab !important; }
+    .theme-dark .title-adaptive { 
+      color: #ffffff !important; 
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    }
+    .theme-dark .text-main-adaptive { color: #f8fafc !important; }
+    .theme-dark .text-sub-adaptive { color: #94a3b8 !important; }
     .theme-dark .val-primary-adaptive { 
-      color: #ffecb9 !important; 
-      text-shadow: 0 0 25px rgba(255, 224, 131, 0.25);
+      color: #ffffff !important; 
+      text-shadow: 0 0 35px rgba(59, 130, 246, 0.30);
     }
     .theme-dark .sub-metric-box {
-      background: rgba(12, 19, 34, 0.85) !important;
-      border-color: rgba(255, 255, 255, 0.06) !important;
+      background: rgba(10, 16, 30, 0.85) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+    }
+    .theme-dark .sub-metric-box:hover {
+      background: rgba(15, 24, 44, 0.95) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
     }
     .theme-dark .flow-node-box {
-      background: #182030 !important;
-      border-color: rgba(190, 209, 255, 0.25) !important;
+      background: rgba(15, 23, 42, 0.90) !important;
+      border-color: rgba(59, 130, 246, 0.35) !important;
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.15) !important;
     }
     .theme-dark #node-solar-ring {
-      background: #1c1b18 !important;
-      border-color: rgba(255, 224, 131, 0.45) !important;
-      box-shadow: 0 0 35px rgba(255, 224, 131, 0.15) !important;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(18, 15, 10, 0.92) 100%) !important;
+      border-color: rgba(245, 158, 11, 0.65) !important;
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.25), inset 0 0 20px rgba(245, 158, 11, 0.10) !important;
     }
     .theme-dark #node-stored-box {
-      background: #182030 !important;
-      border-color: rgba(74, 225, 118, 0.40) !important;
-      box-shadow: 0 0 30px rgba(74, 225, 118, 0.12) !important;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(10, 22, 18, 0.92) 100%) !important;
+      border-color: rgba(16, 185, 129, 0.55) !important;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.22), inset 0 0 15px rgba(16, 185, 129, 0.10) !important;
+    }
+    .theme-dark #battery-segments {
+      background: rgba(10, 16, 30, 0.85) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
     .glow-primary {
-      filter: drop-shadow(0 0 25px rgba(255, 224, 131, 0.35));
+      filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.40));
     }
     .glow-secondary {
-      filter: drop-shadow(0 0 20px rgba(74, 225, 118, 0.3));
+      filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.35));
     }
 
     @keyframes pulse-bar {
-      0%, 100% { opacity: 1; filter: brightness(1.1); }
-      50% { opacity: 0.6; filter: brightness(0.9); }
+      0%, 100% { opacity: 1; filter: brightness(1.15); }
+      50% { opacity: 0.6; filter: brightness(0.85); }
     }
     .animate-pulse-bar {
       animation: pulse-bar 1.2s infinite ease-in-out;
@@ -644,12 +671,29 @@
     // ========================================================
     // 2. SYSTEM STATE & ENERGY ACCUMULATOR
     // ========================================================
-    let currentTarget = "solar"; // 'solar' | 'battery' | 'load'
+    let currentTarget = "solar"; // sistem ini khusus solar, tidak perlu ganti
     let lastVoltage = 0.0;
     let lastTimestamp = Date.now();
-    let accumulatedPvKwh = 0.0;
-    let accumulatedLoadKwh = 0.0;
     let hardwareWatchdogTimer = null;
+
+    // ========================================================
+    // kWh PERSISTENCE (localStorage — reset otomatis tiap hari)
+    // ========================================================
+    const KWH_STORAGE_KEY = () => {
+      const d = new Date();
+      return `plts_kwh_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+    };
+    function loadKwhFromStorage() {
+      try {
+        const stored = localStorage.getItem(KWH_STORAGE_KEY());
+        return stored ? parseFloat(stored) || 0.0 : 0.0;
+      } catch (e) { return 0.0; }
+    }
+    function saveKwhToStorage() {
+      try { localStorage.setItem(KWH_STORAGE_KEY(), accumulatedPvKwh.toString()); } catch (e) {}
+    }
+    let accumulatedPvKwh = loadKwhFromStorage();
+    let accumulatedLoadKwh = 0.0; // beban tidak punya sensor, tidak perlu persist
 
     // Multi-channel telemetry store (from multi-sensors or Protek)
     const telemetry = {
@@ -669,6 +713,19 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // ========================================================
+    // HELPER: Format angka tanpa trailing zeros
+    // Contoh: 12.500 → "12.5", 12.000 → "12", 12.340 → "12.34"
+    // ========================================================
+    function formatV(n, maxDec = 3) {
+      if (n === null || n === undefined || isNaN(n)) return "--";
+      return parseFloat(n.toFixed(maxDec)).toString();
+    }
+    function formatA(n, maxDec = 3) {
+      if (n === null || n === undefined || isNaN(n)) return "--";
+      return parseFloat(n.toFixed(maxDec)).toString();
+    }
 
     // ========================================================
     // 3. REALISTIC OCV-SOC BATTERY MAPPING (Lead-Acid & LiFePO4)
@@ -819,18 +876,48 @@
     }
 
     // ========================================================
-    // 5. CORE TELEMETRY ENGINE & UI UPDATER (Dual Meter Ready)
+    // 5. CORE TELEMETRY ENGINE & UI UPDATER
     // ========================================================
     let liveMeasuredVolt = null;
-    let liveMeasuredAmp = null;
+    let liveMeasuredAmp  = null;
+    let lastFlowRedraw   = 0; // Throttle SVG redraw — max 1x per 2 detik
+    let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 600ms (Fix E)
 
     function updateDashboardState(rawVoltage, rawCurrent = null, unit = "V", unitAmp = "A", sourceLabel = "Protek 608 Live") {
       let v = (rawVoltage !== null && rawVoltage !== undefined) ? parseFloat(rawVoltage) : liveMeasuredVolt;
       if (v !== null && !isNaN(v)) {
         if (unit === "mV") v = v / 1000;
         v = Math.max(0, v);
-        liveMeasuredVolt = v;
-        lastVoltage = v;
+
+        // Anti-spike filter: tolak nilai yang tiba-tiba turun/naik tidak wajar
+        // (packet korup saat Protek 608 pindah range bisa menghasilkan nilai seperti 3V dari 13V)
+        const prevVolt = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
+        let spikeRejected = false;
+
+        if (prevVolt !== null && prevVolt > 5) {
+          // Cek zero spike
+          if (v === 0) {
+            console.warn(`[VOLT] 0V spike dibuang (prev: ${prevVolt.toFixed(3)}V)`);
+            spikeRejected = true;
+          }
+          // FIX D: Diperketat dari 60% → 30% drop maksimum per frame
+          else if (v < prevVolt * 0.70) {
+            console.warn(`[VOLT] Spike drop dibuang: ${v.toFixed(3)}V (prev: ${prevVolt.toFixed(3)}V, drop ${Math.round((1 - v/prevVolt)*100)}%)`);
+            spikeRejected = true;
+          }
+          // Cek spike naik: lebih dari 300% dalam 1 frame juga tidak wajar
+          else if (v > prevVolt * 3.0) {
+            console.warn(`[VOLT] Spike naik dibuang: ${v.toFixed(3)}V (prev: ${prevVolt.toFixed(3)}V)`);
+            spikeRejected = true;
+          }
+        }
+
+        if (spikeRejected) {
+          v = prevVolt; // pakai nilai terakhir yang valid
+        } else {
+          liveMeasuredVolt = v;
+          lastVoltage = v;
+        }
       } else {
         v = lastVoltage || 0;
       }
@@ -839,7 +926,7 @@
       if (a !== null && !isNaN(a)) {
         if (unitAmp === "mA") a = a / 1000;
         else if (unitAmp === "μA" || unitAmp === "uA") a = a / 1000000;
-        a = Math.max(0, a);
+        // Arus negatif (probe terbalik) ditampilkan apa adanya — nilai valid untuk diagnosa
         liveMeasuredAmp = a;
       }
 
@@ -849,56 +936,47 @@
 
       const hasRealAmp = (liveMeasuredAmp !== null && !isNaN(liveMeasuredAmp));
 
-      // Update Telemetry based on user's target probe connection
-      // PRINSIP: Hanya data NYATA dari Protek 608 yang ditampilkan. Tidak ada estimasi/dummy.
-      if (currentTarget === "solar") {
-        telemetry.solar.voltage = v;
-        telemetry.solar.isLive = true;
+      // Sistem ini mengukur Panel Surya (PV) — satu-satunya target aktif.
+      // currentTarget tetap "solar". Battery & load tidak punya sensor fisik.
+      telemetry.solar.voltage = v;
+      telemetry.solar.isLive  = true;
 
-        if (hasRealAmp) {
-          // Keduanya terhubung: P = V × I (presisi penuh)
-          telemetry.solar.current = liveMeasuredAmp.toFixed(3);
-          telemetry.solar.power = parseFloat((v * liveMeasuredAmp).toFixed(2));
-        } else {
-          // Hanya Protek Volt yang terhubung — arus & daya tidak diketahui
-          telemetry.solar.current = null;
-          telemetry.solar.power = 0;
-        }
-
-
-        const solarP = telemetry.solar.power;
-
-        // === PURE REAL-LIFE — HANYA DATA SENSOR NYATA ===
-        // Tidak ada estimasi, tidak ada dummy, tidak ada simulasi.
-        // Baterai dan Beban hanya bisa ditampilkan jika ada sensor fisik terpasang.
-
-        // Beban Listrik — tidak ada sensor terpasang
-        telemetry.load.power   = 0;
-        telemetry.load.voltage = null;
-        telemetry.load.current = null;
-
-        // Baterai Bank — tidak ada sensor terpasang
-        telemetry.battery.power   = 0;
-        telemetry.battery.current = null;
-        telemetry.battery.voltage = null;
-        telemetry.battery.soc     = null;
-        telemetry.battery.status  = 'Tidak Ada Sensor';
+      if (hasRealAmp) {
+        // Kedua Protek terhubung: P = V × I (presisi penuh)
+        telemetry.solar.current = liveMeasuredAmp;  // number, bukan string
+        telemetry.solar.power   = parseFloat((v * Math.abs(liveMeasuredAmp)).toFixed(2));
+      } else {
+        // Hanya Protek Volt yang terhubung — arus & daya tidak diketahui
+        telemetry.solar.current = null;
+        telemetry.solar.power   = 0;
       }
 
-      // Realtime Energy Integration: Integrasi Energi (kWh) = ∫ Power (W) dt / 1000
-      // Membedakan Power sesaat (Watt) dengan Akumulasi Energi (kWh)
-      if (dtHours < 0.1 && dtHours > 0 && telemetry.solar.power > 0) {
-        accumulatedPvKwh += (telemetry.solar.power * dtHours) / 1000;
-      }
-      // FIX #6: Akumulasi Energi Beban (kWh) — sebelumnya tidak pernah diisi
-      if (dtHours < 0.1 && dtHours > 0 && telemetry.load.power > 0) {
-        accumulatedLoadKwh += (telemetry.load.power * dtHours) / 1000;
+      const solarP = telemetry.solar.power;
+
+      // Beban Listrik & Baterai — tidak ada sensor fisik terpasang
+      telemetry.load.power   = 0;
+      telemetry.load.voltage = null;
+      telemetry.load.current = null;
+      telemetry.battery.power   = 0;
+      telemetry.battery.current = null;
+      telemetry.battery.voltage = null;
+      telemetry.battery.soc     = null;
+      telemetry.battery.status  = 'Tidak Ada Sensor';
+
+      // Realtime Energy Integration: ∫P dt / 1000 = kWh
+      // Guard dtHours < 0.1 mencegah spike kWh saat page sleep/hide
+      if (dtHours < 0.1 && dtHours > 0 && solarP > 0) {
+        accumulatedPvKwh += (solarP * dtHours) / 1000;
+        saveKwhToStorage();
       }
 
       // ==========================================
-      // UI Elements Update
+      // UI Elements Update  — Fix E: Throttle 600ms
       // ==========================================
-      
+      const nowUi = Date.now();
+      if (nowUi - lastUiUpdate < 600) return; // skip update jika terlalu sering
+      lastUiUpdate = nowUi;
+
       // 1. Top Card Metric Display (Adapts to measurement focus)
       const elSolarKw = document.getElementById("val-solar-kw");
       const elSolarUnit = document.getElementById("val-solar-unit");
@@ -910,76 +988,37 @@
       const elApplianceText = document.getElementById("appliance-capacity-text");
       const elApplianceIcon = document.getElementById("appliance-icon");
 
-      if (currentTarget === "solar") {
-        const solarP = telemetry.solar.power;
-        if (elSolarKw && elSolarUnit) {
-          if (hasRealAmp && solarP > 0) {
-            if (solarP >= 1000) {
-              elSolarKw.innerText = (solarP / 1000).toFixed(2);
-              elSolarUnit.innerText = "kW";
-            } else {
-              elSolarKw.innerText = solarP.toFixed(2);
-              elSolarUnit.innerText = "W";
-            }
+      // Sistem solar-only: tampilkan daya atau tegangan sesuai ketersediaan data
+      if (elSolarKw && elSolarUnit) {
+        if (hasRealAmp && solarP > 0) {
+          if (solarP >= 1000) {
+            elSolarKw.innerText = parseFloat((solarP / 1000).toFixed(2)).toString();
+            elSolarUnit.innerText = "kW";
           } else {
-            // Hanya 1 meter → hanya tampilkan tegangan, daya tidak bisa dihitung
-            elSolarKw.innerText = v.toFixed(2);
-            elSolarUnit.innerText = "V";
+            elSolarKw.innerText = parseFloat(solarP.toFixed(2)).toString();
+            elSolarUnit.innerText = "W";
           }
+        } else {
+          // Hanya 1 meter — tampilkan tegangan
+          elSolarKw.innerText = formatV(v);
+          elSolarUnit.innerText = "V";
         }
-        if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp
-            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
-            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
-        }
-        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
-        if (elPvAmp)  elPvAmp.innerText  = hasRealAmp ? liveMeasuredAmp.toFixed(3) + " A" : "-- A";
-        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp
-          ? `P = V × I = ${v.toFixed(2)} V × ${liveMeasuredAmp.toFixed(3)} A = ${solarP} W (Terukur presisi)`
-          : `Tegangan PV: ${v.toFixed(3)} V — Sambungkan Protek P2 (Amp) untuk hitung daya`;
-        if (elApplianceText) elApplianceText.innerText = hasRealAmp
-          ? (solarP > 0 ? `Produksi: ${solarP} W (P = V × I)` : "Produksi: 0 W (Tidak ada radiasi)")
-          : "Hubungkan Protek P2 untuk mengukur daya";
-        if (elApplianceIcon) elApplianceIcon.innerText = hasRealAmp && solarP > 100 ? "wb_sunny" : "lightbulb";
-
-      } else if (currentTarget === "battery") {
-        if (elSolarKw) elSolarKw.innerText = v.toFixed(2);
-        if (elSolarUnit) elSolarUnit.innerText = "V";
-        if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp
-            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
-            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
-        }
-        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
-        if (elPvAmp) {
-          const ampVal = telemetry.battery.current;
-          elPvAmp.innerText = ampVal !== null ? parseFloat(ampVal).toFixed(3) + " A" : "-- A";
-        }
-        if (elSolarDesc) elSolarDesc.innerText = `Terminal Baterai: ${v.toFixed(3)} V — SOC: ${telemetry.battery.soc}% (${telemetry.battery.status})`;
-        if (elApplianceText) elApplianceText.innerText = hasRealAmp
-          ? `SOC: ${telemetry.battery.soc}% — ${telemetry.battery.status}`
-          : `SOC: ${telemetry.battery.soc}% — Hubungkan P2 untuk ukur arus`;
-        if (elApplianceIcon) elApplianceIcon.innerText = "battery_charging_full";
-
-      } else if (currentTarget === "load") {
-        const loadP = telemetry.load.power;
-        if (elSolarKw) elSolarKw.innerText = hasRealAmp ? loadP : v.toFixed(2);
-        if (elSolarUnit) elSolarUnit.innerText = hasRealAmp ? "W" : "V";
-        if (elRawMeter) {
-          elRawMeter.innerText = hasRealAmp
-            ? `${v.toFixed(3)} V  •  ${liveMeasuredAmp.toFixed(3)} A`
-            : `${v.toFixed(3)} V  •  Arus: belum terhubung`;
-        }
-        if (elPvVolt) elPvVolt.innerText = v.toFixed(3) + " V";
-        if (elPvAmp)  elPvAmp.innerText  = hasRealAmp ? liveMeasuredAmp.toFixed(3) + " A" : "-- A";
-        if (elSolarDesc) elSolarDesc.innerText = hasRealAmp
-          ? `P = V × I = ${v.toFixed(2)} V × ${liveMeasuredAmp.toFixed(3)} A = ${loadP} W (Terukur presisi)`
-          : `Tegangan Beban: ${v.toFixed(3)} V — Sambungkan Protek P2 (Amp) untuk hitung daya`;
-        if (elApplianceText) elApplianceText.innerText = hasRealAmp
-          ? `Konsumsi: ${loadP} W (P = V × I)`
-          : "Hubungkan Protek P2 untuk mengukur daya beban";
-        if (elApplianceIcon) elApplianceIcon.innerText = "bolt";
       }
+      if (elRawMeter) {
+        const ampStr = (liveMeasuredAmp !== null)
+          ? `${formatA(liveMeasuredAmp)} A`
+          : "Arus: belum terhubung";
+        elRawMeter.innerText = `${formatV(v)} V  •  ${ampStr}`;
+      }
+      if (elPvVolt) elPvVolt.innerText = formatV(v) + " V";
+      if (elPvAmp)  elPvAmp.innerText  = hasRealAmp ? formatA(liveMeasuredAmp) + " A" : "-- A";
+      if (elSolarDesc) elSolarDesc.innerText = hasRealAmp
+        ? `P = V × I = ${formatV(v)} V × ${formatA(liveMeasuredAmp)} A = ${solarP} W (Terukur presisi)`
+        : `Tegangan PV: ${formatV(v)} V — Sambungkan Protek P2 (Amp) untuk hitung daya`;
+      if (elApplianceText) elApplianceText.innerText = hasRealAmp
+        ? (solarP > 0 ? `Produksi: ${solarP} W (P = V × I)` : "Produksi: 0 W (Tidak ada radiasi)")
+        : "Hubungkan Protek P2 untuk mengukur daya";
+      if (elApplianceIcon) elApplianceIcon.innerText = hasRealAmp && solarP > 100 ? "wb_sunny" : "lightbulb";
 
       if (elMeterUpdate) elMeterUpdate.innerText = sourceLabel;
 
@@ -1002,14 +1041,14 @@
       if (elFlowUsed) {
         elFlowUsed.innerText = loadP >= 1000 ? (loadP / 1000).toFixed(2) + " kW" : loadP.toFixed(1) + " W";
         elFlowUsed.className = loadP > 0.05
-          ? "text-lg md:text-2xl font-bold text-blue-400 font-mono"
-          : "text-lg md:text-2xl font-bold text-on-surface-variant font-mono";
+          ? "text-base sm:text-lg md:text-2xl font-black text-blue-400 font-mono"
+          : "text-base sm:text-lg md:text-2xl font-black text-sub-adaptive font-mono";
       }
       if (elFlowUsedLabel) {
         elFlowUsedLabel.innerText = loadP > 0.05 ? "BEBAN AKTIF" : "BEBAN LISTRIK";
         elFlowUsedLabel.className = loadP > 0.05
-          ? "text-xs font-bold text-blue-400 tracking-wider uppercase"
-          : "text-xs font-bold text-on-surface-variant tracking-wider uppercase";
+          ? "text-[10px] sm:text-xs font-bold text-blue-400 tracking-wider uppercase"
+          : "text-[10px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase";
       }
       if (elFlowUsedDesc) {
         elFlowUsedDesc.innerText = loadP > 0.05 ? "Peralatan Menyala" : "Peralatan Aktif";
@@ -1021,44 +1060,44 @@
       if (battP > 0.05) {
         if (elFlowStored) {
           elFlowStored.innerText = absBattP >= 1000 ? (absBattP / 1000).toFixed(2) + " kW" : absBattP.toFixed(1) + " W";
-          elFlowStored.className = "text-lg md:text-2xl font-bold text-secondary font-mono";
+          elFlowStored.className = "text-base sm:text-lg md:text-2xl font-black text-emerald-400 font-mono";
         }
         if (elFlowStoredLabel) {
           elFlowStoredLabel.innerText = "MENGISI (CHARGE)";
-          elFlowStoredLabel.className = "text-xs font-bold text-secondary-fixed tracking-wider uppercase";
+          elFlowStoredLabel.className = "text-[10px] sm:text-xs font-bold text-emerald-400 tracking-wider uppercase";
         }
         if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Daya PV Mengisi Baterai";
         if (elBatteryIcon) {
           elBatteryIcon.innerText = "battery_charging_full";
-          elBatteryIcon.className = "material-symbols-outlined text-secondary text-[32px] md:text-[36px] glow-secondary";
+          elBatteryIcon.className = "material-symbols-outlined text-emerald-400 text-[24px] sm:text-[30px] md:text-[36px] glow-secondary";
         }
       } else if (battP < -0.05) {
         if (elFlowStored) {
           elFlowStored.innerText = absBattP >= 1000 ? (absBattP / 1000).toFixed(2) + " kW" : absBattP.toFixed(1) + " W";
-          elFlowStored.className = "text-lg md:text-2xl font-bold text-yellow-400 font-mono";
+          elFlowStored.className = "text-base sm:text-lg md:text-2xl font-black text-yellow-400 font-mono";
         }
         if (elFlowStoredLabel) {
           elFlowStoredLabel.innerText = "DISCHARGE (DIAMBIL)";
-          elFlowStoredLabel.className = "text-xs font-bold text-yellow-400 tracking-wider uppercase";
+          elFlowStoredLabel.className = "text-[10px] sm:text-xs font-bold text-yellow-400 tracking-wider uppercase";
         }
         if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Baterai Menyuplai Beban";
         if (elBatteryIcon) {
           elBatteryIcon.innerText = "battery_alert"; // FIX #3: battery_profile tidak ada di Material Symbols
-          elBatteryIcon.className = "material-symbols-outlined text-yellow-400 text-[32px] md:text-[36px]";
+          elBatteryIcon.className = "material-symbols-outlined text-yellow-400 text-[24px] sm:text-[30px] md:text-[36px]";
         }
       } else {
         if (elFlowStored) {
           elFlowStored.innerText = "0 W";
-          elFlowStored.className = "text-lg md:text-2xl font-bold text-on-surface-variant font-mono";
+          elFlowStored.className = "text-base sm:text-lg md:text-2xl font-black text-sub-adaptive font-mono";
         }
         if (elFlowStoredLabel) {
           elFlowStoredLabel.innerText = "STANDBY";
-          elFlowStoredLabel.className = "text-xs font-bold text-on-surface-variant tracking-wider uppercase";
+          elFlowStoredLabel.className = "text-[10px] sm:text-xs font-bold text-sub-adaptive tracking-wider uppercase";
         }
         if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Status Siaga";
         if (elBatteryIcon) {
           elBatteryIcon.innerText = "battery_full";
-          elBatteryIcon.className = "material-symbols-outlined text-on-surface-variant text-[32px] md:text-[36px]";
+          elBatteryIcon.className = "material-symbols-outlined text-sub-adaptive text-[24px] sm:text-[30px] md:text-[36px]";
         }
       }
 
@@ -1088,18 +1127,9 @@
       }
       if (elBattWatt) elBattWatt.innerText = telemetry.battery.voltage !== null ? absBattP : "--";
 
-      // FIX #12: spec-batt-type kini ada di HTML — tampilkan auto-sense dan bersihkan saat tidak aktif
+      // Sistem solar-only: baterai tidak punya sensor, sembunyikan spec label
       const elSpecBatt = document.getElementById("spec-batt-type");
-      if (elSpecBatt) {
-        if (currentTarget === "battery" && v > 1.0) {
-          const battInfo = calculateBatterySOC(v);
-          if (battInfo.nominal > 0) {
-            elSpecBatt.innerText = `${battInfo.nominal}V Sistem Auto-Sense`;
-          }
-        } else {
-          elSpecBatt.innerText = "";
-        }
-      }
+      if (elSpecBatt) elSpecBatt.innerText = "";
 
       // FIX #5: Threshold konsisten dengan flow node (> 0.05W), diubah dari 5W ke 1W
       if (battP > 1) {
@@ -1150,8 +1180,12 @@
       if (elLoadAmp) elLoadAmp.innerText = (telemetry.load.current !== null && telemetry.load.current !== undefined) ? telemetry.load.current + " A" : "-- A";
       if (elLoadKwh) elLoadKwh.innerText = "Hari ini: " + accumulatedLoadKwh.toFixed(3) + " kWh";
 
-      // Draw SVG Flow Lines
-      drawFlowLines(telemetry.solar.power, telemetry.load.power, battP);
+      // Draw SVG Flow Lines (throttled: max 1x per 2 detik, bukan setiap packet)
+      const nowFlow = Date.now();
+      if (nowFlow - lastFlowRedraw >= 2000) {
+        lastFlowRedraw = nowFlow;
+        requestAnimationFrame(() => drawFlowLines(telemetry.solar.power, telemetry.load.power, battP));
+      }
     }
 
     function getActiveSourceLabel() {
@@ -1186,36 +1220,41 @@
       for (let i = 0; i < buffer.length; i++) {
         if (buffer[i] === 0x5B) { byteCount = 0; continue; }
         if (buffer[i] === 0x5D) break;
-
         const thisNibble = reverseBits(buffer[i]);
-        if (byteCount % 2 === 0) {
-          lastNibble = thisNibble;
-        } else {
-          packet[(byteCount - 1) >> 1] = ((lastNibble << 4) | thisNibble) & 0xFF;
-        }
+        if (byteCount % 2 === 0) { lastNibble = thisNibble; }
+        else { packet[(byteCount - 1) >> 1] = ((lastNibble << 4) | thisNibble) & 0xFF; }
         byteCount++;
       }
 
+      // Tabel pemetaan segment LCD ke digit angka (exact match only)
+      // Bit pattern dari Protek 608 per digit 7-segment (bit LSB selalu dibuang dulu & 0xFE)
       const DIGIT_MAP = {
-        0xFA: "0", 0x0A: "1", 0x0B: "1", 0xBC: "2", 0x9E: "3",
-        0x4E: "4", 0xD6: "5", 0xF6: "6", 0x8A: "7", 0xFE: "8",
-        0xDE: "9", 0x00: " ", 0x70: "L", 0xEC: "P", 0xF4: "E"
+        0xFA: "0",
+        0x0A: "1",
+        0x0B: "1",  // varian 1
+        0xBC: "2",
+        0x9E: "3",
+        0x4E: "4",
+        0xD6: "5",
+        0xF6: "6",
+        0x8A: "7",
+        0xFE: "8",
+        0xDE: "9",
+        0xCE: "9",  // varian 9 (beberapa unit)
+        0xDA: "5",  // varian 5
+        0x00: " ",
+        0x70: "L",
+        0xEC: "P",
+        0xF4: "E",
+        0x46: "r",  // partial segment
+        0x6E: "H",
       };
 
       function decodeDigit(bits) {
         bits = bits & 0xFE;
         if (bits === 0x00) return " ";
+        // Exact match saja — tidak ada fuzzy fallback agar tidak salah baca
         if (DIGIT_MAP[bits] !== undefined) return DIGIT_MAP[bits];
-        if ((bits & 0xFE) === 0xFE) return "8";
-        if ((bits & 0xDE) === 0xDE) return "9";
-        if ((bits & 0xF6) === 0xF6) return "6";
-        if ((bits & 0xD6) === 0xD6) return "5";
-        if ((bits & 0x4E) === 0x4E) return "4";
-        if ((bits & 0x9E) === 0x9E) return "3";
-        if ((bits & 0xBC) === 0xBC) return "2";
-        if ((bits & 0xFA) === 0xFA) return "0";
-        if ((bits & 0x8A) === 0x8A) return "7";
-        if ((bits & 0x0A) === 0x0A) return "1";
         return "?";
       }
 
@@ -1237,42 +1276,62 @@
       if (packet[11] & 0x01) mainStr += ".";
       mainStr += decodeDigit(d0bits);
 
-      let unit = "V";
-      if (packet[14] & 0x40) unit = "V";
-      else if (packet[13] & 0x04) unit = "Ω";
-      else if (packet[13] & 0x02) unit = "A";
-      else if (packet[13] & 0x01) unit = "F";
-      else if (packet[13] & 0x40) unit = "Hz";
-
+      // --- Unit detection (Ampere SEBELUM Volt agar mA DC terdeteksi benar) ---
+      let unit = "V"; // fallback
       let unitPrefix = "";
+
       if (packet[14] & 0x80) unitPrefix = "k";
       else if (packet[14] & 0x08) unitPrefix = "M";
       else if (packet[14] & 0x04) unitPrefix = "μ";
-      else if (packet[14] & 0x02) unitPrefix = "m";
+      else if (packet[14] & 0x02) unitPrefix = "m"; // milli → mA / mV
       else if (packet[14] & 0x01) unitPrefix = "n";
+
+      if (packet[13] & 0x02) unit = "A";         // Ampere (termasuk mA)
+      else if (packet[13] & 0x04) unit = "Ω";    // Ohm
+      else if (packet[13] & 0x01) unit = "F";    // Farad
+      else if (packet[13] & 0x40) unit = "Hz";   // Hertz
+      else if (packet[14] & 0x40) unit = "V";    // Volt explicit
 
       let mode = "DC";
       if (packet[5] & 0x40) mode = "AC";
       else if (packet[5] & 0x10) mode = "DC";
 
       const trimmed = mainStr.trim();
-      if (!trimmed || trimmed === "?" || !/[0-9]/.test(trimmed)) return null;
-      const numValue = parseFloat(trimmed);
+      if (!trimmed || !/[0-9]/.test(trimmed)) return null;
+
+      // Tolak jika ada digit tidak dikenali sama sekali (packet korup)
+      // Sebelumnya > 1, sekarang > 0: lebih ketat agar tidak ada angka aneh lolos
+      const questionCount = (trimmed.match(/\?/g) || []).length;
+      if (questionCount > 0) return null;
+
+      const cleanStr = trimmed.replace(/\?/g, "0");
+      const numValue = parseFloat(cleanStr);
       if (isNaN(numValue)) return null;
+
+      // Filter all-zero suspect dari packet korup
+      const digitOnly = trimmed.replace(/[^0-9]/g, "");
+      const isAllZero = digitOnly.length > 0 && digitOnly.split("").every(d => d === "0");
+      if (isAllZero && numValue === 0 && digitOnly.length < 3) return null;
 
       let standardValue = numValue;
       if (unitPrefix === "m") standardValue = numValue / 1000;
       else if (unitPrefix === "μ" || unitPrefix === "u") standardValue = numValue / 1000000;
       else if (unitPrefix === "k") standardValue = numValue * 1000;
+      else if (unitPrefix === "M") standardValue = numValue * 1000000;
+
+      const isMilli = (unitPrefix === "m");
+      const isAmpere = (unit === "A");
+      const isMilliAmpere = (isAmpere && isMilli);
 
       return {
         value: numValue,
-        standardValue: standardValue,
-        voltage: standardValue,
-        voltageStr: trimmed,
-        unit: unitPrefix + unit,
+        standardValue: standardValue,       // dalam Ampere atau Volt (base unit)
+        valueStr: parseFloat(trimmed).toString(), // strip trailing zeros
+        unit: unitPrefix + unit,            // tampilan: "mA", "A", "V", "mV"
         rawUnit: unit,
-        isAmpere: (unit === "A"),
+        prefix: unitPrefix,
+        isAmpere: isAmpere,
+        isMilliAmpere: isMilliAmpere,
         isVolt: (unit === "V"),
         mode: mode
       };
@@ -1288,14 +1347,21 @@
         this.buffer = [];
       }
 
-      async connect() {
+      async connect(existingPort = null) {
         if (!("serial" in navigator)) {
-          alert("Web Serial API tidak didukung pada browser ini. Harap gunakan Google Chrome atau Microsoft Edge.");
+          if (!existingPort) {
+            alert("Web Serial API tidak didukung pada browser ini. Harap gunakan Google Chrome atau Microsoft Edge.");
+          }
           return false;
         }
 
         try {
-          this.port = await navigator.serial.requestPort();
+          if (existingPort) {
+            this.port = existingPort;
+          } else {
+            this.port = await navigator.serial.requestPort();
+          }
+
           await this.port.open({
             baudRate: 9600,
             dataBits: 7,
@@ -1313,9 +1379,10 @@
           return true;
         } catch (err) {
           console.error(`Serial connect error (${this.type}):`, err);
-          if (err.name !== "NotFoundError") {
+          if (err.name !== "NotFoundError" && !existingPort) {
             alert(`Gagal membuka port serial (${this.type}): ` + err.message);
           }
+          this.port = null;
           return false;
         }
       }
@@ -1353,7 +1420,14 @@
                       this.onData(result);
                     }
                   } else {
-                    this.buffer.shift();
+                    // End-byte tidak cocok → packet korup.
+                    // Langsung cari 0x5B berikutnya (bukan shift 1 per 1 yang lambat)
+                    const nextStart = this.buffer.indexOf(0x5B, 1);
+                    if (nextStart === -1) {
+                      this.buffer = [];
+                    } else {
+                      this.buffer.splice(0, nextStart);
+                    }
                   }
                 }
 
@@ -1389,42 +1463,105 @@
     let lastVoltUnit = "V";
     let lastAmpUnit = "A";
 
-    const serialVoltDriver = new DashboardSerialPort("volt", (res) => {
-      liveMeasuredVolt = res.standardValue;
-      lastVoltUnit = res.unit || "V";
-      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
+    // EMA (Exponential Moving Average) untuk smoothing nilai serial
+    // α=0.3 untuk volt (cukup responsif), α=0.2 untuk arus (lebih smooth karena lebih noisy)
+    const EMA_ALPHA_VOLT = 0.30;
+    const EMA_ALPHA_AMP  = 0.20;
 
-      // Sync ke cloud
+    function handleIncomingSerialData(sourceDriverType, res) {
+      if (!res || isNaN(res.standardValue)) return;
+
+      if (res.isAmpere || res.rawUnit === "A") {
+        const newA = res.standardValue;
+        if (liveMeasuredAmp === null || isNaN(liveMeasuredAmp)) {
+          // Inisialisasi pertama kali
+          liveMeasuredAmp = newA;
+        } else {
+          // EMA smoothing arus
+          liveMeasuredAmp = EMA_ALPHA_AMP * newA + (1 - EMA_ALPHA_AMP) * liveMeasuredAmp;
+        }
+        lastAmpUnit = res.unit || "A";
+      } else if (res.isVolt || res.rawUnit === "V") {
+        const incomingV = res.standardValue;
+        const prevV = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
+        let reject = false;
+
+        if (prevV !== null && prevV > 5) {
+          if (incomingV === 0) {
+            console.warn(`[VOLT-USB] 0V spike dibuang (prev: ${prevV.toFixed(3)}V)`);
+            reject = true;
+          } else if (incomingV < prevV * 0.70) {
+            // FIX D: Diperketat dari 0.40 → 0.70 (max drop 30%, bukan 60%)
+            console.warn(`[VOLT-USB] Drop spike dibuang: ${incomingV.toFixed(3)}V (prev: ${prevV.toFixed(3)}V, drop ${Math.round((1 - incomingV/prevV)*100)}%)`);
+            reject = true;
+          } else if (incomingV > prevV * 3.0) {
+            console.warn(`[VOLT-USB] Naik spike dibuang: ${incomingV.toFixed(3)}V (prev: ${prevV.toFixed(3)}V)`);
+            reject = true;
+          }
+        }
+
+        if (!reject) {
+          if (liveMeasuredVolt === null || isNaN(liveMeasuredVolt)) {
+            // Inisialisasi pertama kali — langsung pakai nilai baru
+            liveMeasuredVolt = incomingV;
+          } else {
+            // EMA smoothing tegangan
+            liveMeasuredVolt = EMA_ALPHA_VOLT * incomingV + (1 - EMA_ALPHA_VOLT) * liveMeasuredVolt;
+          }
+          lastVoltUnit = res.unit || "V";
+        }
+      } else {
+        // Fallback jika mode tidak spesifik
+        if (sourceDriverType === "amp") {
+          liveMeasuredAmp = res.standardValue;
+          lastAmpUnit = res.unit || "A";
+        } else {
+          liveMeasuredVolt = res.standardValue;
+          lastVoltUnit = res.unit || "V";
+        }
+      }
+
+      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
       syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
+    }
+
+    const serialVoltDriver = new DashboardSerialPort("volt", (res) => {
+      handleIncomingSerialData("volt", res);
     });
 
     const serialAmpDriver = new DashboardSerialPort("amp", (res) => {
-      liveMeasuredAmp = res.standardValue;
-      lastAmpUnit = res.unit || "A";
-      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
-
-      // Sync ke cloud
-      syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
+      handleIncomingSerialData("amp", res);
     });
+
+    // ==========================================
+    // INTERVAL CONSTANTS (ubah di sini saja)
+    // ==========================================
+    const CLOUD_SYNC_INTERVAL_MS  = 3000;   // Cloud push: max 1x per 3 detik
+    const WATCHDOG_TIMEOUT_MS     = 10000;  // Watchdog: standby jika tidak ada data 10 detik
+    const FALLBACK_POLL_INTERVAL  = 5000;   // Fallback Supabase polling (non-USB): 5 detik
+    const PRUNING_INTERVAL_MS     = 3600000; // Supabase pruning: tiap 1 jam
 
     let lastCloudSync = 0;
     function syncTelemetryToCloud(v, a) {
       const now = Date.now();
-      if (now - lastCloudSync < 500) return; // FIX #10: max 2x/detik (sinkron dengan meter.html 500ms)
+      if (now - lastCloudSync < CLOUD_SYNC_INTERVAL_MS) return;
       lastCloudSync = now;
 
-      const calcPower = (v !== null && a !== null) ? Math.round(v * a) : telemetry[currentTarget].power;
+      const calcPower = (v !== null && a !== null) ? Math.round(v * Math.abs(a)) : telemetry.solar.power;
+      const safeV = (v !== null && v !== undefined && !isNaN(v)) ? v : 0;
+      const safeA = (a !== null && a !== undefined && !isNaN(a)) ? a : 0;
+      const unitCurrent = (safeA !== 0 && Math.abs(safeA) < 1) ? 'mA' : 'A';
 
-      // 1. Supabase Sync (Kirim V, A, dan Watt dengan aman)
+      // 1. Supabase Sync
       if (supabase) {
         try {
           supabase
             .from('protek608_telemetry')
             .insert([{
-              voltage: v || 0,
+              voltage: safeV,
               unit: 'V',
               mode: 'DC',
-              target: `${currentTarget}#${(a !== null && a !== undefined) ? a : 0}#${calcPower}`
+              target: `solar#${safeA}#${calcPower}`
             }])
             .then(({ error }) => {
               if (error) console.warn("Supabase insert error:", error);
@@ -1436,19 +1573,36 @@
       if (isFirebaseReady && firebaseDb) {
         try {
           const payload = {
-            voltage: v || 0,
-            current: (a !== null && a !== undefined) ? a : 0,
+            voltage: safeV,
+            current: safeA,
+            current_mA: safeA * 1000,
             power: calcPower,
             unit: 'V',
-            unit_current: 'A',
-            target: currentTarget,
+            unit_current: unitCurrent,
+            target: 'solar',
             timestamp: now
           };
           set(ref(firebaseDb, "protek608/current"), payload);
-          set(ref(firebaseDb, `protek608/${currentTarget}`), payload);
+          set(ref(firebaseDb, "protek608/solar"), payload);
         } catch (fbErr) {}
       }
     }
+
+    // Supabase Pruning: hapus data lebih dari 48 jam sekali per jam
+    async function pruneSupabaseOldRows() {
+      if (!supabase) return;
+      try {
+        const cutoff = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
+        const { error } = await supabase
+          .from('protek608_telemetry')
+          .delete()
+          .lt('created_at', cutoff);
+        if (!error) console.log('[Pruning] Data lama Supabase dihapus, cutoff:', cutoff);
+      } catch (e) { console.warn('[Pruning] Gagal:', e); }
+    }
+    // Jalankan pruning pertama kali dan tiap 1 jam
+    setTimeout(pruneSupabaseOldRows, 5000); // delay 5 detik agar Supabase sudah init
+    setInterval(pruneSupabaseOldRows, PRUNING_INTERVAL_MS);
 
     // Helper Parser Payload Cloud (Mendukung Supabase & Firebase)
     function parseTelemetryPayload(row) {
@@ -1457,6 +1611,13 @@
       let current = null;
       let power = null;
       let voltage = (typeof row.voltage !== "undefined" && row.voltage !== null) ? parseFloat(row.voltage) : 0;
+
+      // Anti-zero-spike filter untuk data cloud:
+      // Jika cloud kirim 0V tapi sebelumnya ada nilai valid, abaikan (pakai null agar fallback ke lastVoltage)
+      if (voltage === 0 && lastVoltage > 0.5) {
+        console.warn(`[CLOUD] 0V dari cloud difilter (lastVoltage: ${lastVoltage.toFixed(3)}V)`);
+        voltage = null;
+      }
 
       if (typeof row.current !== "undefined" && row.current !== null) {
         current = parseFloat(row.current);
@@ -1573,7 +1734,7 @@
                 updateHardwareBadge("standby", "Standby");
                 updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
               }
-            }, 6000);
+            }, WATCHDOG_TIMEOUT_MS);
           }
         });
       } catch (fbErr) {
@@ -1613,7 +1774,7 @@
                 updateHardwareBadge("standby", "Standby");
                 updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
               }
-            }, 6000);
+            }, WATCHDOG_TIMEOUT_MS);
           }
         } catch (err) {
           console.warn("Supabase fetch error:", err);
@@ -1653,7 +1814,7 @@
                     updateHardwareBadge("standby", "Standby");
                     updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
                   }
-                }, 6000);
+                }, WATCHDOG_TIMEOUT_MS); // Fix #5: konsisten dengan konstanta
               }
             }
           )
@@ -1662,12 +1823,12 @@
         console.warn("Supabase Realtime error:", subErr);
       }
 
-      // 3. Fallback Polling setiap 3 detik (hanya aktif saat USB tidak terhubung)
+      // 3. Fallback Polling (hanya aktif saat USB tidak terhubung)
       setInterval(() => {
         if (!isDirectVoltConnected && !isDirectAmpConnected) {
           fetchLatestSupabase();
         }
-      }, 3000);
+      }, FALLBACK_POLL_INTERVAL);
     }
 
     // ========================================================
@@ -1718,17 +1879,73 @@
     }
 
     // ========================================================
-    // 11. INITIALIZE & EVENT LISTENERS
+    // 11. INITIALIZE & EVENT LISTENERS (With Auto-Connect)
     // ========================================================
+    function setVoltButtonConnected(connected) {
+      const btnVolt = document.getElementById("btn-serial-volt");
+      const btnVoltText = document.getElementById("btn-volt-text");
+      if (!btnVolt) return;
+      if (connected) {
+        btnVolt.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
+        if (btnVoltText) btnVoltText.innerText = "Putus V (P1)";
+      } else {
+        btnVolt.className = "h-9 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
+        if (btnVoltText) btnVoltText.innerText = "Volt (P1)";
+      }
+    }
+
+    function setAmpButtonConnected(connected) {
+      const btnAmp = document.getElementById("btn-serial-amp");
+      const btnAmpText = document.getElementById("btn-amp-text");
+      if (!btnAmp) return;
+      if (connected) {
+        btnAmp.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
+        if (btnAmpText) btnAmpText.innerText = "Putus A (P2)";
+      } else {
+        btnAmp.className = "h-9 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
+        if (btnAmpText) btnAmpText.innerText = "Amp (P2)";
+      }
+    }
+
+    async function tryAutoConnectSerial() {
+      if (!("serial" in navigator)) return;
+      try {
+        const ports = await navigator.serial.getPorts();
+        if (!ports || ports.length === 0) return;
+
+        // Port 1 -> Sambungkan ke Volt (P1) jika belum terhubung
+        if (!isDirectVoltConnected && ports[0]) {
+          const okVolt = await serialVoltDriver.connect(ports[0]);
+          if (okVolt) {
+            isDirectVoltConnected = true;
+            setVoltButtonConnected(true);
+            updateHardwareBadge("volt_live");
+            console.log("Auto-connected to Serial Port 1 (Volt)");
+          }
+        }
+
+        // Port 2 -> Sambungkan ke Ampere (P2) jika ada port kedua terotorisasi
+        if (!isDirectAmpConnected && ports.length > 1 && ports[1]) {
+          const okAmp = await serialAmpDriver.connect(ports[1]);
+          if (okAmp) {
+            isDirectAmpConnected = true;
+            setAmpButtonConnected(true);
+            updateHardwareBadge(isDirectVoltConnected ? "dual_live" : "amp_live");
+            console.log("Auto-connected to Serial Port 2 (Ampere)");
+          }
+        }
+      } catch (err) {
+        console.log("Auto-connect info:", err);
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       initThemeSwitcher();
 
       const btnVolt = document.getElementById("btn-serial-volt");
-      const btnVoltText = document.getElementById("btn-volt-text");
       const btnAmp = document.getElementById("btn-serial-amp");
-      const btnAmpText = document.getElementById("btn-amp-text");
 
-      // Port 1 (Volt) Connect/Disconnect Toggle
+      // Port 1 (Volt) Connect/Disconnect Manual Toggle
       if (btnVolt) {
         btnVolt.addEventListener("click", async () => {
           if (!("serial" in navigator)) {
@@ -1740,23 +1957,21 @@
             isDirectVoltConnected = false;
             liveMeasuredVolt = 0.0;
             lastVoltage = 0.0;
-            btnVolt.className = "h-9 px-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
-            if (btnVoltText) btnVoltText.innerText = "Volt (P1)";
+            setVoltButtonConnected(false);
             updateHardwareBadge(isDirectAmpConnected ? "amp_live" : "standby");
             updateDashboardState(0.0, isDirectAmpConnected ? liveMeasuredAmp : null, "V", lastAmpUnit, getActiveSourceLabel());
           } else {
             const ok = await serialVoltDriver.connect();
             if (ok) {
               isDirectVoltConnected = true;
-              btnVolt.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
-              if (btnVoltText) btnVoltText.innerText = "Putus V (P1)";
+              setVoltButtonConnected(true);
               updateHardwareBadge("volt_live");
             }
           }
         });
       }
 
-      // Port 2 (Ampere) Connect/Disconnect Toggle
+      // Port 2 (Ampere) Connect/Disconnect Manual Toggle
       if (btnAmp) {
         btnAmp.addEventListener("click", async () => {
           if (!("serial" in navigator)) {
@@ -1767,18 +1982,59 @@
             await serialAmpDriver.disconnect();
             isDirectAmpConnected = false;
             liveMeasuredAmp = null;
-            btnAmp.className = "h-9 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
-            if (btnAmpText) btnAmpText.innerText = "Amp (P2)";
+            setAmpButtonConnected(false);
             updateHardwareBadge(isDirectVoltConnected ? "volt_live" : "standby");
             updateDashboardState(isDirectVoltConnected ? liveMeasuredVolt : 0.0, null, lastVoltUnit, "A", getActiveSourceLabel());
           } else {
             const ok = await serialAmpDriver.connect();
             if (ok) {
               isDirectAmpConnected = true;
-              btnAmp.className = "h-9 px-3 bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap";
-              if (btnAmpText) btnAmpText.innerText = "Putus A (P2)";
+              setAmpButtonConnected(true);
               updateHardwareBadge("amp_live");
             }
+          }
+        });
+      }
+
+      // Event listener saat kabel USB dicolok / dicabut (Auto-Reconnect & Graceful Cleanup)
+      if ("serial" in navigator) {
+        navigator.serial.addEventListener("connect", async (event) => {
+          console.log("Perangkat USB Serial terdeteksi dicolokkan:", event.target);
+          if (!isDirectVoltConnected) {
+            const ok = await serialVoltDriver.connect(event.target);
+            if (ok) {
+              isDirectVoltConnected = true;
+              setVoltButtonConnected(true);
+              updateHardwareBadge("volt_live");
+            }
+          } else if (!isDirectAmpConnected) {
+            const okAmp = await serialAmpDriver.connect(event.target);
+            if (okAmp) {
+              isDirectAmpConnected = true;
+              setAmpButtonConnected(true);
+              updateHardwareBadge("dual_live");
+            }
+          }
+        });
+
+        navigator.serial.addEventListener("disconnect", async (event) => {
+          console.log("Perangkat USB Serial terputus:", event.target);
+          if (serialVoltDriver.port === event.target) {
+            await serialVoltDriver.disconnect();
+            isDirectVoltConnected = false;
+            liveMeasuredVolt = 0.0;
+            lastVoltage = 0.0;
+            setVoltButtonConnected(false);
+            updateHardwareBadge(isDirectAmpConnected ? "amp_live" : "standby");
+            updateDashboardState(0.0, isDirectAmpConnected ? liveMeasuredAmp : null, "V", lastAmpUnit, getActiveSourceLabel());
+          }
+          if (serialAmpDriver.port === event.target) {
+            await serialAmpDriver.disconnect();
+            isDirectAmpConnected = false;
+            liveMeasuredAmp = null;
+            setAmpButtonConnected(false);
+            updateHardwareBadge(isDirectVoltConnected ? "volt_live" : "standby");
+            updateDashboardState(isDirectVoltConnected ? liveMeasuredVolt : 0.0, null, lastVoltUnit, "A", getActiveSourceLabel());
           }
         });
       }
@@ -1787,6 +2043,9 @@
       initFirebaseListener();
       updateDashboardState(0.0, null, "V", "A", "Standby / Terputus");
       
+      // Jalankan auto-connect saat halaman selesai dimuat jika port sudah pernah diizinkan
+      tryAutoConnectSerial();
+
       window.addEventListener("resize", () => {
         requestAnimationFrame(() => {
           updateDashboardState(lastVoltage, liveMeasuredAmp, "V", "A", getActiveSourceLabel());
