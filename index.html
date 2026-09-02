@@ -605,16 +605,19 @@
     updateClock();
 
     // ========================================================
-    // HELPER: Format angka tanpa trailing zeros
-    // Contoh: 12.500 → "12.5", 12.000 → "12", 12.340 → "12.34"
+    // HELPER: Format angka dengan desimal TETAP (fixed-width)
+    // FIX ANOMALI: versi lama membuang trailing zero (12.50 → "12.5"),
+    // ini membuat lebar digit berubah tiap update & terlihat "loncat".
+    // Sekarang selalu 2 desimal tetap → tampilan stabil, tidak lompat.
+    // Contoh: 12.5 → "12.50", 12 → "12.00", 12.34 → "12.34"
     // ========================================================
     function formatV(n, maxDec = 2) {
       if (n === null || n === undefined || isNaN(n)) return "--";
-      return parseFloat(n.toFixed(maxDec)).toString();
+      return n.toFixed(maxDec);
     }
     function formatA(n, maxDec = 2) {
       if (n === null || n === undefined || isNaN(n)) return "--";
-      return parseFloat(n.toFixed(maxDec)).toString();
+      return n.toFixed(maxDec);
     }
 
     // ========================================================
@@ -774,11 +777,35 @@
     let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 600ms
     // Counter untuk deteksi ganti range (5x tolak berturut = reset ke nilai baru)
     let consecutiveVoltSpike = 0;
+    let consecutiveAmpSpike  = 0; // FIX ANOMALI: dulu arus sama sekali tidak difilter
     const MAX_SPIKE_REJECT   = 5;
+    const MAX_PLAUSIBLE_AMP  = 12; // Protek 608 maksimal ±10A DC, beri margin aman
+
+    // Hysteresis untuk switch tampilan W <-> kW agar tidak "loncat" bolak-balik
+    // saat daya berosilasi tepat di sekitar ambang 1000W.
+    let solarPowerUnitIsKw = false;
+    function shouldUseKw(watt) {
+      if (solarPowerUnitIsKw) {
+        if (watt < 950) solarPowerUnitIsKw = false;
+      } else {
+        if (watt >= 1000) solarPowerUnitIsKw = true;
+      }
+      return solarPowerUnitIsKw;
+    }
 
     function updateDashboardState(rawVoltage, rawCurrent = null, unit = "V", unitAmp = "A", sourceLabel = "Protek 608 Live") {
-      let v = (rawVoltage !== null && rawVoltage !== undefined) ? parseFloat(rawVoltage) : liveMeasuredVolt;
-      if (v !== null && !isNaN(v)) {
+      // FIX ANOMALI (penting): hanya jalankan pengecekan anti-spike saat memang
+      // ADA pembacaan baru masuk. Versi lama menjalankan ulang pengecekan bahkan
+      // saat rawVoltage null (nilai cache lama dipakai lagi) — akibatnya counter
+      // spike ter-reset diam-diam di SETIAP panggilan (termasuk saat hanya paket
+      // Amp yang datang), sehingga mekanisme "5x tolak → auto-terima" gagal
+      // bekerja dan angka bisa macet di nilai lama saat range meter berubah.
+      const hasNewVoltage = (rawVoltage !== null && rawVoltage !== undefined && !isNaN(parseFloat(rawVoltage)));
+      const hasNewCurrent = (rawCurrent !== null && rawCurrent !== undefined && !isNaN(parseFloat(rawCurrent)));
+
+      let v = hasNewVoltage ? parseFloat(rawVoltage) : (liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage);
+
+      if (hasNewVoltage) {
         if (unit === "mV") v = v / 1000;
         v = Math.max(0, v);
 
@@ -812,16 +839,56 @@
           liveMeasuredVolt = v; // nilai LANGSUNG, tanpa EMA → sama persis dengan Protek 608
           lastVoltage = v;
         }
-      } else {
-        v = lastVoltage || 0;
       }
 
-      let a = (rawCurrent !== null && rawCurrent !== undefined) ? parseFloat(rawCurrent) : liveMeasuredAmp;
-      if (a !== null && !isNaN(a)) {
+      // FIX ANOMALI UTAMA: arus (Amp) sebelumnya ditulis LANGSUNG tanpa validasi
+      // apa pun, padahal daya (P = V × I) dihitung dari nilai ini — satu salah-baca
+      // dari segmen 7-segment Protek 608 langsung membuat angka daya "meloncat".
+      // Sekarang arus difilter dengan mekanisme yang setara dengan tegangan:
+      // batas kewajaran mutlak + penolakan lonjakan rasio + auto-reset 5x.
+      let a = hasNewCurrent ? parseFloat(rawCurrent) : liveMeasuredAmp;
+
+      if (hasNewCurrent) {
         if (unitAmp === "mA") a = a / 1000;
         else if (unitAmp === "μA" || unitAmp === "uA") a = a / 1000000;
-        // Arus negatif (probe terbalik) ditampilkan apa adanya — nilai valid untuk diagnosa
-        liveMeasuredAmp = a;
+
+        const prevAmp = liveMeasuredAmp;
+        let ampRejected = false;
+
+        if (Math.abs(a) > MAX_PLAUSIBLE_AMP) {
+          // Di luar kemampuan fisik Protek 608 (±10A) → pasti paket korup
+          console.warn(`[AMP] Nilai tidak masuk akal dibuang: ${a.toFixed(3)}A (maks ±${MAX_PLAUSIBLE_AMP}A)`);
+          ampRejected = true;
+        } else if (prevAmp !== null && Math.abs(prevAmp) > 0.2) {
+          if (a === 0 && Math.abs(prevAmp) > 1) {
+            consecutiveAmpSpike++;
+            if (consecutiveAmpSpike < MAX_SPIKE_REJECT) {
+              console.warn(`[AMP] 0A spike dibuang (prev: ${prevAmp.toFixed(3)}A)`);
+              ampRejected = true;
+            } else {
+              console.warn(`[AMP] Reset spike setelah ${MAX_SPIKE_REJECT}x tolak → terima 0A`);
+              consecutiveAmpSpike = 0;
+            }
+          } else if (Math.abs(a) < Math.abs(prevAmp) * 0.25 || Math.abs(a) > Math.abs(prevAmp) * 4.0) {
+            consecutiveAmpSpike++;
+            if (consecutiveAmpSpike < MAX_SPIKE_REJECT) {
+              console.warn(`[AMP] Spike dibuang: ${a.toFixed(3)}A vs prev ${prevAmp.toFixed(3)}A (reject #${consecutiveAmpSpike})`);
+              ampRejected = true;
+            } else {
+              console.warn(`[AMP] Reset spike setelah ${MAX_SPIKE_REJECT}x tolak → terima ${a.toFixed(3)}A`);
+              consecutiveAmpSpike = 0;
+            }
+          } else {
+            consecutiveAmpSpike = 0; // baca normal, reset counter
+          }
+        }
+
+        if (ampRejected) {
+          a = prevAmp !== null ? prevAmp : 0; // pakai nilai terakhir yang valid
+        } else {
+          // Arus negatif (probe terbalik) ditampilkan apa adanya — nilai valid untuk diagnosa
+          liveMeasuredAmp = a;
+        }
       }
 
       const now = Date.now();
@@ -871,6 +938,11 @@
       if (nowUi - lastUiUpdate < 600) return; // skip update jika terlalu sering
       lastUiUpdate = nowUi;
 
+      // FIX ANOMALI: dulu unit W/kW berganti persis di angka 1000W, jadi kalau
+      // daya berosilasi di sekitar ambang itu, tampilannya "kedip" bolak-balik
+      // W <-> kW. Sekarang pakai hysteresis (naik di 1000W, turun di 950W).
+      const useKwDisplay = shouldUseKw(solarP);
+
       // 1. Top Card Metric Display (Adapts to measurement focus)
       const elSolarKw = document.getElementById("val-solar-kw");
       const elSolarUnit = document.getElementById("val-solar-unit");
@@ -885,11 +957,11 @@
       // Sistem solar-only: tampilkan daya atau tegangan sesuai ketersediaan data
       if (elSolarKw && elSolarUnit) {
         if (hasRealAmp && solarP > 0) {
-          if (solarP >= 1000) {
-            elSolarKw.innerText = parseFloat((solarP / 1000).toFixed(2)).toString();
+          if (useKwDisplay) {
+            elSolarKw.innerText = (solarP / 1000).toFixed(2);
             elSolarUnit.innerText = "kW";
           } else {
-            elSolarKw.innerText = parseFloat(solarP.toFixed(2)).toString();
+            elSolarKw.innerText = solarP.toFixed(1);
             elSolarUnit.innerText = "W";
           }
         } else {
@@ -928,7 +1000,7 @@
 
       if (elFlowSolar) {
         const fsp = telemetry.solar.power;
-        elFlowSolar.innerText = fsp >= 1000 ? (fsp / 1000).toFixed(2) + " kW" : fsp.toFixed(1) + " W";
+        elFlowSolar.innerText = useKwDisplay ? (fsp / 1000).toFixed(2) + " kW" : fsp.toFixed(1) + " W";
       }
       // Update node Beban Listrik
       const loadP = telemetry.load.power;
@@ -1360,53 +1432,29 @@
     function handleIncomingSerialData(sourceDriverType, res) {
       if (!res || isNaN(res.standardValue)) return;
 
+      // Penyaringan anti-spike (volt & amp) sepenuhnya dilakukan di dalam
+      // updateDashboardState — di sini kita hanya meneruskan SATU nilai baru
+      // yang benar-benar baru datang (yang lain dikirim null agar tidak ikut
+      // dianggap "pembacaan baru" dan tidak mengganggu nilai yang sudah ada).
       if (res.isAmpere || res.rawUnit === "A") {
-        // Nilai arus LANGSUNG = sama persis dengan display Protek 608
-        liveMeasuredAmp = res.standardValue;
         lastAmpUnit = res.unit || "A";
+        updateDashboardState(null, res.standardValue, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       } else if (res.isVolt || res.rawUnit === "V") {
-        const incomingV = res.standardValue;
-        const prevV = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
-        let reject = false;
-
-        if (prevV !== null && prevV > 1) {
-          if (incomingV === 0 && prevV > 5) {
-            console.warn(`[VOLT-USB] 0V spike dibuang (prev: ${prevV.toFixed(3)}V)`);
-            reject = true;
-          } else if (incomingV < prevV * 0.50 || incomingV > prevV * 4.0) {
-            consecutiveVoltSpike++;
-            if (consecutiveVoltSpike < MAX_SPIKE_REJECT) {
-              console.warn(`[VOLT-USB] Spike dibuang: ${incomingV.toFixed(3)}V vs ${prevV.toFixed(3)}V (reject #${consecutiveVoltSpike})`);
-              reject = true;
-            } else {
-              // 5x tolak berturut = user ganti range → reset dan terima nilai baru
-              console.warn(`[VOLT-USB] Reset spike → terima ${incomingV.toFixed(3)}V`);
-              consecutiveVoltSpike = 0;
-            }
-          } else {
-            consecutiveVoltSpike = 0;
-          }
-        }
-
-        if (!reject) {
-          // Nilai LANGSUNG tanpa EMA → display = Protek 608
-          liveMeasuredVolt = incomingV;
-          lastVoltUnit = res.unit || "V";
-        }
+        lastVoltUnit = res.unit || "V";
+        updateDashboardState(res.standardValue, null, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
 
       } else {
         // Fallback jika mode tidak spesifik
         if (sourceDriverType === "amp") {
-          liveMeasuredAmp = res.standardValue;
           lastAmpUnit = res.unit || "A";
+          updateDashboardState(null, res.standardValue, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
         } else {
-          liveMeasuredVolt = res.standardValue;
           lastVoltUnit = res.unit || "V";
+          updateDashboardState(res.standardValue, null, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
         }
       }
 
-      updateDashboardState(liveMeasuredVolt, liveMeasuredAmp, lastVoltUnit, lastAmpUnit, getActiveSourceLabel());
       syncTelemetryToCloud(liveMeasuredVolt, liveMeasuredAmp);
     }
 
@@ -1506,8 +1554,10 @@
 
       if (typeof row.current !== "undefined" && row.current !== null) {
         const rawCurrent = parseFloat(row.current);
-        // Plausibilitas: Protek 608 max 10A. Nilai > 1000A = data korup, abaikan
-        if (!isNaN(rawCurrent) && Math.abs(rawCurrent) <= 1000) {
+        // Plausibilitas: Protek 608 max ±10A. Beri margin ke ±30A untuk unit lain,
+        // tapi tolak nilai jauh di luar itu (sebelumnya batas 1000A terlalu longgar
+        // dan membiarkan data korup lolos lalu membuat daya "meloncat").
+        if (!isNaN(rawCurrent) && Math.abs(rawCurrent) <= 30) {
           current = rawCurrent;
         } else {
           console.warn(`[CLOUD] Arus tidak masuk akal diabaikan: ${rawCurrent}A`);
