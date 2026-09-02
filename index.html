@@ -773,8 +773,8 @@
     // ========================================================
     let liveMeasuredVolt = null;
     let liveMeasuredAmp  = null;
-    let lastFlowRedraw   = 0; // Throttle SVG redraw — max 1x per 2 detik
-    let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 600ms
+    let lastFlowRedraw   = 0; // Throttle SVG redraw — max 1x per 1 detik
+    let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 200ms
     // Counter untuk deteksi ganti range (5x tolak berturut = reset ke nilai baru)
     let consecutiveVoltSpike = 0;
     let consecutiveAmpSpike  = 0; // FIX ANOMALI: dulu arus sama sekali tidak difilter
@@ -932,10 +932,10 @@
       }
 
       // ==========================================
-      // UI Elements Update  — Fix E: Throttle 600ms
+      // UI Elements Update  — Throttle 200ms (cukup responsif tanpa membebani browser)
       // ==========================================
       const nowUi = Date.now();
-      if (nowUi - lastUiUpdate < 600) return; // skip update jika terlalu sering
+      if (nowUi - lastUiUpdate < 200) return; // skip update jika terlalu sering
       lastUiUpdate = nowUi;
 
       // FIX ANOMALI: dulu unit W/kW berganti persis di angka 1000W, jadi kalau
@@ -1146,9 +1146,9 @@
       if (elLoadAmp) elLoadAmp.innerText = (telemetry.load.current !== null && telemetry.load.current !== undefined) ? telemetry.load.current + " A" : "-- A";
       if (elLoadKwh) elLoadKwh.innerText = "Hari ini: " + accumulatedLoadKwh.toFixed(3) + " kWh";
 
-      // Draw SVG Flow Lines (throttled: max 1x per 2 detik, bukan setiap packet)
+      // Draw SVG Flow Lines (throttled: max 1x per 1 detik)
       const nowFlow = Date.now();
-      if (nowFlow - lastFlowRedraw >= 2000) {
+      if (nowFlow - lastFlowRedraw >= 1000) {
         lastFlowRedraw = nowFlow;
         requestAnimationFrame(() => drawFlowLines(telemetry.solar.power, telemetry.load.power, battP));
       }
