@@ -779,7 +779,7 @@
     let consecutiveVoltSpike = 0;
     let consecutiveAmpSpike  = 0; // FIX ANOMALI: dulu arus sama sekali tidak difilter
     const MAX_SPIKE_REJECT   = 5;
-    const MAX_PLAUSIBLE_AMP  = 12; // Protek 608 maksimal ±10A DC, beri margin aman
+    const MAX_PLAUSIBLE_AMP  = 10; // Protek 608 batas fisik ±10A DC — di atas ini pasti packet korup
 
     // Hysteresis untuk switch tampilan W <-> kW agar tidak "loncat" bolak-balik
     // saat daya berosilasi tepat di sekitar ambang 1000W.
