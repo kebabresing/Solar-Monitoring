@@ -780,7 +780,7 @@
     let consecutiveAmpSpike  = 0; // FIX ANOMALI: dulu arus sama sekali tidak difilter
     const MAX_SPIKE_REJECT   = 5;
     const MAX_PLAUSIBLE_AMP  = 10; // Protek 608 batas fisik ±10A DC — di atas ini pasti packet korup
-    const MAX_PLAUSIBLE_VOLT = 60; // Panel surya 12V, OC max ~50V. Di atas ini pasti packet korup (titik desimal hilang)
+    const MAX_PLAUSIBLE_VOLT = 600; // Panel surya string rata-rata ~350V, batas aman 600V. Di atas 600V pasti paket korup (misal spike 900V)
 
     // Hysteresis untuk switch tampilan W <-> kW agar tidak "loncat" bolak-balik
     // saat daya berosilasi tepat di sekitar ambang 1000W.
@@ -815,8 +815,8 @@
         let spikeRejected = false;
 
         // Filter 1: Batas plausibilitas absolut — berlaku untuk SEMUA pembacaan termasuk yang pertama.
-        // Panel surya 12V, open-circuit max ~50V. Nilai di atas 60V pasti paket korup
-        // (misal titik desimal hilang: 12.07V → 1207V).
+        // Panel surya PV array rata-rata ~350V, batas aman 600V. Nilai di atas 600V pasti paket korup
+        // (misal spike 900V).
         if (v > MAX_PLAUSIBLE_VOLT) {
           console.warn(`[VOLT] Nilai mustahil dibuang: ${v.toFixed(3)}V (maks ${MAX_PLAUSIBLE_VOLT}V)`);
           spikeRejected = true;
