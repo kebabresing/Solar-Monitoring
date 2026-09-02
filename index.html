@@ -771,7 +771,10 @@
     let liveMeasuredVolt = null;
     let liveMeasuredAmp  = null;
     let lastFlowRedraw   = 0; // Throttle SVG redraw — max 1x per 2 detik
-    let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 600ms (Fix E)
+    let lastUiUpdate     = 0; // Throttle UI DOM update — max 1x per 600ms
+    // Counter untuk deteksi ganti range (5x tolak berturut = reset ke nilai baru)
+    let consecutiveVoltSpike = 0;
+    const MAX_SPIKE_REJECT   = 5;
 
     function updateDashboardState(rawVoltage, rawCurrent = null, unit = "V", unitAmp = "A", sourceLabel = "Protek 608 Live") {
       let v = (rawVoltage !== null && rawVoltage !== undefined) ? parseFloat(rawVoltage) : liveMeasuredVolt;
@@ -779,33 +782,34 @@
         if (unit === "mV") v = v / 1000;
         v = Math.max(0, v);
 
-        // Anti-spike filter: tolak nilai yang tiba-tiba turun/naik tidak wajar
-        // (packet korup saat Protek 608 pindah range bisa menghasilkan nilai seperti 3V dari 13V)
+        // Anti-spike: tolak lonjakan 1 frame, tapi auto-reset setelah MAX_SPIKE_REJECT
+        // penolakan berturut-turut (artinya user ganti range / nilai memang berubah nyata)
         const prevVolt = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
         let spikeRejected = false;
 
-        if (prevVolt !== null && prevVolt > 5) {
-          // Cek zero spike
-          if (v === 0) {
+        if (prevVolt !== null && prevVolt > 1) {
+          if (v === 0 && prevVolt > 5) {
             console.warn(`[VOLT] 0V spike dibuang (prev: ${prevVolt.toFixed(3)}V)`);
             spikeRejected = true;
-          }
-          // FIX D: Diperketat dari 60% → 30% drop maksimum per frame
-          else if (v < prevVolt * 0.70) {
-            console.warn(`[VOLT] Spike drop dibuang: ${v.toFixed(3)}V (prev: ${prevVolt.toFixed(3)}V, drop ${Math.round((1 - v/prevVolt)*100)}%)`);
-            spikeRejected = true;
-          }
-          // Cek spike naik: lebih dari 300% dalam 1 frame juga tidak wajar
-          else if (v > prevVolt * 3.0) {
-            console.warn(`[VOLT] Spike naik dibuang: ${v.toFixed(3)}V (prev: ${prevVolt.toFixed(3)}V)`);
-            spikeRejected = true;
+          } else if (v < prevVolt * 0.50 || v > prevVolt * 4.0) {
+            consecutiveVoltSpike++;
+            if (consecutiveVoltSpike < MAX_SPIKE_REJECT) {
+              console.warn(`[VOLT] Spike dibuang: ${v.toFixed(3)}V vs prev ${prevVolt.toFixed(3)}V (reject #${consecutiveVoltSpike})`);
+              spikeRejected = true;
+            } else {
+              // Terlalu banyak penolakan = ganti range / nilai memang berubah → reset
+              console.warn(`[VOLT] Reset spike setelah ${MAX_SPIKE_REJECT}x tolak → terima ${v.toFixed(3)}V`);
+              consecutiveVoltSpike = 0;
+            }
+          } else {
+            consecutiveVoltSpike = 0; // baca normal, reset counter
           }
         }
 
         if (spikeRejected) {
-          v = prevVolt; // pakai nilai terakhir yang valid
+          v = prevVolt !== null ? prevVolt : 0; // pakai nilai terakhir yang valid
         } else {
-          liveMeasuredVolt = v;
+          liveMeasuredVolt = v; // nilai LANGSUNG, tanpa EMA → sama persis dengan Protek 608
           lastVoltage = v;
         }
       } else {
@@ -1353,53 +1357,44 @@
     let lastVoltUnit = "V";
     let lastAmpUnit = "A";
 
-    // EMA (Exponential Moving Average) untuk smoothing nilai serial
-    // α=0.3 untuk volt (cukup responsif), α=0.2 untuk arus (lebih smooth karena lebih noisy)
-    const EMA_ALPHA_VOLT = 0.30;
-    const EMA_ALPHA_AMP  = 0.20;
-
     function handleIncomingSerialData(sourceDriverType, res) {
       if (!res || isNaN(res.standardValue)) return;
 
       if (res.isAmpere || res.rawUnit === "A") {
-        const newA = res.standardValue;
-        if (liveMeasuredAmp === null || isNaN(liveMeasuredAmp)) {
-          // Inisialisasi pertama kali
-          liveMeasuredAmp = newA;
-        } else {
-          // EMA smoothing arus
-          liveMeasuredAmp = EMA_ALPHA_AMP * newA + (1 - EMA_ALPHA_AMP) * liveMeasuredAmp;
-        }
+        // Nilai arus LANGSUNG = sama persis dengan display Protek 608
+        liveMeasuredAmp = res.standardValue;
         lastAmpUnit = res.unit || "A";
+
       } else if (res.isVolt || res.rawUnit === "V") {
         const incomingV = res.standardValue;
         const prevV = liveMeasuredVolt !== null ? liveMeasuredVolt : lastVoltage;
         let reject = false;
 
-        if (prevV !== null && prevV > 5) {
-          if (incomingV === 0) {
+        if (prevV !== null && prevV > 1) {
+          if (incomingV === 0 && prevV > 5) {
             console.warn(`[VOLT-USB] 0V spike dibuang (prev: ${prevV.toFixed(3)}V)`);
             reject = true;
-          } else if (incomingV < prevV * 0.70) {
-            // FIX D: Diperketat dari 0.40 → 0.70 (max drop 30%, bukan 60%)
-            console.warn(`[VOLT-USB] Drop spike dibuang: ${incomingV.toFixed(3)}V (prev: ${prevV.toFixed(3)}V, drop ${Math.round((1 - incomingV/prevV)*100)}%)`);
-            reject = true;
-          } else if (incomingV > prevV * 3.0) {
-            console.warn(`[VOLT-USB] Naik spike dibuang: ${incomingV.toFixed(3)}V (prev: ${prevV.toFixed(3)}V)`);
-            reject = true;
+          } else if (incomingV < prevV * 0.50 || incomingV > prevV * 4.0) {
+            consecutiveVoltSpike++;
+            if (consecutiveVoltSpike < MAX_SPIKE_REJECT) {
+              console.warn(`[VOLT-USB] Spike dibuang: ${incomingV.toFixed(3)}V vs ${prevV.toFixed(3)}V (reject #${consecutiveVoltSpike})`);
+              reject = true;
+            } else {
+              // 5x tolak berturut = user ganti range → reset dan terima nilai baru
+              console.warn(`[VOLT-USB] Reset spike → terima ${incomingV.toFixed(3)}V`);
+              consecutiveVoltSpike = 0;
+            }
+          } else {
+            consecutiveVoltSpike = 0;
           }
         }
 
         if (!reject) {
-          if (liveMeasuredVolt === null || isNaN(liveMeasuredVolt)) {
-            // Inisialisasi pertama kali — langsung pakai nilai baru
-            liveMeasuredVolt = incomingV;
-          } else {
-            // EMA smoothing tegangan
-            liveMeasuredVolt = EMA_ALPHA_VOLT * incomingV + (1 - EMA_ALPHA_VOLT) * liveMeasuredVolt;
-          }
+          // Nilai LANGSUNG tanpa EMA → display = Protek 608
+          liveMeasuredVolt = incomingV;
           lastVoltUnit = res.unit || "V";
         }
+
       } else {
         // Fallback jika mode tidak spesifik
         if (sourceDriverType === "amp") {
@@ -1510,7 +1505,13 @@
       }
 
       if (typeof row.current !== "undefined" && row.current !== null) {
-        current = parseFloat(row.current);
+        const rawCurrent = parseFloat(row.current);
+        // Plausibilitas: Protek 608 max 10A. Nilai > 1000A = data korup, abaikan
+        if (!isNaN(rawCurrent) && Math.abs(rawCurrent) <= 1000) {
+          current = rawCurrent;
+        } else {
+          console.warn(`[CLOUD] Arus tidak masuk akal diabaikan: ${rawCurrent}A`);
+        }
       }
       if (typeof row.power !== "undefined" && row.power !== null) {
         power = parseFloat(row.power);
