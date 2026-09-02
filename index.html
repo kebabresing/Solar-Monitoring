@@ -1512,13 +1512,17 @@
                     unit: 'V',
                     mode: 'DC',
                     target: `solar#${safeA}#${calcPower}`
-                  }]);
+                  }]).then(({ error: fallbackErr }) => {
+                    if (fallbackErr) console.warn("Supabase fallback insert error:", fallbackErr);
+                  });
                 } else {
                   console.warn("Supabase insert error:", error);
                 }
               }
             });
-        } catch (sbErr) {}
+        } catch (sbErr) {
+          console.warn("Supabase sync exception:", sbErr);
+        }
       }
 
       // 2. Firebase Sync
@@ -1527,7 +1531,6 @@
           const payload = {
             voltage: safeV,
             current: safeA,
-            current_mA: safeA * 1000,
             power: calcPower,
             unit: 'V',
             unit_current: unitCurrent,
@@ -1536,7 +1539,9 @@
           };
           set(ref(firebaseDb, "protek608/current"), payload);
           set(ref(firebaseDb, "protek608/solar"), payload);
-        } catch (fbErr) {}
+        } catch (fbErr) {
+          console.warn("Firebase sync exception:", fbErr);
+        }
       }
     }
 
@@ -1549,8 +1554,14 @@
           .from('protek608_telemetry')
           .delete()
           .lt('created_at', cutoff);
-        if (!error) console.log('[Pruning] Data lama Supabase dihapus, cutoff:', cutoff);
-      } catch (e) { console.warn('[Pruning] Gagal:', e); }
+        if (error) {
+          console.warn('[Pruning] Supabase delete error:', error.message);
+        } else {
+          console.log('[Pruning] Data lama Supabase dihapus, cutoff:', cutoff);
+        }
+      } catch (e) {
+        console.warn('[Pruning] Exception:', e);
+      }
     }
     // Jalankan pruning pertama kali dan tiap 1 jam
     setTimeout(pruneSupabaseOldRows, 5000); // delay 5 detik agar Supabase sudah init
