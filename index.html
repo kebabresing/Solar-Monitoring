@@ -924,15 +924,19 @@
 
       const solarP = telemetry.solar.power;
 
-      // Beban Listrik & Baterai — tidak ada sensor fisik terpasang
+      // Beban Listrik — tidak ada sensor fisik terpasang
       telemetry.load.power   = 0;
       telemetry.load.voltage = null;
       telemetry.load.current = null;
-      telemetry.battery.power   = 0;
+
+      // Baterai — tidak ada sensor fisik, tapi jika PV memproduksi daya,
+      // asumsikan MPPT/Inverter sedang mengisi baterai (batteryPowerW > 0 = charging).
+      // Nilai ini dipakai untuk mengaktifkan animasi aliran Inverter → Baterai.
+      telemetry.battery.power   = solarP > 0.05 ? solarP : 0;
       telemetry.battery.current = null;
       telemetry.battery.voltage = null;
       telemetry.battery.soc     = null;
-      telemetry.battery.status  = 'Tidak Ada Sensor';
+      telemetry.battery.status  = solarP > 0.05 ? 'SEDANG MENGISI (PV)' : 'STANDBY';
 
       // Realtime Energy Integration: ∫P dt / 1000 = kWh
       // Guard dtHours < 0.1 mencegah spike kWh saat page sleep/hide
@@ -1032,10 +1036,14 @@
 
       const battP = telemetry.battery.power;
       const absBattP = Math.abs(battP);
+      // battP di sini = solarP jika PV aktif (karena tidak ada sensor baterai fisik,
+      // diasumsikan surplus PV mengalir ke baterai via MPPT/Inverter)
+      const isPvCharging = solarP > 0.05;
 
-      if (battP > 0.05) {
+      if (isPvCharging) {
         if (elFlowStored) {
-          elFlowStored.innerText = absBattP >= 1000 ? (absBattP / 1000).toFixed(2) + " kW" : absBattP.toFixed(1) + " W";
+          // Tampilkan daya solar sebagai estimasi daya pengisian baterai
+          elFlowStored.innerText = solarP >= 1000 ? (solarP / 1000).toFixed(2) + " kW" : solarP.toFixed(1) + " W";
           elFlowStored.className = "text-base sm:text-lg md:text-2xl font-black text-emerald-400 font-mono";
         }
         if (elFlowStoredLabel) {
@@ -1058,7 +1066,7 @@
         }
         if (elFlowStoredDesc) elFlowStoredDesc.innerText = "Baterai Menyuplai Beban";
         if (elBatteryIcon) {
-          elBatteryIcon.innerText = "battery_alert"; // FIX #3: battery_profile tidak ada di Material Symbols
+          elBatteryIcon.innerText = "battery_alert";
           elBatteryIcon.className = "material-symbols-outlined text-yellow-400 text-[24px] sm:text-[30px] md:text-[36px]";
         }
       } else {
